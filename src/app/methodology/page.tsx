@@ -27,7 +27,7 @@ const MethodologyPage = () => {
     },
     {
       title: "Mentorship",
-      description: "Personalized guidance, realistic goals, and trading psychology — so discipline becomes a habit.",
+      description: "Personalized guidance, realistic goals, and trading psychology - so discipline becomes a habit.",
       bullets: [
         "Weekly mentorship calls",
         "Trade journaling & feedback",
@@ -40,10 +40,10 @@ const MethodologyPage = () => {
   return (
     <>
       {/* SEO Meta Tags */}
-      <title>Our Methodology — Teaching, Training, and Mentorship | The School of Options</title>
+      <title>Our Methodology - Teaching, Training, and Mentorship | The School of Options</title>
       <meta 
         name="description" 
-        content="See how The School of Options builds confident traders through teaching, training, and mentorship — all logic-driven, data-backed, and transparent." 
+        content="See how The School of Options builds confident traders through teaching, training, and mentorship - all logic-driven, data-backed, and transparent." 
       />
       
       <div className="min-h-screen bg-white">
@@ -58,7 +58,7 @@ const MethodologyPage = () => {
               <div className="max-w-[1120px] mx-auto">
                 <div className="max-w-4xl mx-auto text-center">
                   <h1 className="text-[clamp(32px,5vw,52px)] font-extrabold mb-6 text-white leading-[1.2]">
-                    Our Methodology — Teaching, Training, and Mentorship
+                    Our Methodology - Teaching, Training, and Mentorship
                   </h1>
                   <p className="text-[clamp(18px,2.2vw,22px)] text-[#E6ECF5] leading-relaxed max-w-3xl mx-auto">
                     Becoming a confident trader takes more than theory. It takes structured knowledge, practical training, and ongoing mentorship.

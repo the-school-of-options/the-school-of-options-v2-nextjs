@@ -168,7 +168,7 @@ const DedicationAndVideosSection = () => {
                 Ready to Take the Next Step?
               </h3>
               <p className="text-base text-muted-foreground mb-6 leading-relaxed">
-                The 6-Month Mentorship Program puts all of this into action — teaching, training, and mentoring to make you a disciplined, confident trader.
+                The 6-Month Mentorship Program puts all of this into action - teaching, training, and mentoring to make you a disciplined, confident trader.
               </p>
               <Button
                 size="lg"

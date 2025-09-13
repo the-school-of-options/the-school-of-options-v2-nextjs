@@ -274,7 +274,7 @@ const HomePage = () => {
               </div>
               <div className="bg-white rounded-xl p-4 md:p-6 border border-[rgba(255,122,0,0.2)] shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
                 <p className="text-responsive-body font-semibold text-[#FF7A00] text-center">
-                  At The School of Options, we don't chase jackpots. We teach Options the right way — with structure, logic, and consistency.
+                  At The School of Options, we don't chase jackpots. We teach Options the right way - with structure, logic, and consistency.
                 </p>
               </div>
             </div>
@@ -290,7 +290,7 @@ const HomePage = () => {
             <div className="max-w-[1120px] mx-auto">
               <div className="text-container text-center mb-8 md:mb-16">
                 <h2 id="methodology-heading" className="text-responsive-h2 text-white mb-6">
-                  Our Methodology — Teaching, Training, and Mentorship
+                  Our Methodology - Teaching, Training, and Mentorship
                 </h2>
                 <p className="text-responsive-body text-[#E6ECF5]">
                   We don't just deliver theory. Our methodology builds traders through structured teaching, hands-on training, and ongoing mentorship.
@@ -331,7 +331,7 @@ const HomePage = () => {
 
               <div className="text-container text-center mb-8">
                 <p className="text-responsive-body font-semibold text-[#FFCF9E] mb-6">
-                  When teaching, training, and mentorship come together — knowledge turns into skill, and skill turns into confidence. Every step is logic-driven, data-backed, and transparent.
+                  When teaching, training, and mentorship come together - knowledge turns into skill, and skill turns into confidence. Every step is logic-driven, data-backed, and transparent.
                 </p>
                 <Button 
                   className="bg-[#FF7A00] text-white font-bold py-[14px] px-[22px] rounded-xl shadow-[0_10px_24px_rgba(255,122,0,0.25)] hover:bg-[#FF8A1E] hover:scale-[1.02] transition-all duration-200 tap-target w-full md:w-auto" 
@@ -611,7 +611,7 @@ const HomePage = () => {
                   <div className="bg-white border border-black/5 rounded-[16px] shadow-[0_6px_20px_rgba(0,0,0,0.08)] p-3">
                     <Image
                       src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png"
-                      alt="Kundan Kishore — Founder, The School of Options"
+                      alt="Kundan Kishore - Founder, The School of Options"
                       className="rounded-[12px] w-full shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
                       width={520}
                       height={520}
@@ -643,7 +643,7 @@ const HomePage = () => {
               <div className="flex justify-center mt-[14px] mb-[18px]">
           <Image
                   src="/lovable-uploads/0771f174-6238-46f1-9333-8e156fea40a7.png"
-                  alt="Kundan Kishore — Weekly Trading Letter"
+                  alt="Kundan Kishore - Weekly Trading Letter"
                   className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#FF7A00] shadow-[0_8px_18px_rgba(0,0,0,0.08)]"
                   width={120}
                   height={120}
@@ -657,7 +657,7 @@ const HomePage = () => {
               
               {/* Body */}
               <p className="text-base text-[#334155] leading-[1.75] mb-[22px] max-w-[720px] mx-auto">
-                I send a practical weekly note to prepare you for trading — market outlooks, volatility cues, risk checkpoints, and one mindset reminder. It's the same briefing my mentees rely on to start the week with clarity, discipline, and confidence. Now, you can subscribe too.
+                I send a practical weekly note to prepare you for trading - market outlooks, volatility cues, risk checkpoints, and one mindset reminder. It's the same briefing my mentees rely on to start the week with clarity, discipline, and confidence. Now, you can subscribe too.
               </p>
               
               {/* Email Form */}
@@ -684,7 +684,7 @@ const HomePage = () => {
               
               {/* Privacy Note */}
               <p className="text-sm text-[#64748B]">
-                We respect your privacy. No spam—ever.
+                We respect your privacy. No spam-ever.
               </p>
             </div>
           </div>
@@ -860,7 +860,7 @@ const HomePage = () => {
             
             {/* Subheading */}
             <p className="text-[clamp(16px,2.2vw,20px)] text-[#4A5568] leading-[1.6] max-w-4xl mx-auto mb-8">
-              We believe education should be accessible. Along with live mentorship and webinars, we also provide high-quality recorded courses — priced affordably at ₹990 — to help every aspiring trader learn at their own pace.
+              We believe education should be accessible. Along with live mentorship and webinars, we also provide high-quality recorded courses - priced affordably at ₹990 - to help every aspiring trader learn at their own pace.
             </p>
           </div>
           
@@ -990,7 +990,7 @@ const HomePage = () => {
           
           {/* Subheading */}
           <p className="text-[clamp(16px,2.2vw,20px)] font-medium text-[#E6ECF5] leading-[1.6] mb-4 max-w-[700px] mx-auto">
-            Want to know if The School of Options really works? Don't just take our word for it. Talk directly to our alumni — traders who were once beginners like you and now trade with logic, discipline, and confidence.
+            Want to know if The School of Options really works? Don't just take our word for it. Talk directly to our alumni - traders who were once beginners like you and now trade with logic, discipline, and confidence.
           </p>
           
           {/* Tagline */}

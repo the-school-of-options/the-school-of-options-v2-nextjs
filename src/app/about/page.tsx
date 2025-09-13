@@ -45,7 +45,7 @@ const AboutPage = () => {
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
               <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                In 1997, in Gaya, Bihar, I fell in love with markets. For years, I lost money trying to time them—intraday, 
+                In 1997, in Gaya, Bihar, I fell in love with markets. For years, I lost money trying to time them-intraday, 
                 F&O, everything. Loans, EMIs, stress. Eventually, I discovered what actually works: market-neutral thinking, 
                 options pricing, and risk control.
               </p>
@@ -79,17 +79,17 @@ const AboutPage = () => {
               </div>
               <div>
                 <h2 className="text-2xl lg:text-3xl font-bold mb-6 text-gray-900">
-                  Kundan Kishore — From Losses to Legacy
+                  Kundan Kishore - From Losses to Legacy
                 </h2>
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  I'm not here to give tips. I'm here to teach logic, neutrality, and discipline—so you become independent.
+                  I'm not here to give tips. I'm here to teach logic, neutrality, and discipline-so you become independent.
                 </p>
                 <div className="bg-accent/10 rounded-lg p-6 border border-accent/20">
                   <blockquote className="text-lg font-medium text-gray-900">
                     "Success in options trading isn't about predicting market direction. It's about understanding 
                     probabilities, managing risk, and staying disciplined when emotions run high."
                   </blockquote>
-                  <cite className="text-sm text-gray-600 mt-2 block">— Kundan Kishore</cite>
+                  <cite className="text-sm text-gray-600 mt-2 block">- Kundan Kishore</cite>
                 </div>
               </div>
             </div>

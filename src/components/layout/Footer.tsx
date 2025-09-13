@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-bold">The School of Options</h3>
             <p className="text-sm text-white/80">
-              Learn Options Trading the Transparent Way — Logic, Neutrality, and Discipline First.
+              Learn Options Trading the Transparent Way - Logic, Neutrality, and Discipline First.
             </p>
             <div className="text-xs text-white/70">
               Founded by Kundan Kishore
@@ -112,7 +112,7 @@ const Footer = () => {
           </div>
           <div className="mt-4 text-xs text-white/60">
             <strong>Risk Disclosure:</strong> Trading involves risk. Past results do not guarantee future returns. 
-            This program focuses on education and process—not tips or assured profits.
+            This program focuses on education and process-not tips or assured profits.
           </div>
         </div>
       </div>

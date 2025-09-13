@@ -31,7 +31,7 @@ const FAQPage = () => {
     },
     {
       question: "Do you give live trading tips?",
-      answer: "No, this is education and mentorship—not a tip service. We don't answer questions like 'Should I buy this now?' or 'Will NIFTY go up?' Instead, we teach you the framework and analysis skills to make these decisions yourself. Our goal is to make you independent, not dependent on tips."
+      answer: "No, this is education and mentorship-not a tip service. We don't answer questions like 'Should I buy this now?' or 'Will NIFTY go up?' Instead, we teach you the framework and analysis skills to make these decisions yourself. Our goal is to make you independent, not dependent on tips."
     },
     {
       question: "What happens after I enroll?",
@@ -43,7 +43,7 @@ const FAQPage = () => {
     },
     {
       question: "What's your refund policy?",
-      answer: "Full refund available within 7 days of enrollment OR before the onboarding call—whichever comes first. After the onboarding call is completed, refunds don't apply. For genuine scheduling conflicts, we can defer your participation to a later batch at no extra cost."
+      answer: "Full refund available within 7 days of enrollment OR before the onboarding call-whichever comes first. After the onboarding call is completed, refunds don't apply. For genuine scheduling conflicts, we can defer your participation to a later batch at no extra cost."
     },
     {
       question: "How long does the program take?",
@@ -214,7 +214,7 @@ const FAQPage = () => {
                     <h3 className="font-semibold mb-2">Important Risk Disclosure</h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
                       Trading involves risk. Past results do not guarantee future returns. This program focuses on education 
-                      and process—not tips or assured profits. Options trading can result in significant losses, and you should 
+                      and process-not tips or assured profits. Options trading can result in significant losses, and you should 
                       never trade with money you cannot afford to lose. All trading decisions are your own responsibility.
                     </p>
                   </div>
