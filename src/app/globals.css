@@ -638,6 +638,123 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Lovable Dark Theme Webinar Design System */
+@layer components {
+  /* Dark Theme Variables Override for Masterclass */
+  .masterclass-dark {
+    /* Deep blue background palette */
+    --background: 220 100% 4%;
+    --foreground: 0 0% 100%;
+
+    --card: 220 100% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 220 100% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Golden yellow primary */
+    --primary: 47 100% 50%;
+    --primary-foreground: 220 100% 4%;
+    --primary-glow: 50 100% 52%;
+
+    /* Medium blue secondary */
+    --secondary: 220 100% 20%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted blue backgrounds */
+    --muted: 220 100% 16%;
+    --muted-foreground: 0 0% 70%;
+
+    /* Golden accent */
+    --accent: 47 100% 50%;
+    --accent-foreground: 220 100% 4%;
+
+    /* Warning golden */
+    --warning: 47 100% 50%;
+    --warning-foreground: 220 100% 4%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 100% 20%;
+    --input: 220 100% 12%;
+    --ring: 47 100% 50%;
+  }
+
+  /* Custom gradient and shadow classes from Lovable */
+  .bg-gradient-orange {
+    background: linear-gradient(135deg, hsl(47 100% 50%), hsl(50 100% 52%));
+  }
+
+  .text-gradient-orange {
+    background: linear-gradient(135deg, hsl(47 100% 50%), hsl(50 100% 52%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .shadow-orange {
+    box-shadow: 0 8px 25px -8px hsl(47 100% 50% / 0.4);
+  }
+
+  .shadow-elegant {
+    box-shadow: 0 10px 40px -10px hsl(47 100% 50% / 0.3);
+  }
+
+  .shadow-card {
+    box-shadow: 0 4px 12px hsl(220 100% 4% / 0.5);
+  }
+
+  .hover-scale {
+    transition: transform 0.2s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  /* Animation classes */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Grid background pattern */
+  .bg-grid-white {
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  }
+
+  .bg-grid-16 {
+    background-size: 16px 16px;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
