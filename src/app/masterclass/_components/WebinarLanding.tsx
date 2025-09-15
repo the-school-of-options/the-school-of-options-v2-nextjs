@@ -217,7 +217,7 @@ export const WebinarLanding = () => {
                 <div className="space-y-3">
                   <h3 className="text-xl font-semibold text-foreground">The Exciting Trap</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Tips, charts, and guesswork feel exciting—but they don't build consistency.
+                    Tips, charts, and guesswork feel exciting-but they don't build consistency.
                   </p>
                 </div>
               </div>
@@ -255,7 +255,7 @@ export const WebinarLanding = () => {
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold text-foreground">The Real Problem</h3>
                   <p className="text-lg text-foreground font-medium leading-relaxed">
-                    It's not that Options are impossible—most people are taught the wrong way.
+                    It's not that Options are impossible-most people are taught the wrong way.
                   </p>
                   <div className="w-16 h-1 bg-primary rounded-full"></div>
                 </div>
@@ -283,7 +283,7 @@ export const WebinarLanding = () => {
               You don't need jackpot trades. You need a system built on probabilities, market neutrality, and discipline.
             </p>
             <p className="font-semibold text-foreground">
-              In this MasterClass, I'll show you the path I wish I had 20 years ago—so you can stop losing and start thinking like a professional.
+              In this MasterClass, I'll show you the path I wish I had 20 years ago-so you can stop losing and start thinking like a professional.
             </p>
           </div>
         </div>
@@ -341,11 +341,11 @@ export const WebinarLanding = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                Meet Your Mentor — Kundan Kishore
+                Meet Your Mentor - Kundan Kishore
               </h2>
               <div className="space-y-4 text-lg text-muted-foreground">
                 <p>
-                  I've spent <span className="font-semibold text-foreground">20+ years in markets and finance</span>—working with Citibank, RBS, Morgan Stanley, and Barclays Capital (AVP).
+                  I've spent <span className="font-semibold text-foreground">20+ years in markets and finance</span>-working with Citibank, RBS, Morgan Stanley, and Barclays Capital (AVP).
                 </p>
                 <p>
                   I also lived the retail trader's struggle, blowing up lakhs before discovering what truly works: <span className="font-semibold text-foreground">logic + neutrality + discipline</span>.
@@ -678,7 +678,7 @@ export const WebinarLanding = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Limited Seats — Claim Yours Now
+              Limited Seats - Claim Yours Now
             </h2>
             <p className="text-xl text-white/90">
               Stop guessing. Start trading with logic. See you Saturday, 8 PM.
@@ -696,7 +696,7 @@ export const WebinarLanding = () => {
               }}
               className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4 h-auto font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
             >
-              Register Now — Free
+              Register Now - Free
             </Button>
             
             <div className="space-y-2">
@@ -713,7 +713,7 @@ export const WebinarLanding = () => {
       <section className="py-8 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
           <p className="text-sm text-muted-foreground text-center leading-relaxed">
-            <strong className="text-foreground">Risk Disclosure:</strong> Trading involves risk. Past performance does not guarantee future results. This session focuses on education—not tips or assured returns. Always consult with a qualified financial advisor before making trading decisions.
+            <strong className="text-foreground">Risk Disclosure:</strong> Trading involves risk. Past performance does not guarantee future results. This session focuses on education-not tips or assured returns. Always consult with a qualified financial advisor before making trading decisions.
           </p>
         </div>
       </section>

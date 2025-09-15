@@ -898,10 +898,10 @@ export default function WebinarAds1Page() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-bold text-[var(--text-100)] mb-3 text-base">
-                            {item.split(' — ')[0]}
+                            {item.split(' - ')[0]}
                           </h3>
                           <p className="text-[var(--text-80)] text-sm leading-relaxed">
-                            {item.split(' — ')[1]}
+                            {item.split(' - ')[1]}
                           </p>
                         </div>
                       </div>

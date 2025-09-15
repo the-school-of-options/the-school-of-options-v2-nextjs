@@ -105,7 +105,7 @@ export const RegistrationForm = () => {
           </Button>
           
           <p className="text-xs text-muted-foreground text-center leading-relaxed">
-            By registering, you agree to receive reminders for this event. No spam—unsubscribe anytime.
+            By registering, you agree to receive reminders for this event. No spam-unsubscribe anytime.
           </p>
         </form>
       </Card>
