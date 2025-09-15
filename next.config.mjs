@@ -21,6 +21,13 @@ const nextConfig = {
       },
     ],
   },
+  // Disable webpack caching to prevent cache strategy errors
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.cache = false;
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

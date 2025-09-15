@@ -8,7 +8,6 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import DedicationAndVideosSection from "@/components/DedicationAndVideosSection";
 import Image from "next/image";
-// import founderImage from "/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png";
 import { subscribeToNewsletter } from "@/api/newsletter";
 import { registerForWebinar } from "@/api/webinar";
 import { useToast } from "@/hooks/use-toast";

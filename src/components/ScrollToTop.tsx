@@ -6,7 +6,16 @@ const ScrollToTop = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Scroll to top when pathname changes
+    // Check if the URL has a hash fragment
+    const hasHash = window.location.hash;
+    
+    // If there's a hash, let the browser handle the navigation naturally
+    // Don't scroll to top if there's a hash fragment
+    if (hasHash) {
+      return;
+    }
+
+    // Scroll to top when pathname changes (but not for hash navigation)
     // Use setTimeout to ensure the page has fully rendered
     const timer = setTimeout(() => {
       window.scrollTo({

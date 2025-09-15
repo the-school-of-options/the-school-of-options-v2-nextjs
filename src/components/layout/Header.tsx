@@ -14,8 +14,8 @@ const Header = () => {
 
   const isActive = (href: string) => pathname === href;
 
-  const handleNewsletterClick = () => {
-    router.push('/#section-newsletter');
+  const handleSignInClick = () => {
+    router.push('/login');
   };
 
   return (
@@ -65,7 +65,7 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Button variant="cta-outline" size="sm" onClick={handleNewsletterClick}>
+            <Button variant="cta-outline" size="sm" onClick={handleSignInClick}>
               Sign In
             </Button>
             <Button variant="cta" size="sm" asChild>
@@ -137,10 +137,10 @@ const Header = () => {
                   className="w-full" 
                   onClick={() => {
                     setIsMenuOpen(false);
-                    handleNewsletterClick();
+                    handleSignInClick();
                   }}
                 >
-                  Free Newsletter
+                  Sign In
                 </Button>
                 <Button variant="cta" size="sm" className="w-full" asChild>
                   <a 
