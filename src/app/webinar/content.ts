@@ -1,5 +1,5 @@
 export const content = {
-  experimentId: "webinar-ads1",
+  experimentId: "webinar",
   ctaPrimary: { a: "Register Now", b: "Get My Free Seat" }, // use .a only for now
 
   stickyBar: {
