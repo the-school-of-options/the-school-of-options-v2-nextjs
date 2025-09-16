@@ -14,8 +14,25 @@ export async function GET() {
 
     if (!res.ok) {
       const text = await res.text();
+      console.error(`Zoom API error: ${res.status} ${text}`);
+      
+      // Handle specific error cases
+      if (res.status === 401) {
+        return NextResponse.json(
+          { error: "zoom_auth_error", detail: "Zoom authentication failed. Please check your credentials." },
+          { status: 401 }
+        );
+      }
+      
+      if (res.status === 403) {
+        return NextResponse.json(
+          { error: "zoom_permission_error", detail: "Insufficient permissions to access Zoom meetings." },
+          { status: 403 }
+        );
+      }
+      
       return NextResponse.json(
-        { error: "zoom_error", detail: text },
+        { error: "zoom_error", detail: `Zoom API error: ${res.status} ${text}` },
         { status: 502 }
       );
     }
@@ -30,13 +47,32 @@ export async function GET() {
       join_url: m.join_url, // may exist on some responses; include if present
     }));
 
+    console.log(`Successfully fetched ${items.length} upcoming meetings`);
+    
     return NextResponse.json({
       items,
       next_page_token: data.next_page_token ?? null,
     });
   } catch (e: any) {
+    console.error("Error in meetings API:", e);
+    
+    // Handle specific error types
+    if (e.message?.includes("Missing Zoom environment variables")) {
+      return NextResponse.json(
+        { error: "config_error", detail: "Zoom configuration is missing. Please check environment variables." },
+        { status: 500 }
+      );
+    }
+    
+    if (e.message?.includes("Zoom token error")) {
+      return NextResponse.json(
+        { error: "token_error", detail: "Failed to obtain Zoom access token. Please check your credentials." },
+        { status: 500 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: "internal_error", detail: e?.message ?? "unknown" },
+      { error: "internal_error", detail: e?.message ?? "An unexpected error occurred" },
       { status: 500 }
     );
   }

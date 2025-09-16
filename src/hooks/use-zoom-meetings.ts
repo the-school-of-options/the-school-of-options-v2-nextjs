@@ -37,7 +37,19 @@ export function useZoomMeetings(): UseZoomMeetingsReturn {
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || `HTTP ${response.status}`);
+        
+        // Handle specific error types with user-friendly messages
+        if (errorData.error === 'config_error') {
+          throw new Error('Zoom API is not configured. Please contact support.');
+        } else if (errorData.error === 'token_error') {
+          throw new Error('Unable to connect to Zoom. Please try again later.');
+        } else if (errorData.error === 'zoom_auth_error') {
+          throw new Error('Zoom authentication failed. Please contact support.');
+        } else if (errorData.error === 'zoom_permission_error') {
+          throw new Error('Insufficient permissions to access meetings.');
+        } else {
+          throw new Error(errorData.detail || `HTTP ${response.status}`);
+        }
       }
       
       const data: ZoomMeetingsResponse = await response.json();

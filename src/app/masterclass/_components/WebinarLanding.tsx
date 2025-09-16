@@ -8,10 +8,29 @@ import { Card } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 
-export const WebinarLanding = () => {
+interface ZoomMeeting {
+  id: string;
+  topic: string;
+  start_time: string;
+  timezone: string;
+  duration: number;
+  join_url?: string;
+}
+
+interface WebinarLandingProps {
+  meetings?: ZoomMeeting[];
+  meetingsLoading?: boolean;
+  meetingsError?: string | null;
+}
+
+export const WebinarLanding = ({ 
+  meetings = [], 
+  meetingsLoading = false, 
+  meetingsError = null 
+}: WebinarLandingProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 masterclass-dark">
-      <StickyBar />
+      <StickyBar meetings={meetings} />
       
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -140,7 +159,11 @@ export const WebinarLanding = () => {
               <div data-registration-form className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary-glow/20 rounded-2xl blur-xl"></div>
                 <div className="relative">
-                  <RegistrationForm />
+                  <RegistrationForm 
+                    meetings={meetings}
+                    meetingsLoading={meetingsLoading}
+                    meetingsError={meetingsError}
+                  />
                 </div>
               </div>
               

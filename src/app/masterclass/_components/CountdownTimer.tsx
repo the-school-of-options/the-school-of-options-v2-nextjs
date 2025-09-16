@@ -2,6 +2,15 @@
 
 import { useState, useEffect } from 'react';
 
+interface ZoomMeeting {
+  id: string;
+  topic: string;
+  start_time: string;
+  timezone: string;
+  duration: number;
+  join_url?: string;
+}
+
 interface TimeLeft {
   days: number;
   hours: number;
@@ -9,41 +18,72 @@ interface TimeLeft {
   seconds: number;
 }
 
-export const CountdownTimer = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+interface CountdownTimerProps {
+  meetings?: ZoomMeeting[];
+}
+
+// Helper function to get the earliest meeting from Zoom data
+const getEarliestMeetingDate = (meetings: ZoomMeeting[]): Date | null => {
+  if (!meetings || meetings.length === 0) {
+    return null;
+  }
+  
+  // Sort meetings by start_time and get the earliest one
+  const sortedMeetings = [...meetings].sort((a, b) => 
+    new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+  );
+  
+  return new Date(sortedMeetings[0].start_time);
+};
+
+// Fallback function to get a default countdown time
+const getDefaultCountdownTime = (): TimeLeft => {
+  return {
     days: 0,
     hours: 4,
     minutes: 51,
     seconds: 4
-  });
+  };
+};
+
+export const CountdownTimer = ({ meetings = [] }: CountdownTimerProps) => {
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(getDefaultCountdownTime());
 
   useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      
+      // Try to get the earliest meeting from Zoom data first
+      let targetDate = getEarliestMeetingDate(meetings);
+      
+      // If no Zoom meetings available, use default countdown
+      if (!targetDate) {
+        return getDefaultCountdownTime();
+      }
+      
+      const timeDiff = targetDate.getTime() - now.getTime();
+      
+      if (timeDiff <= 0) {
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      }
+      
+      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+      
+      return { days, hours, minutes, seconds };
+    };
+
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { days, hours, minutes, seconds } = prev;
-        
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
-        } else if (days > 0) {
-          days--;
-          hours = 23;
-          minutes = 59;
-          seconds = 59;
-        }
-        
-        return { days, hours, minutes, seconds };
-      });
+      setTimeLeft(calculateTimeLeft());
     }, 1000);
 
+    // Initial calculation
+    setTimeLeft(calculateTimeLeft());
+
     return () => clearInterval(timer);
-  }, []);
+  }, [meetings]);
 
   return (
     <div className="flex items-center justify-center gap-2 md:gap-4">

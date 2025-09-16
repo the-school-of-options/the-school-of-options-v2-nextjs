@@ -6,16 +6,51 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 
-export const RegistrationForm = () => {
+interface ZoomMeeting {
+  id: string;
+  topic: string;
+  start_time: string;
+  timezone: string;
+  duration: number;
+  join_url?: string;
+}
+
+interface RegistrationFormProps {
+  meetings?: ZoomMeeting[];
+  meetingsLoading?: boolean;
+  meetingsError?: string | null;
+}
+
+export const RegistrationForm = ({ 
+  meetings = [], 
+  meetingsLoading = false, 
+  meetingsError = null 
+}: RegistrationFormProps) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     phone: '',
-    session: 'english',
+    session: '',
     experience: 'beginner',
     hearAbout: ''
   });
+
+  // Format meeting data for display
+  const formatMeetingOption = (meeting: ZoomMeeting) => {
+    const startDate = new Date(meeting.start_time);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    };
+    const formattedDate = startDate.toLocaleDateString('en-US', options);
+    const duration = meeting.duration ? ` (${meeting.duration} min)` : '';
+    return `${meeting.topic} - ${formattedDate}${duration}`;
+  };
 
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +87,7 @@ export const RegistrationForm = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-semibold text-gray-900">
+            <Label htmlFor="email" className="text-sm font-semibold text-foreground">
               Email Address *
             </Label>
             <Input
@@ -67,7 +102,7 @@ export const RegistrationForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-sm font-semibold text-gray-900">
+            <Label htmlFor="phone" className="text-sm font-semibold text-foreground">
               Phone Number *
             </Label>
             <Input
@@ -82,26 +117,58 @@ export const RegistrationForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="session" className="text-sm font-semibold text-gray-900">
+            <Label htmlFor="session" className="text-sm font-semibold text-foreground">
               Choose Session *
             </Label>
             <select
               id="session"
-              value={formData.session || 'english'}
+              value={formData.session}
               onChange={(e) => setFormData({ ...formData, session: e.target.value })}
               className="w-full h-12 px-3 text-base bg-input border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-foreground"
               required
+              disabled={meetingsLoading || (meetings.length === 0 && !meetingsError)}
             >
-              <option value="english">English (Saturday 8-10 PM)</option>
-              <option value="hindi">Hindi (Sunday 8-10 PM)</option>
+              <option value="">
+                {meetingsLoading 
+                  ? 'Loading sessions...' 
+                  : meetings.length === 0 && !meetingsError
+                    ? 'No sessions scheduled'
+                    : 'Select your preferred session'
+                }
+              </option>
+              {meetingsError ? (
+                <option value="" disabled>
+                  Error loading sessions - please try again later
+                </option>
+              ) : meetings.length > 0 ? (
+                meetings.slice(0, 2).map((meeting) => (
+                  <option key={meeting.id} value={meeting.id}>
+                    {formatMeetingOption(meeting)}
+                  </option>
+                ))
+              ) : !meetingsLoading && !meetingsError ? (
+                <option value="" disabled>
+                  No upcoming sessions available
+                </option>
+              ) : null}
             </select>
+            {meetingsError && (
+              <p className="text-sm text-yellow-400">
+                Unable to load sessions. {meetingsError}
+              </p>
+            )}
+            {!meetingsLoading && !meetingsError && meetings.length === 0 && (
+              <p className="text-sm text-blue-400">
+                No upcoming sessions are currently scheduled. Please check back later.
+              </p>
+            )}
           </div>
 
           <Button 
             type="submit" 
             className="w-full h-12 text-base font-semibold bg-gradient-orange shadow-orange hover:shadow-xl transition-all duration-300"
           >
-            Continue to Step 2
+            Register Now
           </Button>
           
           <p className="text-xs text-muted-foreground text-center leading-relaxed">
