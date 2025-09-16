@@ -68,7 +68,7 @@ export const content = {
 
   sessions: {
     title: "Pick your live session",
-    note: "Live on Zoom/Google Meet • Weekly schedule available",
+    note: "Live on Zoom • Upcoming sessions loaded automatically",
     options: [
       { label: "English - Sep 13, Sat 8:00–10:00 PM IST", value: "english_sat" },
       { label: "Hindi - Sep 14, Sun 8:00–10:00 PM IST", value: "hindi_sun" }

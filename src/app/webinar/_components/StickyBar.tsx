@@ -2,11 +2,21 @@
 
 import Countdown from './Countdown';
 
-interface StickyBarProps {
-  className?: string;
+interface ZoomMeeting {
+  id: string;
+  topic: string;
+  start_time: string;
+  timezone: string;
+  duration: number;
+  join_url?: string;
 }
 
-export default function StickyBar({ className = '' }: StickyBarProps) {
+interface StickyBarProps {
+  className?: string;
+  meetings?: ZoomMeeting[];
+}
+
+export default function StickyBar({ className = '', meetings = [] }: StickyBarProps) {
   const handleRegisterClick = () => {
     const registerSection = document.getElementById('register');
     if (registerSection) {
@@ -67,6 +77,7 @@ export default function StickyBar({ className = '' }: StickyBarProps) {
               variant="long" 
               className="text-[var(--acc-500)] countdown-pulse countdown-glow"
               aria-live="polite"
+              meetings={meetings}
             />
           </div>
 

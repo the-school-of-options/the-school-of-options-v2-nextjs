@@ -10,8 +10,12 @@ import TestimonialCard from './_components/TestimonialCard';
 import FAQAccordion from './_components/FAQAccordion';
 import SeatMeter from './_components/SeatMeter';
 import StackGroup, { StackItem } from './_components/StackGroup';
+import { useZoomMeetings } from '@/hooks/use-zoom-meetings';
 
 export default function WebinarAds1Page() {
+  // Fetch upcoming Zoom meetings
+  const { meetings, loading: meetingsLoading, error: meetingsError } = useZoomMeetings();
+
   // Mobile stack animation effect
   React.useEffect(() => {
     const observerOptions = {
@@ -587,7 +591,11 @@ export default function WebinarAds1Page() {
                 {/* Right Form - Modern Design */}
                 <StackItem index={1}>
                   <div className="text-slide-right">
-                    <FormCard />
+                    <FormCard 
+                      meetings={meetings}
+                      meetingsLoading={meetingsLoading}
+                      meetingsError={meetingsError}
+                    />
                   </div>
                 </StackItem>
               </div>
@@ -1038,7 +1046,7 @@ export default function WebinarAds1Page() {
                   <div className="w-2 h-2 bg-[var(--accent-500)] rounded-full animate-pulse"></div>
                   <span>{content.stickyBar.a.replace('{TIMER}', '')}</span>
                 </div>
-                <Countdown variant="mini" className="text-sm sm:text-base font-mono text-[var(--accent-500)] countdown-pulse countdown-glow" />
+                <Countdown variant="mini" className="text-sm sm:text-base font-mono text-[var(--accent-500)] countdown-pulse countdown-glow" meetings={meetings} />
               </div>
               <a 
                 href="#register"
