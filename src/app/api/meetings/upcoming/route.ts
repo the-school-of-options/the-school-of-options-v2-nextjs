@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { getZoomToken } from "@/app/lib/zoom";
+import { getZoomToken, clearZoomTokenCache } from "@/app/lib/zoom";
 
 export async function GET() {
   try {
-    const token = await getZoomToken();
-    const zoomUrl =
-      "https://api.zoom.us/v2/users/me/meetings?type=upcoming&page_size=50";
+    const tokenData = await getZoomToken();
+    const token = typeof tokenData === 'string' ? tokenData : tokenData.access_token;
+    const apiUrl = typeof tokenData === 'object' && tokenData.api_url ? tokenData.api_url : "https://api.zoom.us";
+    const zoomUrl = `${apiUrl}/v2/users/me/meetings?type=upcoming&page_size=50`;
 
     const res = await fetch(zoomUrl, {
       headers: { Authorization: `Bearer ${token}` },
@@ -18,8 +19,16 @@ export async function GET() {
       
       // Handle specific error cases
       if (res.status === 401) {
+        // Clear token cache on authentication failure
+        clearZoomTokenCache();
+        
         return NextResponse.json(
-          { error: "zoom_auth_error", detail: "Zoom authentication failed. Please check your credentials." },
+          { 
+            error: "zoom_auth_error", 
+            detail: "Zoom authentication failed. Token cache cleared - please try again.",
+            status: res.status,
+            response_text: text
+          },
           { status: 401 }
         );
       }
@@ -59,7 +68,12 @@ export async function GET() {
     // Handle specific error types
     if (e.message?.includes("Missing Zoom environment variables")) {
       return NextResponse.json(
-        { error: "config_error", detail: "Zoom configuration is missing. Please check environment variables." },
+        { 
+          error: "config_error", 
+          detail: "Zoom configuration is missing. Please check your .env.local file and ensure ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID, and ZOOM_CLIENT_SECRET are properly configured.",
+          missing_vars: e.message.includes('ZOOM_ACCOUNT_ID') ? ['ZOOM_ACCOUNT_ID'] : [],
+          help: "Visit https://marketplace.zoom.us/develop/apps to create a Zoom app and obtain the required credentials."
+        },
         { status: 500 }
       );
     }
