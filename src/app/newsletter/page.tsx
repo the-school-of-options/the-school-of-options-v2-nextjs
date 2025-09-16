@@ -188,8 +188,14 @@ export default function NewsletterPage() {
 
               {/* Author Portrait */}
               <div className="mb-12 newsletter-text-reveal">
-                <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] flex items-center justify-center text-[var(--newsletter-primary-900)] text-3xl font-bold shadow-2xl ring-4 ring-white/20">
-                  KK
+                <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] flex items-center justify-center shadow-2xl ring-4 ring-white/20 p-1">
+                  <img 
+                    src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png" 
+                    alt="Kundan Kishore"
+                    className="w-full h-full rounded-full object-contain bg-white"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               </div>
 
@@ -248,7 +254,7 @@ export default function NewsletterPage() {
           </div>
         </section>
 
-        {/* About Kundan Section */}
+        {/* About Kundan Section - Redesigned */}
         <section className="py-16 relative overflow-hidden">
           {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--newsletter-primary-900)] to-[var(--newsletter-primary-800)]"></div>
@@ -258,26 +264,139 @@ export default function NewsletterPage() {
           </div>
           
           <div className="container relative z-10">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center text-[#2dcf95] mb-8 newsletter-text-reveal">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-center text-[#2dcf95] mb-12 newsletter-text-reveal">
                 {newsletterContent.author.heading}
               </h2>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  {newsletterContent.author.bio.map((paragraph, index) => (
-                    <p key={index} className="text-[var(--newsletter-text-80)] leading-relaxed newsletter-text-reveal">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-                
-                <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                  {newsletterContent.author.chips.map((chip, index) => (
-                    <div key={index} className="newsletter-glass text-[var(--newsletter-text-100)] px-4 py-2 rounded-full text-sm font-medium newsletter-hover-lift">
-                      {chip}
+              {/* Main Content Grid - Better Space Utilization */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column - Profile & Stats */}
+                <div className="lg:col-span-1 space-y-6">
+                  {/* Profile Card */}
+                  <div className="newsletter-glass rounded-3xl p-8 newsletter-hover-lift newsletter-hover-glow text-center">
+                    <div className="relative mb-7">
+                      <div className="w-32 h-32 mx-auto bg-gradient-to-br from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-full flex items-center justify-center shadow-2xl">
+                        <img 
+                          src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png" 
+                          alt="Kundan Kishore"
+                          className="w-full h-full rounded-full object-contain bg-white p-1"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-[var(--newsletter-accent-500)] rounded-full flex items-center justify-center shadow-lg border-2 border-[var(--newsletter-primary-900)]">
+                        <svg className="w-4 h-4 text-[var(--newsletter-primary-900)]" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
                     </div>
-                  ))}
+                    <h3 className="text-2xl font-bold text-[var(--newsletter-text-100)] mb-2">Kundan Kishore</h3>
+                    <p className="text-[var(--newsletter-text-100)] font-semibold text-lg mb-6">Founder & Chief Mentor</p>
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-4 ">
+                    {newsletterContent.author.stats.map((stat, index) => (
+                      <div key={index} className="newsletter-glass rounded-2xl p-8 newsletter-hover-lift newsletter-hover-glow text-center group">
+                        <div className="text-3xl font-bold text-[var(--newsletter-accent-500)] mb-2 group-hover:scale-110 transition-transform duration-300">
+                          {stat.split(' ')[0]}
+                        </div>
+                        <div className="text-xs text-[var(--newsletter-text-80)] leading-tight font-medium">
+                          {stat.split(' ').slice(1).join(' ')}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right Column - Bio & Career Journey */}
+                <div className="lg:col-span-2 space-y-8">
+                  {/* Bio Section */}
+                  <div className="newsletter-glass rounded-3xl p-8 newsletter-hover-lift newsletter-hover-glow">
+                    <h4 className="text-xl font-bold text-[var(--newsletter-text-100)] mb-6 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-lg flex items-center justify-center">
+                        <svg className="w-4 h-4 text-[var(--newsletter-primary-900)]" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      Experience & Philosophy
+                    </h4>
+                    <div className="space-y-4">
+                      {newsletterContent.author.bio.map((paragraph, index) => (
+                        <p key={index} className="text-[var(--newsletter-text-80)] leading-relaxed text-base">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Career Journey - Full Width */}
+                  <div className="newsletter-glass rounded-3xl p-8 newsletter-hover-lift newsletter-hover-glow">
+                    <h4 className="text-xl font-bold text-[var(--newsletter-text-100)] mb-8 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-lg flex items-center justify-center">
+                        <svg className="w-4 h-4 text-[var(--newsletter-primary-900)]" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      Career Journey
+                    </h4>
+                    
+                    {/* Horizontal Timeline - Full Width */}
+                    <div className="relative">
+                      {/* Timeline Line */}
+                      <div className="absolute top-16 left-12 right-12 h-1 bg-gradient-to-r from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-full"></div>
+                      
+                      {/* Timeline Items - Better Spacing */}
+                      <div className="flex justify-between items-start px-4">
+                        {newsletterContent.author.career.map((exp, index) => (
+                          <div key={index} className="flex flex-col items-center group relative flex-1 max-w-32">
+                            {/* Timeline Dot */}
+                            <div className={`relative z-10 w-20 h-20 rounded-full flex items-center justify-center shadow-xl mb-6 transition-all duration-300 group-hover:scale-110 ${
+                              exp.current 
+                                ? 'bg-gradient-to-r from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] ring-4 ring-[var(--newsletter-accent-500)] ring-opacity-30' 
+                                : 'bg-[var(--newsletter-primary-800)] border-4 border-[var(--newsletter-accent-500)]'
+                            }`}>
+                              {exp.logo === "R" ? (
+                                <span className="text-[var(--newsletter-primary-900)] font-bold text-xl">{exp.logo}</span>
+                              ) : exp.logo === "TSO" ? (
+                                <span className="text-[var(--newsletter-primary-900)] font-bold text-xl">{exp.logo}</span>
+                              ) : (
+                                <img 
+                                  src={exp.logo} 
+                                  alt={`${exp.company} logo`}
+                                  className="w-10 h-10 object-contain"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              )}
+                            </div>
+                            
+                            {/* Company Info - Fixed alignment */}
+                            <div className="text-center flex flex-col justify-end min-h-[120px]">
+                              <div className={`font-bold text-lg mb-2 leading-tight ${
+                                exp.current ? 'text-[var(--newsletter-accent-500)]' : 'text-[var(--newsletter-text-100)]'
+                              }`}>
+                                {exp.company}
+                              </div>
+                              <div className={`text-sm mb-2 leading-tight ${
+                                exp.current ? 'text-[var(--newsletter-accent-500)]' : 'text-[var(--newsletter-text-80)]'
+                              }`}>
+                                {exp.role}
+                              </div>
+                              <div className={`text-sm font-semibold px-3 py-1 rounded-full ${
+                                exp.current 
+                                  ? 'bg-[var(--newsletter-primary-900)] text-[var(--newsletter-accent-500)]' 
+                                  : 'bg-[var(--newsletter-accent-500)] text-[var(--newsletter-primary-900)]'
+                              }`}>
+                                {exp.period}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,7 +415,7 @@ export default function NewsletterPage() {
           <div className="container relative z-10">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-center text-[#2dcf95] mb-12 newsletter-text-reveal">
-                What subscribers say
+                What Subscribers say
               </h2>
               
               <StackGroup className="grid grid-cols-1 md:grid-cols-3 gap-6">

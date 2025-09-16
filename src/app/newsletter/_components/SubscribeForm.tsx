@@ -42,7 +42,7 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Store email in localStorage for future prefills
-    localStorage.setItem("newsletter-email", email);
+    sessionStorage.setItem("newsletter-email", email);
     
     setIsSuccess(true);
     setIsSubmitting(false);
@@ -76,16 +76,32 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
         <Label htmlFor="email" className="sr-only">
           Email address
         </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder={placeholder}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="h-12 text-base bg-white/10 border-white/20 text-[var(--newsletter-text-100)] placeholder:text-[var(--newsletter-text-60)] focus:border-[var(--newsletter-accent-500)] focus:ring-[var(--newsletter-accent-500)]"
-          disabled={isSubmitting}
-        />
+        <div className="flex flex-row gap-0.5">
+          <Input
+            id="email"
+            type="email"
+            placeholder={placeholder}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="flex-1 h-12 text-base bg-white/10 border-white/20 text-[var(--newsletter-text-100)] placeholder:text-[var(--newsletter-text-60)] focus:border-[var(--newsletter-accent-500)] focus:ring-[var(--newsletter-accent-500)]"
+            disabled={isSubmitting}
+          />
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="h-12 px-2 text-base font-semibold newsletter-btn-primary text-[var(--newsletter-primary-900)] shadow-lg hover:shadow-xl transition-all duration-300 whitespace-nowrap"
+          >
+            {isSubmitting ? (
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 border-1 border-current border-t-transparent rounded-full animate-spin" />
+                Subscribing...
+              </div>
+            ) : (
+              cta
+            )}
+          </Button>
+        </div>
         {error && (
           <p className="text-sm text-red-400" role="alert">
             {error}
@@ -93,27 +109,9 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
         )}
       </div>
       
-      {/* Mobile: Horizontal layout, Desktop: Full width */}
-      <div className="flex flex-col md:block space-y-4 md:space-y-0">
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full md:w-full h-12 text-base font-semibold newsletter-btn-primary text-[var(--newsletter-primary-900)] shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          {isSubmitting ? (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-              Subscribing...
-            </div>
-          ) : (
-            cta
-          )}
-        </Button>
-        
-        <p className="text-sm text-[var(--newsletter-text-60)] text-center">
-          {micro}
-        </p>
-      </div>
+      <p className="text-sm text-[var(--newsletter-text-60)] text-center">
+        {micro}
+      </p>
     </form>
   );
 }

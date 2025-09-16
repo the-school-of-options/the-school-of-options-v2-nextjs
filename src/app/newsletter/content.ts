@@ -38,8 +38,21 @@ export const newsletterContent = {
   author: {
     heading: "About Kundan",
     bio: [
-      "Kundan Kishore has spent 20+ years across markets and finance-working with Citibank, RBS, Morgan Stanley, and Barclays Capital (AVP).",
-      "He teaches a transparent, probability-first method that removes hype and guesswork: logic + neutrality + discipline."
+      "Kundan has spent 20+ years across markets and finance-working with Citibank, RBS, Morgan Stanley, and Barclays Capital (AVP).",
+      "He's seen the retail struggle firsthand and built a method that removes hype and guesswork: logic + neutrality + discipline."
+    ],
+    stats: [
+      "1.5L+ learners trained",
+      "4.9★ average rating", 
+      "20+ years in markets",
+      "Proven systematic method"
+    ],
+    career: [
+      { company: "Citibank", role: "Investment Banking", period: "2003-2008", logo: "/assets/Citi.png" },
+      { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2012", logo: "R" },
+      { company: "Morgan Stanley", role: "Investment Banking", period: "2012-2016", logo: "/assets/morgan_stanley1671191982870.png" },
+      { company: "Barclays Capital", role: "Assistant VP", period: "2016-2020", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" },
+      { company: "The School of Options", role: "Founder & Mentor", period: "2020-Present", logo: "TSO", current: true }
     ],
     chips: ["1.5L+ trained", "20+ years", "4.9★ average"]
   },

@@ -31,7 +31,7 @@ export default function FormCard({ className = '' }: FormCardProps) {
 
   // Load form data from localStorage on mount
   useEffect(() => {
-    const savedData = localStorage.getItem('webinar-form-data');
+    const savedData = sessionStorage.getItem('webinar-form-data');
     if (savedData) {
       try {
         const parsed = JSON.parse(savedData);
@@ -44,7 +44,7 @@ export default function FormCard({ className = '' }: FormCardProps) {
 
   // Save form data to localStorage on change
   useEffect(() => {
-    localStorage.setItem('webinar-form-data', JSON.stringify(formData));
+    sessionStorage.setItem('webinar-form-data', JSON.stringify(formData));
   }, [formData]);
 
   // Focus trap for modal
