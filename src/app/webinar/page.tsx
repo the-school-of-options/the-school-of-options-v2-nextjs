@@ -638,7 +638,7 @@ export default function WebinarAds1Page() {
                   <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
                     {/* Profile Image & Basic Info */}
                     <div className="text-center lg:text-left flex-shrink-0">
-                      <div className="relative flex justify-center mb-6">
+                      <div className="relative flex justify-center mb-12 mt-8">
                         <div className="w-48 h-48 sm:w-56 sm:h-56 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-3xl flex items-center justify-center shadow-2xl relative">
                           <img 
                             src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png" 
@@ -655,7 +655,7 @@ export default function WebinarAds1Page() {
                         </div>
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-[var(--text-100)] mb-2 text-center">Kundan Kishore</h3>
-                      <p className="text-[var(--text-100)] font-bold text-lg mb-6 text-center">Founder & Chief Mentor</p>
+                      <p className="text-[var(--text-100)] font-bold text-lg mb-8 text-center">Founder & Chief Mentor</p>
                       
                       {/* Quick Stats - Improved Grid Layout */}
                       <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto lg:mx-0 mobile-stack-container">
