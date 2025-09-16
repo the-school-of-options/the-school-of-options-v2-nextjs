@@ -675,52 +675,53 @@ export default function WebinarAds1Page() {
                       </div>
                       
                       {/* Career Highlights - Modern Design */}
-                      <div className="glass rounded-2xl p-6">
-                        <h4 className="text-xl font-bold text-[var(--text-100)] mb-6 flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-lg flex items-center justify-center">
-                            <svg className="w-4 h-4 text-[var(--primary-900)]" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="glass rounded-2xl p-6 sm:p-8">
+                        <h4 className="text-xl sm:text-2xl font-bold text-[var(--text-100)] mb-6 sm:mb-8 flex items-center gap-3">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--primary-900)]" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                             </svg>
                           </div>
                           Career Journey
                         </h4>
-                        <div className="grid sm:grid-cols-2 gap-4 mobile-stack-container">
+                        {/* Mobile: Single column, Desktop: 2 columns */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mobile-stack-container">
                           {[
                             { company: "Citibank", role: "Investment Banking", period: "2003-2008", logo: "/assets/Citi.png" },
                             { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2012", logo: "R" },
                             { company: "Morgan Stanley", role: "Investment Banking", period: "2012-2016", logo: "/assets/morgan_stanley1671191982870.png" },
                             { company: "Barclays Capital", role: "Assistant VP", period: "2016-2020", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" }
                           ].map((exp, index) => (
-                            <div key={index} className="mobile-stack-item flex items-center gap-4 p-4 rounded-xl glass hover-lift">
-                              <div className="w-12 h-12 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
+                            <div key={index} className="mobile-stack-item flex items-center gap-4 p-4 sm:p-5 rounded-xl glass hover-lift">
+                              <div className="w-14 h-14 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
                                 {exp.logo === "R" ? (
-                                  <span className="text-[var(--primary-900)] font-bold text-sm">{exp.logo}</span>
+                                  <span className="text-[var(--primary-900)] font-bold text-base sm:text-sm">{exp.logo}</span>
                                 ) : (
                                   <img 
                                     src={exp.logo} 
                                     alt={`${exp.company} logo`}
-                                    className="w-8 h-8 object-contain"
+                                    className="w-10 h-10 sm:w-8 sm:h-8 object-contain"
                                     loading="lazy"
                                     decoding="async"
                                   />
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="font-bold text-[var(--text-100)] text-sm">{exp.company}</div>
-                                <div className="text-[var(--text-60)] text-xs">{exp.role}</div>
-                                <div className="text-[var(--accent-500)] text-xs font-medium">{exp.period}</div>
+                                <div className="font-bold text-[var(--text-100)] text-base sm:text-sm mb-1">{exp.company}</div>
+                                <div className="text-[var(--text-60)] text-sm sm:text-xs mb-1">{exp.role}</div>
+                                <div className="text-[var(--accent-500)] text-sm sm:text-xs font-medium">{exp.period}</div>
                               </div>
                             </div>
                           ))}
                         </div>
-                        <div className="mt-6 p-4 bg-gradient-to-r from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl">
+                        <div className="mt-6 p-4 sm:p-5 bg-gradient-to-r from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-[var(--primary-900)] rounded-xl flex items-center justify-center flex-shrink-0">
-                              <span className="text-[var(--accent-500)] font-bold text-sm">TSO</span>
+                            <div className="w-14 h-14 sm:w-12 sm:h-12 bg-[var(--primary-900)] rounded-xl flex items-center justify-center flex-shrink-0">
+                              <span className="text-[var(--accent-500)] font-bold text-base sm:text-sm">TSO</span>
                             </div>
                             <div className="flex-1">
-                              <div className="font-bold text-[var(--primary-900)] text-sm">The School of Options</div>
-                              <div className="text-[var(--primary-900)] text-xs opacity-80">Founder & Mentor • 2020-Present</div>
+                              <div className="font-bold text-[var(--primary-900)] text-base sm:text-sm mb-1">The School of Options</div>
+                              <div className="text-[var(--primary-900)] text-sm sm:text-xs opacity-80">Founder & Mentor • 2020-Present</div>
                             </div>
                           </div>
                         </div>

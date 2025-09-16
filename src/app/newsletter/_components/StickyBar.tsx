@@ -52,7 +52,7 @@ export default function StickyBar({ className = '' }: StickyBarProps) {
           {/* Right side - CTA */}
           <button
             onClick={handleSubscribeClick}
-            className="bg-[#2dcf95] hover:bg-[#2dcf99] text-gray-900 font-bold px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm shadow-md transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-300 focus:ring-offset-2 focus:ring-offset-gray-900 whitespace-nowrap"
+            className="bg-[#2dcf95] hover:bg-[#2dcf99] text-gray-900 font-bold px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm shadow-md transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-300 focus:ring-offset-2 focus:ring-offset-gray-900 whitespace-nowrap newsletter-glow-animation"
           >
             <span className="hidden md:inline">Subscribe</span>
             <span className="md:hidden">Subscribe</span>

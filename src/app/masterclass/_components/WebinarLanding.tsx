@@ -65,7 +65,7 @@ export const WebinarLanding = () => {
                             <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-glow rounded-full blur-md opacity-60"></div>
                             <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden ring-4 ring-primary/30 shadow-2xl">
                               <img 
-                                src="/kundan-portrait.jpg" 
+                                src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png" 
                                 alt="Kundan Kishore - Options Trading Expert" 
                                 className="w-full h-full object-cover"
                               />
@@ -369,7 +369,7 @@ export const WebinarLanding = () => {
               <div className="relative mx-auto w-fit">
                 <div className="relative w-80 h-96 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-lg">
                   <img 
-                    src="/kundan-portrait.jpg" 
+                    src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png" 
                     alt="Kundan Kishore - Options Trading Expert" 
                     className="w-full h-full object-cover"
                   />

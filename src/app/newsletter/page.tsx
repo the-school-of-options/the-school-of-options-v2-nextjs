@@ -88,6 +88,24 @@ export default function NewsletterPage() {
             box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
           }
 
+          /* Glow Animation for CTAs */
+          @keyframes newsletterGlow {
+            0%, 100% {
+              box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), 0 0 40px rgba(16, 185, 129, 0.2);
+            }
+            50% {
+              box-shadow: 0 0 30px rgba(16, 185, 129, 0.6), 0 0 60px rgba(16, 185, 129, 0.3);
+            }
+          }
+
+          .newsletter-glow-animation {
+            animation: newsletterGlow 2s ease-in-out infinite;
+          }
+
+          .newsletter-glow-animation:hover {
+            animation: newsletterGlow 1s ease-in-out infinite;
+          }
+
           /* Button Styles */
           .newsletter-btn-primary {
             background: var(--newsletter-gradient-primary);
@@ -331,9 +349,9 @@ export default function NewsletterPage() {
                     </div>
                   </div>
 
-                  {/* Career Journey - Full Width */}
-                  <div className="newsletter-glass rounded-3xl p-8 newsletter-hover-lift newsletter-hover-glow">
-                    <h4 className="text-xl font-bold text-[var(--newsletter-text-100)] mb-8 flex items-center gap-3">
+                  {/* Career Journey - Responsive Layout */}
+                  <div className="newsletter-glass rounded-3xl p-6 sm:p-8 newsletter-hover-lift newsletter-hover-glow">
+                    <h4 className="text-xl font-bold text-[var(--newsletter-text-100)] mb-6 sm:mb-8 flex items-center gap-3">
                       <div className="w-8 h-8 bg-gradient-to-br from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-lg flex items-center justify-center">
                         <svg className="w-4 h-4 text-[var(--newsletter-primary-900)]" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
@@ -342,13 +360,13 @@ export default function NewsletterPage() {
                       Career Journey
                     </h4>
                     
-                    {/* Horizontal Timeline - Full Width */}
+                    {/* Mobile: Vertical Timeline, Desktop: Horizontal Timeline */}
                     <div className="relative">
-                      {/* Timeline Line */}
-                      <div className="absolute top-16 left-12 right-12 h-1 bg-gradient-to-r from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-full"></div>
+                      {/* Desktop: Horizontal Timeline Line */}
+                      <div className="hidden md:block absolute top-16 left-12 right-12 h-1 bg-gradient-to-r from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] rounded-full"></div>
                       
-                      {/* Timeline Items - Better Spacing */}
-                      <div className="flex justify-between items-start px-4">
+                      {/* Desktop: Horizontal Layout */}
+                      <div className="hidden md:flex justify-between items-start px-4">
                         {newsletterContent.author.career.map((exp, index) => (
                           <div key={index} className="flex flex-col items-center group relative flex-1 max-w-32">
                             {/* Timeline Dot */}
@@ -385,6 +403,61 @@ export default function NewsletterPage() {
                                 {exp.role}
                               </div>
                               <div className={`text-sm font-semibold px-3 py-1 rounded-full ${
+                                exp.current 
+                                  ? 'bg-[var(--newsletter-primary-900)] text-[var(--newsletter-accent-500)]' 
+                                  : 'bg-[var(--newsletter-accent-500)] text-[var(--newsletter-primary-900)]'
+                              }`}>
+                                {exp.period}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {/* Mobile: Vertical Timeline Layout */}
+                      <div className="md:hidden space-y-6">
+                        {newsletterContent.author.career.map((exp, index) => (
+                          <div key={index} className="flex items-start gap-4 group">
+                            {/* Timeline Dot and Line */}
+                            <div className="flex flex-col items-center">
+                              <div className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 group-hover:scale-110 ${
+                                exp.current 
+                                  ? 'bg-gradient-to-r from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] ring-4 ring-[var(--newsletter-accent-500)] ring-opacity-30' 
+                                  : 'bg-[var(--newsletter-primary-800)] border-4 border-[var(--newsletter-accent-500)]'
+                              }`}>
+                                {exp.logo === "R" ? (
+                                  <span className="text-[var(--newsletter-primary-900)] font-bold text-lg">{exp.logo}</span>
+                                ) : exp.logo === "TSO" ? (
+                                  <span className="text-[var(--newsletter-primary-900)] font-bold text-lg">{exp.logo}</span>
+                                ) : (
+                                  <img 
+                                    src={exp.logo} 
+                                    alt={`${exp.company} logo`}
+                                    className="w-8 h-8 object-contain"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                )}
+                              </div>
+                              {/* Vertical Line Connector */}
+                              {index < newsletterContent.author.career.length - 1 && (
+                                <div className="w-1 h-8 bg-gradient-to-b from-[var(--newsletter-accent-500)] to-[var(--newsletter-accent-400)] mt-2"></div>
+                              )}
+                            </div>
+                            
+                            {/* Company Info */}
+                            <div className="flex-1 pt-2">
+                              <div className={`font-bold text-lg mb-2 ${
+                                exp.current ? 'text-[var(--newsletter-accent-500)]' : 'text-[var(--newsletter-text-100)]'
+                              }`}>
+                                {exp.company}
+                              </div>
+                              <div className={`text-sm mb-3 ${
+                                exp.current ? 'text-[var(--newsletter-accent-500)]' : 'text-[var(--newsletter-text-80)]'
+                              }`}>
+                                {exp.role}
+                              </div>
+                              <div className={`text-sm font-semibold px-3 py-1 rounded-full inline-block ${
                                 exp.current 
                                   ? 'bg-[var(--newsletter-primary-900)] text-[var(--newsletter-accent-500)]' 
                                   : 'bg-[var(--newsletter-accent-500)] text-[var(--newsletter-primary-900)]'

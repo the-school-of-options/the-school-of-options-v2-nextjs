@@ -90,7 +90,7 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="h-12 px-2 text-base font-semibold newsletter-btn-primary text-[var(--newsletter-primary-900)] shadow-lg hover:shadow-xl transition-all duration-300 whitespace-nowrap"
+            className="h-12 px-2 text-base font-semibold newsletter-btn-primary newsletter-glow-animation text-[var(--newsletter-primary-900)] shadow-lg hover:shadow-xl transition-all duration-300 whitespace-nowrap"
           >
             {isSubmitting ? (
               <div className="flex items-center gap-2">
