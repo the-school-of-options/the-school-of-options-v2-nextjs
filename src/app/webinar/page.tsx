@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { content } from './content';
 import StickyBar from './_components/StickyBar';
 import FormCard from './_components/FormCard';
@@ -469,7 +470,10 @@ export default function WebinarAds1Page() {
         <div className="glass sticky top-0 z-30 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 text-reveal">
+              <Link 
+                href="/" 
+                className="flex items-center gap-3 text-reveal hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+              >
                 <div className="w-10 h-10 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-[var(--primary-900)] font-bold text-sm">TSO</span>
                 </div>
@@ -477,7 +481,7 @@ export default function WebinarAds1Page() {
                   <span className="font-bold text-[var(--text-100)] text-lg">The School of Options</span>
                   <div className="text-xs text-[var(--text-60)]">Live Masterclass</div>
                 </div>
-              </div>
+              </Link>
               <div className="hidden md:flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm limited-seats-glow">
                   <div className="w-2 h-2 bg-[var(--accent-500)] rounded-full pulse-dot-glow"></div>

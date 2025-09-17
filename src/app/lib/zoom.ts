@@ -1,7 +1,7 @@
 // Server-only helper to fetch & cache a Zoom S2S OAuth token.
 let tokenCache: { token: string; exp: number; api_url?: string } | null = null;
 
-export async function getZoomToken(): Promise<string | { access_token: string; api_url: string }> {
+export async function getZoomToken(retryCount: number = 0): Promise<string | { access_token: string; api_url: string }> {
   const now = Math.floor(Date.now() / 1000);
   
   // Check if we have a valid cached token (with 5 minute buffer)
@@ -91,6 +91,15 @@ export async function getZoomToken(): Promise<string | { access_token: string; a
     console.error("Failed to fetch Zoom token:", error);
     // Clear cache on error
     tokenCache = null;
+    
+    // Retry logic with exponential backoff
+    if (retryCount < 3) {
+      const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+      console.log(`Retrying token fetch in ${delay}ms (attempt ${retryCount + 1}/3)`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return getZoomToken(retryCount + 1);
+    }
+    
     throw error;
   }
 }

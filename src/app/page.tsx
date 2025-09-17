@@ -8,7 +8,6 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import DedicationAndVideosSection from "@/components/DedicationAndVideosSection";
 import Image from "next/image";
-import { subscribeToNewsletter } from "@/api/newsletter";
 import { registerForWebinar } from "@/api/webinar";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -32,12 +31,31 @@ const HomePage = () => {
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubscribing(true);
     
     try {
-      const response = await subscribeToNewsletter(email);
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email }),
+      });
+
+      const data = await response.json();
       
-      if (response.ok) {
+      if (data.ok) {
         toast({
           title: "Successfully Subscribed!",
           description: "Thank you for subscribing to our newsletter. You'll receive weekly updates from Kundan Kishore.",
@@ -45,24 +63,17 @@ const HomePage = () => {
         });
         form.reset();
       } else {
-        if (response.error === "already_subscribed") {
-          toast({
-            title: "Already Subscribed",
-            description: "This email is already subscribed to our newsletter.",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Subscription Failed",
-            description: response.error || "Something went wrong. Please try again.",
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "Subscription Failed",
+          description: data.error || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
       }
-    } catch {
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
       toast({
         title: "Subscription Failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: "Network error. Please check your connection and try again.",
         variant: "destructive",
       });
     } finally {

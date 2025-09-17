@@ -44,7 +44,7 @@ export function useZoomMeetings(): UseZoomMeetingsReturn {
         } else if (errorData.error === 'token_error') {
           throw new Error('Unable to connect to Zoom. Please try again later.');
         } else if (errorData.error === 'zoom_auth_error') {
-          throw new Error('Zoom authentication failed. Please contact support.');
+          throw new Error('Zoom authentication failed. The session has been refreshed - please try again.');
         } else if (errorData.error === 'zoom_permission_error') {
           throw new Error('Insufficient permissions to access meetings.');
         } else {

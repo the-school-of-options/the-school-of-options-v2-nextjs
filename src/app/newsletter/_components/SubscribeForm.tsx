@@ -38,14 +38,30 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
 
     setIsSubmitting(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      });
 
-    // Store email in localStorage for future prefills
-    sessionStorage.setItem("newsletter-email", email);
-    
-    setIsSuccess(true);
-    setIsSubmitting(false);
+      const data = await response.json();
+
+      if (data.ok) {
+        // Store email in sessionStorage for future prefills
+        sessionStorage.setItem("newsletter-email", email);
+        setIsSuccess(true);
+      } else {
+        setError(data.error || 'Failed to subscribe. Please try again.');
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSuccess) {

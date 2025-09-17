@@ -3,65 +3,93 @@ import { getZoomToken, clearZoomTokenCache } from "@/app/lib/zoom";
 
 export async function GET() {
   try {
-    const tokenData = await getZoomToken();
-    const token = typeof tokenData === 'string' ? tokenData : tokenData.access_token;
-    const apiUrl = typeof tokenData === 'object' && tokenData.api_url ? tokenData.api_url : "https://api.zoom.us";
-    const zoomUrl = `${apiUrl}/v2/users/me/meetings?type=upcoming&page_size=50`;
+    let retryAttempt = 0;
+    const maxRetries = 2;
 
-    const res = await fetch(zoomUrl, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store",
-    });
+    while (retryAttempt <= maxRetries) {
+      try {
+        const tokenData = await getZoomToken();
+        const token = typeof tokenData === 'string' ? tokenData : tokenData.access_token;
+        const apiUrl = typeof tokenData === 'object' && tokenData.api_url ? tokenData.api_url : "https://api.zoom.us";
+        const zoomUrl = `${apiUrl}/v2/users/me/meetings?type=upcoming&page_size=50`;
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error(`Zoom API error: ${res.status} ${text}`);
-      
-      // Handle specific error cases
-      if (res.status === 401) {
-        // Clear token cache on authentication failure
-        clearZoomTokenCache();
+        console.log(`Zoom API call attempt ${retryAttempt + 1}/${maxRetries + 1}: ${zoomUrl}`);
+
+        const res = await fetch(zoomUrl, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          console.error(`Zoom API error: ${res.status} ${text}`);
+          
+          // Handle specific error cases
+          if (res.status === 401 && retryAttempt < maxRetries) {
+            // Clear token cache on authentication failure and retry
+            console.log(`Authentication failed, clearing cache and retrying (attempt ${retryAttempt + 1})`);
+            clearZoomTokenCache();
+            retryAttempt++;
+            continue; // Retry the loop
+          }
+          
+          if (res.status === 401) {
+            return NextResponse.json(
+              { 
+                error: "zoom_auth_error", 
+                detail: "Zoom authentication failed after retries. Please check your credentials.",
+                status: res.status,
+                response_text: text,
+                attempts: retryAttempt + 1
+              },
+              { status: 401 }
+            );
+          }
+          
+          if (res.status === 403) {
+            return NextResponse.json(
+              { error: "zoom_permission_error", detail: "Insufficient permissions to access Zoom meetings." },
+              { status: 403 }
+            );
+          }
+          
+          return NextResponse.json(
+            { error: "zoom_error", detail: `Zoom API error: ${res.status} ${text}` },
+            { status: 502 }
+          );
+        }
+
+        // Success case
+        const data = await res.json();
+        const items = (data.meetings ?? []).map((m: any) => ({
+          id: m.id,
+          topic: m.topic,
+          start_time: m.start_time,
+          timezone: m.timezone,
+          duration: m.duration,
+          join_url: m.join_url, // may exist on some responses; include if present
+        }));
+
+        console.log(`Successfully fetched ${items.length} upcoming meetings`);
         
-        return NextResponse.json(
-          { 
-            error: "zoom_auth_error", 
-            detail: "Zoom authentication failed. Token cache cleared - please try again.",
-            status: res.status,
-            response_text: text
-          },
-          { status: 401 }
-        );
+        return NextResponse.json({
+          items,
+          next_page_token: data.next_page_token ?? null,
+        });
+
+      } catch (fetchError: any) {
+        console.error(`Error in fetch attempt ${retryAttempt + 1}:`, fetchError);
+        
+        if (retryAttempt < maxRetries) {
+          retryAttempt++;
+          console.log(`Retrying API call (attempt ${retryAttempt + 1}/${maxRetries + 1})`);
+          continue;
+        }
+        
+        // If we've exhausted retries, throw to outer catch
+        throw fetchError;
       }
-      
-      if (res.status === 403) {
-        return NextResponse.json(
-          { error: "zoom_permission_error", detail: "Insufficient permissions to access Zoom meetings." },
-          { status: 403 }
-        );
-      }
-      
-      return NextResponse.json(
-        { error: "zoom_error", detail: `Zoom API error: ${res.status} ${text}` },
-        { status: 502 }
-      );
     }
-
-    const data = await res.json();
-    const items = (data.meetings ?? []).map((m: any) => ({
-      id: m.id,
-      topic: m.topic,
-      start_time: m.start_time,
-      timezone: m.timezone,
-      duration: m.duration,
-      join_url: m.join_url, // may exist on some responses; include if present
-    }));
-
-    console.log(`Successfully fetched ${items.length} upcoming meetings`);
-    
-    return NextResponse.json({
-      items,
-      next_page_token: data.next_page_token ?? null,
-    });
   } catch (e: any) {
     console.error("Error in meetings API:", e);
     
