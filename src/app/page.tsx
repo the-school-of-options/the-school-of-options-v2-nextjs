@@ -11,11 +11,31 @@ import Image from "next/image";
 import { registerForWebinar } from "@/api/webinar";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { useZoomMeetings } from '@/hooks/use-zoom-meetings';
 
 const HomePage = () => {
   const { toast } = useToast();
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [isRegisteringWebinar, setIsRegisteringWebinar] = useState(false);
+  
+  // Fetch upcoming Zoom meetings
+  const { meetings, loading: meetingsLoading, error: meetingsError } = useZoomMeetings();
+
+  // Format meeting data for display
+  const formatMeetingOption = (meeting: any) => {
+    const startDate = new Date(meeting.start_time);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    };
+    const formattedDate = startDate.toLocaleDateString('en-US', options);
+    const duration = meeting.duration ? ` (${meeting.duration} min)` : '';
+    return `${meeting.topic} - ${formattedDate}${duration}`;
+  };
 
   const handleNewsletterSubscription = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,9 +109,9 @@ const HomePage = () => {
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const mobile = formData.get('mobile') as string;
-    const preferedLanguage = formData.get('preferedLanguage') as string;
+    const session = formData.get('session') as string;
 
-    if (!name || !email || !mobile || !preferedLanguage) {
+    if (!name || !email || !mobile || !session) {
       toast({
         title: "All Fields Required",
         description: "Please fill in all the required fields.",
@@ -103,12 +123,41 @@ const HomePage = () => {
     setIsRegisteringWebinar(true);
     
     try {
+      // Find the selected meeting to get the webinar name
+      const selectedMeeting = meetings.find(meeting => {
+        // Try exact match first
+        if (meeting.id === session) return true;
+        // Try string comparison in case of type mismatch
+        if (String(meeting.id) === String(session)) return true;
+        return false;
+      });
+      
+      let webinarName = 'Unknown Webinar';
+      
+      if (selectedMeeting) {
+        webinarName = selectedMeeting.topic;
+      } else {
+        // Fallback: try to extract webinar name from the formatted option text
+        const optionText = document.querySelector(`option[value="${session}"]`)?.textContent;
+        if (optionText && optionText !== 'Select your preferred session' && optionText !== 'Loading sessions...') {
+          // Extract the topic part before the date/time (format: "Topic - Date Time")
+          const topicMatch = optionText.match(/^([^-]+)/);
+          if (topicMatch) {
+            webinarName = topicMatch[1].trim();
+          }
+        }
+      }
+
+      console.log("session", session);
+      console.log("meetings array", meetings);
+      console.log("selectedMeeting", selectedMeeting);
+      console.log("webinarName", webinarName);
+
       const response = await registerForWebinar({
         email: email.trim(),
-        name: name.trim(),
-        webinarLink: "https://theschoolofoptions.com/webinar", // Default webinar link
-        source: "website", // Default source
-        preferedLanguage: preferedLanguage.toLowerCase()
+        fullName: name.trim(),
+        phoneNumebr: mobile.trim(), // Note: keeping the typo as specified in requirements
+        webinarName: webinarName
       });
       
       if (response.ok) {
@@ -827,23 +876,58 @@ const HomePage = () => {
                 </div>
                 <div>
                   <select
-                    name="preferedLanguage"
+                    name="session"
                     required
-                    disabled={isRegisteringWebinar}
+                    disabled={isRegisteringWebinar || meetingsLoading || (meetings.length === 0 && !meetingsError)}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0A2540] focus:border-[#FF7A00] focus:outline-none focus:ring-2 focus:ring-[#FF7A00]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <option value="">Preferred Language</option>
-                    <option value="English">English</option>
-                    <option value="Hindi">Hindi</option>
+                    <option value="">
+                      {meetingsLoading 
+                        ? 'Loading sessions...' 
+                        : meetings.length === 0 && !meetingsError
+                          ? 'No sessions scheduled'
+                          : 'Select your preferred session'
+                      }
+                    </option>
+                    {meetingsError ? (
+                      <option value="" disabled>
+                        Error loading sessions - please try again later
+                      </option>
+                    ) : meetings.length > 0 ? (
+                      meetings.slice(0, 2).map((meeting) => (
+                        <option key={meeting.id} value={meeting.id}>
+                          {formatMeetingOption(meeting)}
+                        </option>
+                      ))
+                    ) : !meetingsLoading && !meetingsError ? (
+                      <option value="" disabled>
+                        No upcoming sessions available
+                      </option>
+                    ) : null}
                   </select>
+                  {meetingsError && (
+                    <p className="mt-1 text-sm text-yellow-400">
+                      Unable to load sessions. {meetingsError}
+                    </p>
+                  )}
+                  {!meetingsLoading && !meetingsError && meetings.length === 0 && (
+                    <p className="mt-1 text-sm text-blue-400">
+                      No upcoming sessions are currently scheduled. Please check back later.
+                    </p>
+                  )}
                 </div>
                 <button
                   type="submit"
-                  disabled={isRegisteringWebinar}
+                  disabled={isRegisteringWebinar || (meetings.length === 0 && !meetingsError)}
                   className="w-full px-6 py-4 bg-[#FF7A00] hover:bg-[#FF8A1E] text-white font-bold rounded-[12px] shadow-[0_10px_24px_rgba(255,122,0,0.25)] transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   aria-label="Reserve your free webinar seat"
                 >
-                  {isRegisteringWebinar ? "Registering..." : "Reserve Your Free Seat"}
+                  {isRegisteringWebinar 
+                    ? "Registering..." 
+                    : meetings.length === 0 && !meetingsError
+                      ? "NO SESSIONS AVAILABLE"
+                      : "Reserve Your Free Seat"
+                  }
                 </button>
               </form>
               <p className="text-sm text-gray-500 mt-4 text-center">

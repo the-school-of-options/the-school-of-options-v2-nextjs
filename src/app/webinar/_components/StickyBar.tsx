@@ -75,7 +75,7 @@ export default function StickyBar({ className = '', meetings = [] }: StickyBarPr
             </div>
             <Countdown 
               variant="long" 
-              className="text-[var(--acc-500)] countdown-pulse countdown-glow"
+              className="text-5lg text-[var(--acc-500)] countdown-pulse countdown-glow"
               aria-live="polite"
               meetings={meetings}
             />

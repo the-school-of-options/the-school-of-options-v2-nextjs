@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Countdown from './Countdown';
 import { content } from '../content';
+import { registerForWebinar, WebinarRegistrationData } from '@/api/webinar';
 
 interface ZoomMeeting {
   id: string;
@@ -170,11 +171,70 @@ export default function FormCard({
 
     setIsSubmitting(true);
     
-    // Simulate form submission delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setIsSubmitting(false);
-    setIsStep2Open(true);
+    try {
+      // Find the selected meeting to get the webinar name
+      const selectedMeeting = meetings.find(meeting => {
+        // Try exact match first
+        if (meeting.id === formData.session) return true;
+        // Try string comparison in case of type mismatch
+        if (String(meeting.id) === String(formData.session)) return true;
+        return false;
+      });
+      
+      let webinarName = 'Unknown Webinar';
+      
+      if (selectedMeeting) {
+        webinarName = selectedMeeting.topic;
+      } else {
+        // Fallback: try to extract webinar name from the formatted option text
+        // This matches the formatMeetingOption function used in the dropdown
+        const optionText = document.querySelector(`option[value="${formData.session}"]`)?.textContent;
+        if (optionText && optionText !== 'Select your preferred session' && optionText !== 'Loading sessions...') {
+          // Extract the topic part before the date/time (format: "Topic - Date Time")
+          const topicMatch = optionText.match(/^([^-]+)/);
+          if (topicMatch) {
+            webinarName = topicMatch[1].trim();
+          }
+        }
+      }
+
+      console.log("formData.session", formData.session);
+      console.log("meetings array", meetings);
+      console.log("selectedMeeting", selectedMeeting);
+      console.log("webinarName", webinarName);
+      
+      // Prepare the payload according to the new API structure
+      const registrationData: WebinarRegistrationData = {
+        email: formData.email,
+        fullName: formData.name,
+        phoneNumebr: formData.phone, // Note: keeping the typo as specified in requirements
+        webinarName: webinarName
+      };
+
+      // Call the API
+      const response = await registerForWebinar(registrationData);
+      
+      if (response.ok) {
+        // Clear form data on successful submission
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          session: ''
+        });
+        sessionStorage.removeItem('webinar-form-data');
+        setIsStep2Open(true);
+      } else {
+        // Handle API error
+        console.error('Registration failed:', response.error);
+        alert(`Registration failed: ${response.error || 'Unknown error occurred'}`);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleModalClose = () => {

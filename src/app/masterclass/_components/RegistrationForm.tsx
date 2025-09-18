@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { registerForWebinar, WebinarRegistrationData } from '@/api/webinar';
 
 interface ZoomMeeting {
   id: string;
@@ -27,6 +28,7 @@ export const RegistrationForm = ({
   meetingsError = null 
 }: RegistrationFormProps) => {
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -59,12 +61,75 @@ export const RegistrationForm = ({
     }
   };
 
-  const handleStep2Submit = (e: React.FormEvent) => {
+  const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle final form submission
-    console.log('Registration completed:', formData);
-    // Here you would typically send the data to your backend
-    alert('Registration successful! Check your email for webinar details.');
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Find the selected meeting to get the webinar name
+      const selectedMeeting = meetings.find(meeting => {
+        // Try exact match first
+        if (meeting.id === formData.session) return true;
+        // Try string comparison in case of type mismatch
+        if (String(meeting.id) === String(formData.session)) return true;
+        return false;
+      });
+      
+      let webinarName = 'Unknown Webinar';
+      
+      if (selectedMeeting) {
+        webinarName = selectedMeeting.topic;
+      } else {
+        // Fallback: try to extract webinar name from the formatted option text
+        const optionText = document.querySelector(`option[value="${formData.session}"]`)?.textContent;
+        if (optionText && optionText !== 'Select your preferred session' && optionText !== 'Loading sessions...') {
+          // Extract the topic part before the date/time (format: "Topic - Date Time")
+          const topicMatch = optionText.match(/^([^-]+)/);
+          if (topicMatch) {
+            webinarName = topicMatch[1].trim();
+          }
+        }
+      }
+
+      console.log("formData.session", formData.session);
+      console.log("meetings array", meetings);
+      console.log("selectedMeeting", selectedMeeting);
+      console.log("webinarName", webinarName);
+      
+      // Prepare the payload according to the new API structure
+      const registrationData: WebinarRegistrationData = {
+        email: formData.email,
+        fullName: formData.fullName,
+        phoneNumebr: formData.phone, // Note: keeping the typo as specified in requirements
+        webinarName: webinarName
+      };
+
+      // Call the API
+      const response = await registerForWebinar(registrationData);
+      
+      if (response.ok) {
+        // Clear form data on successful submission
+        setFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          session: '',
+          experience: 'beginner',
+          hearAbout: ''
+        });
+        alert('Registration successful! Check your email for webinar details.');
+      } else {
+        // Handle API error
+        console.error('Registration failed:', response.error);
+        alert(`Registration failed: ${response.error || 'Unknown error occurred'}`);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (step === 1) {
@@ -166,7 +231,8 @@ export const RegistrationForm = ({
 
           <Button 
             type="submit" 
-            className="w-full h-12 text-base font-semibold bg-gradient-orange shadow-orange hover:shadow-xl transition-all duration-300"
+            disabled={isSubmitting}
+            className="w-full h-12 text-base font-semibold bg-gradient-orange shadow-orange hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Register Now
           </Button>
@@ -238,9 +304,10 @@ export const RegistrationForm = ({
 
         <Button 
           type="submit" 
-          className="w-full h-12 text-base font-semibold bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all duration-300"
+          disabled={isSubmitting}
+          className="w-full h-12 text-base font-semibold bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Save Your Spot - Free
+          {isSubmitting ? '⏳ Processing...' : 'Save Your Spot - Free'}
         </Button>
       </form>
     </Card>

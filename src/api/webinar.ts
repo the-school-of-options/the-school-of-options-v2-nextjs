@@ -4,18 +4,16 @@ const API_BASE_URL = 'https://api.theschoolofoptions.com/api/v1';
 
 export interface WebinarRegistrationData {
   email: string;
-  name: string;
-  webinarLink: string;
-  source: string;
-  preferedLanguage: string;
+  fullName: string;
+  phoneNumebr: string;
+  webinarName: string;
 }
 
 export interface WebinarUser {
   email: string;
-  name: string;
-  webinarLink: string;
-  source: string;
-  preferedLanguage: string;
+  fullName: string;
+  phoneNumebr: string;
+  webinarName: string;
   id: string;
   createdAt: string;
   updatedAt: string;
