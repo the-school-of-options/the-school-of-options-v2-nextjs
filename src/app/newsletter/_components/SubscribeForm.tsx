@@ -46,7 +46,7 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
         },
         body: JSON.stringify({ 
           email: email.trim(),
-          listId: 26
+          listId: 29
         }),
       });
 
