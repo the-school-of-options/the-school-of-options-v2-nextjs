@@ -32,7 +32,13 @@ export const registerForWebinar = async (data: WebinarRegistrationData): Promise
   try {
     console.log('Sending webinar registration request:', {
       url: `${API_BASE_URL}/webinar/register`,
-      data: data
+      {
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber:data.phoneNumebr,
+        webinarName:data.webinarName,
+        source:'website'
+    }
     });
 
     const response = await axios.post(`${API_BASE_URL}/webinar/register`, data, {
