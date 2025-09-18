@@ -39,22 +39,25 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/newsletter/subscribe', {
+      const response = await fetch('https://api.theschoolofoptions.com/api/v1/newsletter/subscribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ 
+          email: email.trim(),
+          listId: 26
+        }),
       });
 
       const data = await response.json();
 
-      if (data.ok) {
+      if (response.ok) {
         // Store email in sessionStorage for future prefills
         sessionStorage.setItem("newsletter-email", email);
         setIsSuccess(true);
       } else {
-        setError(data.error || 'Failed to subscribe. Please try again.');
+        setError(data.message || data.error || 'Failed to subscribe. Please try again.');
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);

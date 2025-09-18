@@ -31,11 +31,12 @@ export interface NewsletterResponse {
   message?: string;
 }
 
-export const subscribeToNewsletter = async (email: string): Promise<NewsletterResponse> => {
+export const subscribeToNewsletter = async (email: string, name?: string): Promise<NewsletterResponse> => {
   try {
     console.log('Sending newsletter subscription request to Listmonk:', {
       url: LISTMONK_API_URL,
       email: email,
+      name: name,
       listId: NEWSLETTER_LIST_ID
     });
 
@@ -53,7 +54,7 @@ export const subscribeToNewsletter = async (email: string): Promise<NewsletterRe
 
     const response = await axios.post(LISTMONK_API_URL, {
       email: email,
-      name: '', // Optional: can be extracted from email or left empty
+      name: name || email.split('@')[0], // Use provided name or email prefix
       listId: NEWSLETTER_LIST_ID
     }, {
       headers: {

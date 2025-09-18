@@ -4,7 +4,7 @@ import { subscribeToNewsletter } from '@/api/newsletter';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email } = body;
+    const { email, name } = body;
 
     if (!email) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await subscribeToNewsletter(email);
+    const result = await subscribeToNewsletter(email, name);
     
     if (result.ok) {
       return NextResponse.json(result, { status: 200 });
