@@ -699,10 +699,10 @@ export default function WebinarAds1Page() {
                         {/* Mobile: Single column, Desktop: 2 columns */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mobile-stack-container">
                           {[
-                            { company: "Citibank", role: "Investment Banking", period: "2003-2008", logo: "/assets/Citi.png" },
-                            { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2012", logo: "R" },
-                            { company: "Morgan Stanley", role: "Investment Banking", period: "2012-2016", logo: "/assets/morgan_stanley1671191982870.png" },
-                            { company: "Barclays Capital", role: "Assistant VP", period: "2016-2020", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" }
+                            { company: "Citibank", role: "Investment Banking", period: "2007-2008", logo: "/assets/Citi.png" },
+                            { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "R" },
+                            { company: "Morgan Stanley", role: "Investment Banking", period: "2010-2013", logo: "/assets/morgan_stanley1671191982870.png" },
+                            { company: "Barclays Capital", role: "Assistant VP", period: "2013-2014", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" }
                           ].map((exp, index) => (
                             <div key={index} className="mobile-stack-item flex items-center gap-4 p-4 sm:p-5 rounded-xl glass hover-lift">
                               <div className="w-14 h-14 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">

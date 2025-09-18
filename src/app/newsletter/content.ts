@@ -48,11 +48,11 @@ export const newsletterContent = {
       "Proven systematic method"
     ],
     career: [
-      { company: "Citibank", role: "Investment Banking", period: "2003-2008", logo: "/assets/Citi.png" },
-      { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2012", logo: "R" },
-      { company: "Morgan Stanley", role: "Investment Banking", period: "2012-2016", logo: "/assets/morgan_stanley1671191982870.png" },
-      { company: "Barclays Capital", role: "Assistant VP", period: "2016-2020", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" },
-      { company: "The School of Options", role: "Founder & Mentor", period: "2020-Present", logo: "TSO", current: true }
+      { company: "Citibank", role: "Investment Banking", period: "2006-2008", logo: "/assets/Citi.png" },
+      { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "R" },
+      { company: "Morgan Stanley", role: "Investment Banking", period: "2010-2013", logo: "/assets/morgan_stanley1671191982870.png" },
+      { company: "Barclays Capital", role: "Assistant VP", period: "2013-2014", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" },
+      { company: "The School of Options", role: "Founder & Mentor", period: "2019-Present", logo: "TSO", current: true }
     ],
     chips: ["1.5L+ trained", "20+ years", "4.9★ average"]
   },
