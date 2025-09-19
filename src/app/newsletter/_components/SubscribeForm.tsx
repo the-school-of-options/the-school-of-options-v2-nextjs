@@ -80,10 +80,10 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
           </svg>
         </div>
         <h3 className="text-xl font-semibold text-[var(--newsletter-text-100)] mb-2">
-          Check your inbox to confirm your subscription.
+          Thank you for subscribing to our newsletter.
         </h3>
         <p className="text-[var(--newsletter-text-80)]">
-          If you don't see it, check spam/promotions.
+          You'll receive weekly updates from Kundan Kishore.
         </p>
       </div>
     );

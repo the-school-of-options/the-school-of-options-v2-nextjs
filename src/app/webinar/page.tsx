@@ -700,7 +700,7 @@ export default function WebinarAds1Page() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mobile-stack-container">
                           {[
                             { company: "Citibank", role: "Investment Banking", period: "2007-2008", logo: "/assets/Citi.png" },
-                            { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "R" },
+                            { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "/assets/rbs.png" },
                             { company: "Morgan Stanley", role: "Investment Banking", period: "2010-2013", logo: "/assets/morgan_stanley1671191982870.png" },
                             { company: "Barclays Capital", role: "Assistant VP", period: "2013-2014", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" }
                           ].map((exp, index) => (
@@ -708,6 +708,14 @@ export default function WebinarAds1Page() {
                               <div className="w-14 h-14 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
                                 {exp.logo === "R" ? (
                                   <span className="text-[var(--primary-900)] font-bold text-base sm:text-sm">{exp.logo}</span>
+                                ) : exp.logo === "/assets/rbs.png" ? (
+                                  <img 
+                                    src={exp.logo} 
+                                    alt={`${exp.company} logo`}
+                                    className="w-10 h-10 sm:w-8 sm:h-8 object-contain"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
                                 ) : (
                                   <img 
                                     src={exp.logo} 
@@ -1025,7 +1033,7 @@ export default function WebinarAds1Page() {
         </section>
 
         {/* Compliance Footer - Modern Design */}
-        <footer className="py-12 border-t border-[var(--border-20)] bg-[var(--primary-900)]">
+        <footer className="py-12 border-t mb-20 border-[var(--border-20)] bg-[var(--primary-900)]">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-6">

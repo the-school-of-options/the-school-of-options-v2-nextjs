@@ -379,6 +379,14 @@ export default function NewsletterPage() {
                                 <span className="text-[var(--newsletter-primary-900)] font-bold text-xl">{exp.logo}</span>
                               ) : exp.logo === "TSO" ? (
                                 <span className="text-[var(--newsletter-primary-900)] font-bold text-xl">{exp.logo}</span>
+                              ) : exp.logo === "/assets/rbs.png" ? (
+                                <img 
+                                  src={exp.logo} 
+                                  alt={`${exp.company} logo`}
+                                  className="w-10 h-10 object-contain"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
                               ) : (
                                 <img 
                                   src={exp.logo} 
@@ -429,6 +437,14 @@ export default function NewsletterPage() {
                                   <span className="text-[var(--newsletter-primary-900)] font-bold text-lg">{exp.logo}</span>
                                 ) : exp.logo === "TSO" ? (
                                   <span className="text-[var(--newsletter-primary-900)] font-bold text-lg">{exp.logo}</span>
+                                ) : exp.logo === "/assets/rbs.png" ? (
+                                  <img 
+                                    src={exp.logo} 
+                                    alt={`${exp.company} logo`}
+                                    className="w-8 h-8 object-contain"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
                                 ) : (
                                   <img 
                                     src={exp.logo} 

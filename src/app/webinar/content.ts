@@ -83,7 +83,7 @@ export const content = {
     urgencyNote: "Live this week - limited seats.",
     step2Title: "You're in!",
     step2Body:
-      "We'll email/SMS your unique join link shortly. Add the session to your calendar and come ready to learn."
+      "We'll email you your unique join link shortly. Add the session to your calendar and come ready to learn."
   },
 
   socialProof: {

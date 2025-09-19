@@ -49,7 +49,7 @@ export const newsletterContent = {
     ],
     career: [
       { company: "Citibank", role: "Investment Banking", period: "2006-2008", logo: "/assets/Citi.png" },
-      { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "R" },
+      { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "/assets/rbs.png" },
       { company: "Morgan Stanley", role: "Investment Banking", period: "2010-2013", logo: "/assets/morgan_stanley1671191982870.png" },
       { company: "Barclays Capital", role: "Assistant VP", period: "2013-2014", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" },
       { company: "The School of Options", role: "Founder & Mentor", period: "2019-Present", logo: "TSO", current: true }

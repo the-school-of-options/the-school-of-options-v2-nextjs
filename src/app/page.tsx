@@ -65,12 +65,12 @@ const HomePage = () => {
     setIsSubscribing(true);
     
     try {
-      const response = await fetch('/api/newsletter/subscribe', {
+      const response = await fetch('https://api.theschoolofoptions.com/api/v1/newsletter/subscribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify({ email: email, listId: 29 }),
       });
 
       const data = await response.json();
