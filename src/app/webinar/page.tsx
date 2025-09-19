@@ -11,11 +11,11 @@ import TestimonialCard from './_components/TestimonialCard';
 import FAQAccordion from './_components/FAQAccordion';
 import SeatMeter from './_components/SeatMeter';
 import StackGroup, { StackItem } from './_components/StackGroup';
-import { useZoomMeetings } from '@/hooks/use-zoom-meetings';
+import { useZoomWebinars } from '@/hooks/use-zoom-webinars';
 
 export default function WebinarAds1Page() {
   // Fetch upcoming Zoom meetings
-  const { meetings, loading: meetingsLoading, error: meetingsError } = useZoomMeetings();
+  const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
 
   // Mobile stack animation effect
   React.useEffect(() => {
@@ -596,9 +596,9 @@ export default function WebinarAds1Page() {
                 <StackItem index={1}>
                   <div className="text-slide-right">
                     <FormCard 
-                      meetings={meetings}
-                      meetingsLoading={meetingsLoading}
-                      meetingsError={meetingsError}
+                      meetings={webinars}
+                      meetingsLoading={webinarsLoading}
+                      meetingsError={webinarsError}
                     />
                   </div>
                 </StackItem>
@@ -1058,7 +1058,7 @@ export default function WebinarAds1Page() {
                   <div className="w-2 h-2 bg-[var(--accent-500)] rounded-full animate-pulse"></div>
                   <span>{content.stickyBar.a.replace('{TIMER}', '')}</span>
                 </div>
-                <Countdown variant="mini" className="text-sm sm:text-base font-mono text-[var(--accent-500)] countdown-pulse countdown-glow" meetings={meetings} />
+                <Countdown variant="mini" className="text-sm sm:text-base font-mono text-[var(--accent-500)] countdown-pulse countdown-glow" meetings={webinars} />
               </div>
               <a 
                 href="#register"

@@ -32,7 +32,7 @@ export function useZoomWebinars(): UseZoomWebinarsReturn {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/api/meetings/upcoming', {
+      const response = await fetch('/api/webinars/upcoming', {
         cache: 'no-store'
       });
       
@@ -75,3 +75,6 @@ export function useZoomWebinars(): UseZoomWebinarsReturn {
     refetch: fetchWebinars
   };
 }
+
+// Backward compatibility export
+export const useZoomMeetings = useZoomWebinars;

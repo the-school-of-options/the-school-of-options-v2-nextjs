@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getZoomToken, clearZoomTokenCache } from "@/app/lib/zoom";
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     let retryAttempt = 0;
@@ -92,7 +95,7 @@ export async function GET() {
       }
     }
   } catch (e: any) {
-    console.error("Error in meetings API:", e);
+    console.error("Error in webinars API:", e);
     
     // Handle specific error types
     if (e.message?.includes("Missing Zoom environment variables")) {

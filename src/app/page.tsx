@@ -11,7 +11,7 @@ import Image from "next/image";
 import { registerForWebinar } from "@/api/webinar";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
-import { useZoomMeetings } from '@/hooks/use-zoom-meetings';
+import { useZoomWebinars } from '@/hooks/use-zoom-webinars';
 
 const HomePage = () => {
   const { toast } = useToast();
@@ -19,7 +19,7 @@ const HomePage = () => {
   const [isRegisteringWebinar, setIsRegisteringWebinar] = useState(false);
   
   // Fetch upcoming Zoom meetings
-  const { meetings, loading: meetingsLoading, error: meetingsError } = useZoomMeetings();
+  const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
 
   // Format meeting data for display
   const formatMeetingOption = (meeting: any) => {
@@ -124,7 +124,7 @@ const HomePage = () => {
     
     try {
       // Find the selected meeting to get the webinar name
-      const selectedMeeting = meetings.find(meeting => {
+      const selectedMeeting = webinars.find(meeting => {
         // Try exact match first
         if (meeting.id === session) return true;
         // Try string comparison in case of type mismatch
@@ -149,7 +149,7 @@ const HomePage = () => {
       }
 
       console.log("session", session);
-      console.log("meetings array", meetings);
+      console.log("webinars array", webinars);
       console.log("selectedMeeting", selectedMeeting);
       console.log("webinarName", webinarName);
 
@@ -878,39 +878,39 @@ const HomePage = () => {
                   <select
                     name="session"
                     required
-                    disabled={isRegisteringWebinar || meetingsLoading || (meetings.length === 0 && !meetingsError)}
+                    disabled={isRegisteringWebinar || webinarsLoading || (webinars.length === 0 && !webinarsError)}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0A2540] focus:border-[#FF7A00] focus:outline-none focus:ring-2 focus:ring-[#FF7A00]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">
-                      {meetingsLoading 
+                      {webinarsLoading 
                         ? 'Loading sessions...' 
-                        : meetings.length === 0 && !meetingsError
+                        : webinars.length === 0 && !webinarsError
                           ? 'No sessions scheduled'
                           : 'Select your preferred session'
                       }
                     </option>
-                    {meetingsError ? (
+                    {webinarsError ? (
                       <option value="" disabled>
                         Error loading sessions - please try again later
                       </option>
-                    ) : meetings.length > 0 ? (
-                      meetings.slice(0, 2).map((meeting) => (
+                    ) : webinars.length > 0 ? (
+                      webinars.slice(0, 2).map((meeting) => (
                         <option key={meeting.id} value={meeting.id}>
                           {formatMeetingOption(meeting)}
                         </option>
                       ))
-                    ) : !meetingsLoading && !meetingsError ? (
+                    ) : !webinarsLoading && !webinarsError ? (
                       <option value="" disabled>
                         No upcoming sessions available
                       </option>
                     ) : null}
                   </select>
-                  {meetingsError && (
+                  {webinarsError && (
                     <p className="mt-1 text-sm text-yellow-400">
-                      Unable to load sessions. {meetingsError}
+                      Unable to load sessions. {webinarsError}
                     </p>
                   )}
-                  {!meetingsLoading && !meetingsError && meetings.length === 0 && (
+                  {!webinarsLoading && !webinarsError && webinars.length === 0 && (
                     <p className="mt-1 text-sm text-blue-400">
                       No upcoming sessions are currently scheduled. Please check back later.
                     </p>
@@ -918,13 +918,13 @@ const HomePage = () => {
                 </div>
                 <button
                   type="submit"
-                  disabled={isRegisteringWebinar || (meetings.length === 0 && !meetingsError)}
+                  disabled={isRegisteringWebinar || (webinars.length === 0 && !webinarsError)}
                   className="w-full px-6 py-4 bg-[#FF7A00] hover:bg-[#FF8A1E] text-white font-bold rounded-[12px] shadow-[0_10px_24px_rgba(255,122,0,0.25)] transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   aria-label="Reserve your free webinar seat"
                 >
                   {isRegisteringWebinar 
                     ? "Registering..." 
-                    : meetings.length === 0 && !meetingsError
+                    : webinars.length === 0 && !webinarsError
                       ? "NO SESSIONS AVAILABLE"
                       : "Reserve Your Free Seat"
                   }

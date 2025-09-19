@@ -2,17 +2,17 @@
 
 import React from "react";
 import { WebinarLanding } from "./_components/WebinarLanding";
-import { useZoomMeetings } from '@/hooks/use-zoom-meetings';
+import { useZoomWebinars } from '@/hooks/use-zoom-webinars';
 
 export default function MasterclassPage() {
   // Fetch upcoming Zoom meetings
-  const { meetings, loading: meetingsLoading, error: meetingsError } = useZoomMeetings();
+  const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
 
   return (
     <WebinarLanding 
-      meetings={meetings}
-      meetingsLoading={meetingsLoading}
-      meetingsError={meetingsError}
+      meetings={webinars}
+      meetingsLoading={webinarsLoading}
+      meetingsError={webinarsError}
     />
   );
 }
