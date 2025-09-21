@@ -28,17 +28,7 @@ export interface WebinarResponse {
 
 export const registerForWebinar = async (data: WebinarRegistrationData): Promise<WebinarResponse> => {
   try {
-    console.log('Sending webinar registration request:', {
-      url: `${API_BASE_URL}/webinar/register`,
-    });
-
-    const response = await axios.post(`${API_BASE_URL}/webinar/register`, {
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber:data.phoneNumebr,
-        webinarName:data.webinarName,
-        source:'website'
-    }, {
+    const response = await axios.post(`${API_BASE_URL}/webinar/register`, data, {
       headers: {
         'Content-Type': 'application/json',
       },
