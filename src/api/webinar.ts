@@ -4,18 +4,16 @@ const API_BASE_URL = 'https://api.theschoolofoptions.com/api/v1';
 
 export interface WebinarRegistrationData {
   email: string;
-  name: string;
-  webinarLink: string;
-  source: string;
-  preferedLanguage: string;
+  fullName: string;
+  phoneNumebr: string;
+  webinarName: string;
 }
 
 export interface WebinarUser {
   email: string;
-  name: string;
-  webinarLink: string;
-  source: string;
-  preferedLanguage: string;
+  fullName: string;
+  phoneNumebr: string;
+  webinarName: string;
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -30,7 +28,17 @@ export interface WebinarResponse {
 
 export const registerForWebinar = async (data: WebinarRegistrationData): Promise<WebinarResponse> => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/webinar/register`, data, {
+    console.log('Sending webinar registration request:', {
+      url: `${API_BASE_URL}/webinar/register`,
+    });
+
+    const response = await axios.post(`${API_BASE_URL}/webinar/register`, {
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber:data.phoneNumebr,
+        webinarName:data.webinarName,
+        source:'website'
+    }, {
       headers: {
         'Content-Type': 'application/json',
       },

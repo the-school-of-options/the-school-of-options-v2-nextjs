@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { content } from './content';
 import StickyBar from './_components/StickyBar';
 import FormCard from './_components/FormCard';
@@ -10,8 +11,12 @@ import TestimonialCard from './_components/TestimonialCard';
 import FAQAccordion from './_components/FAQAccordion';
 import SeatMeter from './_components/SeatMeter';
 import StackGroup, { StackItem } from './_components/StackGroup';
+import { useZoomWebinars } from '@/hooks/use-zoom-webinars';
 
 export default function WebinarAds1Page() {
+  // Fetch upcoming Zoom meetings
+  const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
+
   // Mobile stack animation effect
   React.useEffect(() => {
     const observerOptions = {
@@ -465,7 +470,10 @@ export default function WebinarAds1Page() {
         <div className="glass sticky top-0 z-30 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 text-reveal">
+              <Link 
+                href="/" 
+                className="flex items-center gap-3 text-reveal hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+              >
                 <div className="w-10 h-10 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-[var(--primary-900)] font-bold text-sm">TSO</span>
                 </div>
@@ -473,7 +481,7 @@ export default function WebinarAds1Page() {
                   <span className="font-bold text-[var(--text-100)] text-lg">The School of Options</span>
                   <div className="text-xs text-[var(--text-60)]">Live Masterclass</div>
                 </div>
-              </div>
+              </Link>
               <div className="hidden md:flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm limited-seats-glow">
                   <div className="w-2 h-2 bg-[var(--accent-500)] rounded-full pulse-dot-glow"></div>
@@ -587,7 +595,11 @@ export default function WebinarAds1Page() {
                 {/* Right Form - Modern Design */}
                 <StackItem index={1}>
                   <div className="text-slide-right">
-                    <FormCard />
+                    <FormCard 
+                      meetings={webinars}
+                      meetingsLoading={webinarsLoading}
+                      meetingsError={webinarsError}
+                    />
                   </div>
                 </StackItem>
               </div>
@@ -630,7 +642,7 @@ export default function WebinarAds1Page() {
                   <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
                     {/* Profile Image & Basic Info */}
                     <div className="text-center lg:text-left flex-shrink-0">
-                      <div className="relative flex justify-center mb-6">
+                      <div className="relative flex justify-center mb-12 mt-8">
                         <div className="w-48 h-48 sm:w-56 sm:h-56 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-3xl flex items-center justify-center shadow-2xl relative">
                           <img 
                             src="/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png" 
@@ -647,7 +659,7 @@ export default function WebinarAds1Page() {
                         </div>
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-[var(--text-100)] mb-2 text-center">Kundan Kishore</h3>
-                      <p className="text-[var(--text-100)] font-bold text-lg mb-6 text-center">Founder & Chief Mentor</p>
+                      <p className="text-[var(--text-100)] font-bold text-lg mb-8 text-center">Founder & Chief Mentor</p>
                       
                       {/* Quick Stats - Improved Grid Layout */}
                       <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto lg:mx-0 mobile-stack-container">
@@ -675,52 +687,61 @@ export default function WebinarAds1Page() {
                       </div>
                       
                       {/* Career Highlights - Modern Design */}
-                      <div className="glass rounded-2xl p-6">
-                        <h4 className="text-xl font-bold text-[var(--text-100)] mb-6 flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-lg flex items-center justify-center">
-                            <svg className="w-4 h-4 text-[var(--primary-900)]" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="glass rounded-2xl p-6 sm:p-8">
+                        <h4 className="text-xl sm:text-2xl font-bold text-[var(--text-100)] mb-6 sm:mb-8 flex items-center gap-3">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--primary-900)]" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                             </svg>
                           </div>
                           Career Journey
                         </h4>
-                        <div className="grid sm:grid-cols-2 gap-4 mobile-stack-container">
+                        {/* Mobile: Single column, Desktop: 2 columns */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mobile-stack-container">
                           {[
-                            { company: "Citibank", role: "Investment Banking", period: "2003-2008", logo: "/assets/Citi.png" },
-                            { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2012", logo: "R" },
-                            { company: "Morgan Stanley", role: "Investment Banking", period: "2012-2016", logo: "/assets/morgan_stanley1671191982870.png" },
-                            { company: "Barclays Capital", role: "Assistant VP", period: "2016-2020", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" }
+                            { company: "Citibank", role: "Investment Banking", period: "2007-2008", logo: "/assets/Citi.png" },
+                            { company: "RBS", role: "Royal Bank of Scotland", period: "2008-2010", logo: "/assets/rbs.png" },
+                            { company: "Morgan Stanley", role: "Investment Banking", period: "2010-2013", logo: "/assets/morgan_stanley1671191982870.png" },
+                            { company: "Barclays Capital", role: "Assistant VP", period: "2013-2014", logo: "/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png" }
                           ].map((exp, index) => (
-                            <div key={index} className="mobile-stack-item flex items-center gap-4 p-4 rounded-xl glass hover-lift">
-                              <div className="w-12 h-12 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
+                            <div key={index} className="mobile-stack-item flex items-center gap-4 p-4 sm:p-5 rounded-xl glass hover-lift">
+                              <div className="w-14 h-14 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
                                 {exp.logo === "R" ? (
-                                  <span className="text-[var(--primary-900)] font-bold text-sm">{exp.logo}</span>
+                                  <span className="text-[var(--primary-900)] font-bold text-base sm:text-sm">{exp.logo}</span>
+                                ) : exp.logo === "/assets/rbs.png" ? (
+                                  <img 
+                                    src={exp.logo} 
+                                    alt={`${exp.company} logo`}
+                                    className="w-10 h-10 sm:w-8 sm:h-8 object-contain"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
                                 ) : (
                                   <img 
                                     src={exp.logo} 
                                     alt={`${exp.company} logo`}
-                                    className="w-8 h-8 object-contain"
+                                    className="w-10 h-10 sm:w-8 sm:h-8 object-contain"
                                     loading="lazy"
                                     decoding="async"
                                   />
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="font-bold text-[var(--text-100)] text-sm">{exp.company}</div>
-                                <div className="text-[var(--text-60)] text-xs">{exp.role}</div>
-                                <div className="text-[var(--accent-500)] text-xs font-medium">{exp.period}</div>
+                                <div className="font-bold text-[var(--text-100)] text-base sm:text-sm mb-1">{exp.company}</div>
+                                <div className="text-[var(--text-60)] text-sm sm:text-xs mb-1">{exp.role}</div>
+                                <div className="text-[var(--accent-500)] text-sm sm:text-xs font-medium">{exp.period}</div>
                               </div>
                             </div>
                           ))}
                         </div>
-                        <div className="mt-6 p-4 bg-gradient-to-r from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl">
+                        <div className="mt-6 p-4 sm:p-5 bg-gradient-to-r from-[var(--accent-500)] to-[var(--accent-400)] rounded-xl">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-[var(--primary-900)] rounded-xl flex items-center justify-center flex-shrink-0">
-                              <span className="text-[var(--accent-500)] font-bold text-sm">TSO</span>
+                            <div className="w-14 h-14 sm:w-12 sm:h-12 bg-[var(--primary-900)] rounded-xl flex items-center justify-center flex-shrink-0">
+                              <span className="text-[var(--accent-500)] font-bold text-base sm:text-sm">TSO</span>
                             </div>
                             <div className="flex-1">
-                              <div className="font-bold text-[var(--primary-900)] text-sm">The School of Options</div>
-                              <div className="text-[var(--primary-900)] text-xs opacity-80">Founder & Mentor • 2020-Present</div>
+                              <div className="font-bold text-[var(--primary-900)] text-base sm:text-sm mb-1">The School of Options</div>
+                              <div className="text-[var(--primary-900)] text-sm sm:text-xs opacity-80">Founder & Mentor • 2020-Present</div>
                             </div>
                           </div>
                         </div>
@@ -898,10 +919,10 @@ export default function WebinarAds1Page() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-bold text-[var(--text-100)] mb-3 text-base">
-                            {item.split(' — ')[0]}
+                            {item.split(' - ')[0]}
                           </h3>
                           <p className="text-[var(--text-80)] text-sm leading-relaxed">
-                            {item.split(' — ')[1]}
+                            {item.split(' - ')[1]}
                           </p>
                         </div>
                       </div>
@@ -1012,7 +1033,7 @@ export default function WebinarAds1Page() {
         </section>
 
         {/* Compliance Footer - Modern Design */}
-        <footer className="py-12 border-t border-[var(--border-20)] bg-[var(--primary-900)]">
+        <footer className="py-12 border-t mb-20 border-[var(--border-20)] bg-[var(--primary-900)]">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-6">
@@ -1037,7 +1058,7 @@ export default function WebinarAds1Page() {
                   <div className="w-2 h-2 bg-[var(--accent-500)] rounded-full animate-pulse"></div>
                   <span>{content.stickyBar.a.replace('{TIMER}', '')}</span>
                 </div>
-                <Countdown variant="mini" className="text-sm sm:text-base font-mono text-[var(--accent-500)] countdown-pulse countdown-glow" />
+                <Countdown variant="mini" className="text-sm sm:text-base font-mono text-[var(--accent-500)] countdown-pulse countdown-glow" meetings={webinars} />
               </div>
               <a 
                 href="#register"

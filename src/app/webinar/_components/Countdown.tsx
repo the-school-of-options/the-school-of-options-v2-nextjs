@@ -3,8 +3,17 @@
 import { useState, useEffect } from 'react';
 import { content } from '../content';
 
-// Helper function to parse session date and find the earliest one
-const getEarliestSessionDate = () => {
+interface ZoomMeeting {
+  id: string;
+  topic: string;
+  start_time: string;
+  timezone: string;
+  duration: number;
+  join_url?: string;
+}
+
+// Helper function to parse session date and find the earliest one from content
+const getEarliestSessionDateFromContent = () => {
   const sessionOptions = content.sessions.options;
   let earliestDate = null;
   
@@ -42,16 +51,32 @@ const getEarliestSessionDate = () => {
   return earliestDate || new Date('2024-09-13T20:00:00+05:30'); // fallback to Sep 13, 2024
 };
 
+// Helper function to get the earliest meeting from Zoom data
+const getEarliestMeetingDate = (meetings: ZoomMeeting[]): Date | null => {
+  if (!meetings || meetings.length === 0) {
+    return null;
+  }
+  
+  // Sort meetings by start_time and get the earliest one
+  const sortedMeetings = [...meetings].sort((a, b) => 
+    new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+  );
+  
+  return new Date(sortedMeetings[0].start_time);
+};
+
 interface CountdownProps {
   variant?: 'long' | 'mini';
   className?: string;
   'aria-live'?: 'polite' | 'assertive' | 'off';
+  meetings?: ZoomMeeting[];
 }
 
 export default function Countdown({ 
   variant = 'long', 
   className = '',
-  'aria-live': ariaLive = 'polite'
+  'aria-live': ariaLive = 'polite',
+  meetings = []
 }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<{
     days: number;
@@ -77,14 +102,18 @@ export default function Countdown({
     const calculateTimeLeft = () => {
       const now = new Date();
       
-      // Get the earliest session date from content
-      const sessionDate = getEarliestSessionDate();
+      // Try to get the earliest meeting from Zoom data first
+      let targetDate = getEarliestMeetingDate(meetings);
       
-      // If the session date has passed, calculate next occurrence
-      let targetDate = new Date(sessionDate);
-      if (now >= targetDate) {
-        // If current time is past the session, get next week's session
-        targetDate.setDate(targetDate.getDate() + 7);
+      // If no Zoom meetings available, fall back to content-based date
+      if (!targetDate) {
+        targetDate = getEarliestSessionDateFromContent();
+        
+        // If the session date has passed, calculate next occurrence
+        if (now >= targetDate) {
+          // If current time is past the session, get next week's session
+          targetDate.setDate(targetDate.getDate() + 7);
+        }
       }
       
       const timeDiff = targetDate.getTime() - now.getTime();
@@ -113,7 +142,7 @@ export default function Countdown({
       const interval = setInterval(updateCountdown, 1000);
       return () => clearInterval(interval);
     }
-  }, [isReducedMotion]);
+  }, [isReducedMotion, meetings]);
 
   const formatNumber = (num: number) => num.toString().padStart(2, '0');
 

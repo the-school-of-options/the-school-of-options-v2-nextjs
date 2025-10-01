@@ -3,6 +3,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Countdown from './Countdown';
 import { content } from '../content';
+import { registerForWebinar, WebinarRegistrationData } from '@/api/webinar';
+
+interface ZoomMeeting {
+  id: string;
+  topic: string;
+  start_time: string;
+  timezone: string;
+  duration: number;
+  join_url?: string;
+}
 
 interface FormData {
   name: string;
@@ -13,9 +23,17 @@ interface FormData {
 
 interface FormCardProps {
   className?: string;
+  meetings?: ZoomMeeting[];
+  meetingsLoading?: boolean;
+  meetingsError?: string | null;
 }
 
-export default function FormCard({ className = '' }: FormCardProps) {
+export default function FormCard({ 
+  className = '', 
+  meetings = [], 
+  meetingsLoading = false, 
+  meetingsError = null 
+}: FormCardProps) {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -29,9 +47,25 @@ export default function FormCard({ className = '' }: FormCardProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
+  // Format meeting data for display
+  const formatMeetingOption = (meeting: any) => {
+    const startDate = new Date(meeting.start_time);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    };
+    const formattedDate = startDate.toLocaleDateString('en-US', options);
+    const duration = meeting.duration ? ` (${meeting.duration} min)` : '';
+    return `${meeting.topic} - ${formattedDate}${duration}`;
+  };
+
   // Load form data from localStorage on mount
   useEffect(() => {
-    const savedData = localStorage.getItem('webinar-form-data');
+    const savedData = sessionStorage.getItem('webinar-form-data');
     if (savedData) {
       try {
         const parsed = JSON.parse(savedData);
@@ -44,7 +78,7 @@ export default function FormCard({ className = '' }: FormCardProps) {
 
   // Save form data to localStorage on change
   useEffect(() => {
-    localStorage.setItem('webinar-form-data', JSON.stringify(formData));
+    sessionStorage.setItem('webinar-form-data', JSON.stringify(formData));
   }, [formData]);
 
   // Focus trap for modal
@@ -109,7 +143,11 @@ export default function FormCard({ className = '' }: FormCardProps) {
     }
 
     if (!formData.session) {
-      newErrors.session = 'Please select a session';
+      if (meetings.length === 0 && !meetingsError) {
+        newErrors.session = 'No sessions are currently available';
+      } else {
+        newErrors.session = 'Please select a session';
+      }
     }
 
     setErrors(newErrors);
@@ -133,11 +171,70 @@ export default function FormCard({ className = '' }: FormCardProps) {
 
     setIsSubmitting(true);
     
-    // Simulate form submission delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setIsSubmitting(false);
-    setIsStep2Open(true);
+    try {
+      // Find the selected meeting to get the webinar name
+      const selectedMeeting = meetings.find(meeting => {
+        // Try exact match first
+        if (meeting.id === formData.session) return true;
+        // Try string comparison in case of type mismatch
+        if (String(meeting.id) === String(formData.session)) return true;
+        return false;
+      });
+      
+      let webinarName = 'Unknown Webinar';
+      
+      if (selectedMeeting) {
+        webinarName = selectedMeeting.topic;
+      } else {
+        // Fallback: try to extract webinar name from the formatted option text
+        // This matches the formatMeetingOption function used in the dropdown
+        const optionText = document.querySelector(`option[value="${formData.session}"]`)?.textContent;
+        if (optionText && optionText !== 'Select your preferred session' && optionText !== 'Loading sessions...') {
+          // Extract the topic part before the date/time (format: "Topic - Date Time")
+          const topicMatch = optionText.match(/^([^-]+)/);
+          if (topicMatch) {
+            webinarName = topicMatch[1].trim();
+          }
+        }
+      }
+
+      console.log("formData.session", formData.session);
+      console.log("meetings array", meetings);
+      console.log("selectedMeeting", selectedMeeting);
+      console.log("webinarName", webinarName);
+      
+      // Prepare the payload according to the new API structure
+      const registrationData: WebinarRegistrationData = {
+        email: formData.email,
+        fullName: formData.name,
+        phoneNumebr: formData.phone, // Note: keeping the typo as specified in requirements
+        webinarName: webinarName
+      };
+
+      // Call the API
+      const response = await registerForWebinar(registrationData);
+      
+      if (response.ok) {
+        // Clear form data on successful submission
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          session: ''
+        });
+        sessionStorage.removeItem('webinar-form-data');
+        setIsStep2Open(true);
+      } else {
+        // Handle API error
+        console.error('Registration failed:', response.error);
+        alert(`Registration failed: ${response.error || 'Unknown error occurred'}`);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleModalClose = () => {
@@ -152,13 +249,13 @@ export default function FormCard({ className = '' }: FormCardProps) {
 
   return (
     <>
-      <div className={`bg-gradient-to-br from-[var(--primary-800)] to-[var(--primary-700)] rounded-2xl p-6 border border-[var(--border-20)] hover-lift hover-glow ${className}`}>
+      <div id="register" className={`bg-gradient-to-br from-[var(--primary-800)] to-[var(--primary-700)] rounded-2xl p-6 border border-[var(--border-20)] hover-lift hover-glow ${className}`}>
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-[var(--text-100)] mb-2">
             {content.form.title}
           </h3>
           <div className="flex items-center gap-2 text-sm text-[var(--text-60)]">
-            <Countdown variant="mini" />
+            <Countdown variant="mini" meetings={meetings} />
             <div className="flex items-center gap-1 bg-[var(--danger-500)] text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">
               <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
               ⚠️ LIMITED
@@ -240,22 +337,50 @@ export default function FormCard({ className = '' }: FormCardProps) {
                 errors.session ? 'border-red-500' : 'border-[var(--border-20)]'
               }`}
               required
+              disabled={meetingsLoading || (meetings.length === 0 && !meetingsError)}
             >
-              <option value="">Select your preferred session</option>
-              {content.sessions.options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              <option value="">
+                {meetingsLoading 
+                  ? 'Loading sessions...' 
+                  : meetings.length === 0 && !meetingsError
+                    ? 'No sessions scheduled'
+                    : 'Select your preferred session'
+                }
+              </option>
+              {meetingsError ? (
+                <option value="" disabled>
+                  Error loading sessions - please try again later
                 </option>
-              ))}
+              ) : meetings.length > 0 ? (
+                meetings.slice(0, 2).map((meeting) => (
+                  <option key={meeting.id} value={meeting.id}>
+                    {formatMeetingOption(meeting)}
+                  </option>
+                ))
+              ) : !meetingsLoading && !meetingsError ? (
+                <option value="" disabled>
+                  No upcoming sessions available
+                </option>
+              ) : null}
             </select>
             {errors.session && (
               <p className="mt-1 text-sm text-red-400">{errors.session}</p>
+            )}
+            {meetingsError && (
+              <p className="mt-1 text-sm text-yellow-400">
+                Unable to load sessions. {meetingsError}
+              </p>
+            )}
+            {!meetingsLoading && !meetingsError && meetings.length === 0 && (
+              <p className="mt-1 text-sm text-blue-400">
+                No upcoming sessions are currently scheduled. Please check back later.
+              </p>
             )}
           </div>
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || (meetings.length === 0 && !meetingsError)}
             className="w-full btn-primary text-[var(--primary-900)] font-bold py-4 px-6 rounded-xl text-lg shadow-2xl transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[var(--accent-400)] focus:ring-offset-2 focus:ring-offset-[var(--primary-800)] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:scale-100 animate-pulse"
             style={{
               background: 'linear-gradient(135deg, #10B981 0%, #34D399 50%, #10B981 100%)',
@@ -263,7 +388,12 @@ export default function FormCard({ className = '' }: FormCardProps) {
               animation: isSubmitting ? 'none' : 'buttonGlow 2s ease-in-out infinite alternate, shimmer 3s ease-in-out infinite'
             }}
           >
-            {isSubmitting ? '⏳ Processing...' : 'REGISTER NOW'}
+            {isSubmitting 
+              ? '⏳ Processing...' 
+              : meetings.length === 0 && !meetingsError
+                ? 'NO SESSIONS AVAILABLE'
+                : 'REGISTER NOW'
+            }
           </button>
 
           <div className="flex items-center justify-center gap-4 text-sm text-[var(--text-60)] mt-4">

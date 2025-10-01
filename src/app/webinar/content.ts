@@ -1,5 +1,5 @@
 export const content = {
-  experimentId: "webinar-ads1",
+  experimentId: "webinar",
   ctaPrimary: { a: "Register Now", b: "Get My Free Seat" }, // use .a only for now
 
   stickyBar: {
@@ -68,7 +68,7 @@ export const content = {
 
   sessions: {
     title: "Pick your live session",
-    note: "Live on Zoom/Google Meet • Weekly schedule available",
+    note: "Live on Zoom • Upcoming sessions loaded automatically",
     options: [
       { label: "English - Sep 13, Sat 8:00–10:00 PM IST", value: "english_sat" },
       { label: "Hindi - Sep 14, Sun 8:00–10:00 PM IST", value: "hindi_sun" }
@@ -83,7 +83,7 @@ export const content = {
     urgencyNote: "Live this week - limited seats.",
     step2Title: "You're in!",
     step2Body:
-      "We'll email/SMS your unique join link shortly. Add the session to your calendar and come ready to learn."
+      "We'll email you your unique join link shortly. Add the session to your calendar and come ready to learn."
   },
 
   socialProof: {
