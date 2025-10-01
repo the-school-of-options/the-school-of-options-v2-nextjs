@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useMemo, useState } from 'react'
-import { ZoomMtg } from '@zoom/meetingsdk'
 
 function useQueryParam(name: string) {
   const search = typeof window !== 'undefined' ? window.location.search : ''
@@ -25,6 +24,9 @@ const WebcastPage = () => {
       try {
         setJoining(true)
         setError(null)
+
+        // Dynamically import Zoom SDK to avoid SSR issues
+        const { ZoomMtg } = await import('@zoom/meetingsdk')
 
         // Ensure Client View root containers exist
         if (!document.getElementById('zmmtg-root')) {
