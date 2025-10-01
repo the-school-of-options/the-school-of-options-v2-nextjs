@@ -236,7 +236,7 @@ const FAQPage = () => {
               Join our mentorship program and learn to trade options with discipline, logic, and proper risk management.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="hero" size="xl" asChild>
+              {/* <Button variant="hero" size="xl" asChild>
                                   <a 
                     href="https://www.kundankishore.in/courses/package-six-months-mentorship-on-options-trading-by-kundan-kishore"
                     target="_blank"
@@ -245,7 +245,7 @@ const FAQPage = () => {
                   >
                     Join Mentorship
                   </a>
-              </Button>
+              </Button> */}
               <Button 
                 variant="cta-outline" 
                 size="xl" 

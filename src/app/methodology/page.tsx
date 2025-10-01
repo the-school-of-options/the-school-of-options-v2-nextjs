@@ -144,7 +144,7 @@ const MethodologyPage = () => {
                   <p className="text-lg mb-8 text-[#E6ECF5] max-w-3xl mx-auto">
                     Explore the 6-Month Mentorship that puts this methodology into action.
                   </p>
-                  <Button 
+                  {/* <Button 
                     className="bg-[#FF7A00] text-white font-bold py-[14px] px-[22px] rounded-xl shadow-[0_10px_24px_rgba(255,122,0,0.25)] hover:bg-[#FF8A1E] hover:scale-[1.02] transition-all duration-200" 
                     asChild
                   >
@@ -156,7 +156,7 @@ const MethodologyPage = () => {
                     >
                       Explore Mentorship Program
                     </a>
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </div>

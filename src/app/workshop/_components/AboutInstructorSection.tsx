@@ -1,5 +1,5 @@
 import { Award, Users, TrendingUp, Heart, Briefcase, GraduationCap, Star, Building2 } from "lucide-react";
-import kundanImage from "/public/kundan-portrait.jpg";
+import kundanImage from "/public/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png";
 import morganStanleyBadge from "@/assets/morgan_stanley1671191982870.png";
 import barclaysBadge from "@/assets/barclays-investment-bank-logo-115630277832rlaxpy1ry.png";
 import rbsBadge from "@/assets/rbs.png";

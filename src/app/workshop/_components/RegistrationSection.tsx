@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Sparkles, Users, Gift } from "lucide-react";
+import { CheckCircle2, Sparkles, Users, Gift, Loader } from "lucide-react";
+import axios from "axios";
+const API_BASE = "https://api.theschoolofoptions.com/api/v1";
+
 export const RegistrationSection = () => {
   const {
     toast
@@ -14,7 +17,8 @@ export const RegistrationSection = () => {
     email: "",
     phone: ""
   });
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation
@@ -27,18 +31,37 @@ export const RegistrationSection = () => {
       return;
     }
 
-    // Success message
-    toast({
-      title: "🎉 Registration Successful!",
-      description: "Aapko email pe webinar link mil jayega. See you on Saturday at 8 PM!"
-    });
+    setLoading(true);
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: ""
-    });
+    try {
+      const response = await axios.post(`${API_BASE}/webinar/register`, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone
+      });
+
+      // Success message
+      toast({
+        title: "🎉 Registration Successful!",
+        description: "Aapko email pe webinar link mil jayega. See you on Saturday at 8 PM!"
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: ""
+      });
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error?.response?.data?.error || "Registration failed. Please try again.";
+      toast({
+        title: "Registration Failed",
+        description: errorMessage,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   const features = ["FREE 3-Hour Live Masterclass", "Call/Put Options Complete Guide", "Delta & Probability Explained", "10 Interactive Exercises", "Win Exciting Prizes", "Certificate of Participation"];
   return <section id="registration" className="py-20 px-4 bg-white relative overflow-hidden">
@@ -120,7 +143,16 @@ export const RegistrationSection = () => {
               })} className="bg-secondary border-border" />
               </div>
 
-              <Button type="submit" variant="cta" size="xl" className="w-full">Register Now </Button>
+              <Button type="submit" variant="cta" size="xl" className="w-full" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader className="w-5 h-5 animate-spin mr-2" />
+                    Registering...
+                  </>
+                ) : (
+                  "Register Now"
+                )}
+              </Button>
 
               <p className="text-xs text-muted-foreground text-center">
                 By registering, you agree to receive webinar updates via email and WhatsApp

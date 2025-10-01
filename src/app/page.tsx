@@ -290,7 +290,7 @@ const HomePage = () => {
               <p className="hero-subheading text-responsive-body">
                 The School of Options teaches Options Trading the right way: structured, clear, and logic-driven.
               </p>
-              <a 
+              {/* <a 
                 href="https://www.kundankishore.in/courses/package-six-months-mentorship-on-options-trading-by-kundan-kishore"
                 target="_blank"
                 rel="noopener"
@@ -299,7 +299,7 @@ const HomePage = () => {
                 aria-label="Join the Mentorship Program"
               >
                 Join the Mentorship Program
-              </a>
+              </a> */}
               <p className="hero-micro-trust text-responsive-small">
                 Trusted by 2 lakh+ learners • 20+ years of market lessons
               </p>
@@ -492,7 +492,7 @@ const HomePage = () => {
 
               {/* CTA */}
               <div className="text-center">
-                <Button 
+                {/* <Button 
                   className="bg-[#FF7A00] text-white font-bold py-[14px] px-[22px] rounded-xl shadow-[0_10px_24px_rgba(255,122,0,0.22)] hover:bg-[#FF8A1E] hover:scale-[1.02] transition-all duration-200 tap-target w-full md:w-auto" 
                   asChild
                 >
@@ -504,7 +504,7 @@ const HomePage = () => {
                   >
                     Explore Mentorship Program
                   </a>
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
@@ -939,28 +939,23 @@ const HomePage = () => {
       </section>
 
       {/* Courses Section */}
-      <section className="py-[88px] px-6 bg-[#F7F9FB]">
+      {/* <section className="py-[88px] px-6 bg-[#F7F9FB]">
         <div className="max-w-[1120px] mx-auto">
           <div className="text-center mb-12">
-            {/* Eyebrow */}
             <p className="text-xs font-bold tracking-wider uppercase text-[#FF7A00] mb-3">
               Affordable Recorded Courses
             </p>
             
-            {/* Headline */}
             <h2 className="text-[clamp(28px,4.5vw,40px)] font-extrabold text-[#0A2540] leading-[1.2] mb-3">
               Learn Options Trading at Just ₹990
             </h2>
             
-            {/* Subheading */}
             <p className="text-[clamp(16px,2.2vw,20px)] text-[#4A5568] leading-[1.6] max-w-4xl mx-auto mb-8">
               We believe education should be accessible. Along with live mentorship and webinars, we also provide high-quality recorded courses - priced affordably at ₹990 - to help every aspiring trader learn at their own pace.
             </p>
           </div>
           
-          {/* Courses Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {/* Course 1 - Hindi */}
             <div className="bg-white border border-black/6 rounded-[14px] shadow-[0_6px_18px_rgba(0,0,0,0.06)] p-6 relative flex flex-col h-full">
               <div className="absolute top-4 left-4 bg-[#0A2540] text-white text-sm font-bold px-3 py-1 rounded-lg">
                 ₹990
@@ -990,7 +985,6 @@ const HomePage = () => {
               </a>
             </div>
 
-            {/* Course 2 - English */}
             <div className="bg-white border border-black/6 rounded-[14px] shadow-[0_6px_18px_rgba(0,0,0,0.06)] p-6 relative flex flex-col h-full">
               <div className="absolute top-4 left-4 bg-[#0A2540] text-white text-sm font-bold px-3 py-1 rounded-lg">
                 ₹990
@@ -1020,7 +1014,6 @@ const HomePage = () => {
               </a>
             </div>
 
-            {/* Course 3 - Intraday */}
             <div className="bg-white border border-black/6 rounded-[14px] shadow-[0_6px_18px_rgba(0,0,0,0.06)] p-6 relative flex flex-col h-full">
               <div className="absolute top-4 left-4 bg-[#0A2540] text-white text-sm font-bold px-3 py-1 rounded-lg">
                 ₹990
@@ -1051,7 +1044,6 @@ const HomePage = () => {
             </div>
           </div>
           
-          {/* Main CTA */}
           <div className="text-center">
             <a
               href="https://www.kundankishore.in/s/store"
@@ -1064,7 +1056,7 @@ const HomePage = () => {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Alumni Connect Section */}
       <section id="section-alumni" className="py-[88px] px-6 relative overflow-hidden dark-gradient">
