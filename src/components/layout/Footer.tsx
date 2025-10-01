@@ -96,7 +96,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-sm text-white/70">
-              © 2024 The School of Options. All rights reserved.
+              © 2025 Wealthian Pvt Ltd. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <Link href="/privacy" className="text-white/70 hover:text-white smooth-transition">
@@ -105,8 +105,11 @@ const Footer = () => {
               <Link href="/terms" className="text-white/70 hover:text-white smooth-transition">
                 Terms of Service
               </Link>
-              <Link href="/risk-disclosure" className="text-white/70 hover:text-white smooth-transition">
-                Risk Disclosure
+              <Link href="/return" className="text-white/70 hover:text-white smooth-transition">
+                Return & Refund Policy
+              </Link>
+              <Link href="/contact" className="text-white/70 hover:text-white smooth-transition">
+                Contact Us
               </Link>
             </div>
           </div>
