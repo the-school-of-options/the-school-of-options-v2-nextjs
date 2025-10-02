@@ -50,7 +50,7 @@ export const StickyCtaBar = () => {
               variant="cta" 
               size="default"
               onClick={scrollToRegistration}
-              className="text-sm font-semibold group h-9 bg-gradient-orange text-black shadow-orange"
+              className="text-sm font-semibold group h-9 bg-gradient-purple text-black shadow-purple"
             >
               Reserve Your Seat
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

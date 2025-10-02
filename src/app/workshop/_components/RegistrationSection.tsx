@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,7 @@ import axios from "axios";
 const API_BASE = "https://api.theschoolofoptions.com/api/v1";
 
 export const RegistrationSection = () => {
+  const router = useRouter();
   const {
     toast
   } = useToast();
@@ -30,7 +32,7 @@ export const RegistrationSection = () => {
     if (!formData.name || !formData.email || !formData.phone) {
       toast({
         title: "Please fill all fields",
-        description: "Sab fields fill karna zaroori hai",
+        description: "Please fill all fields",
         variant: "destructive"
       });
       return;
@@ -64,19 +66,8 @@ export const RegistrationSection = () => {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Success message
-      toast({
-        title: "🎉 Registration Successful!",
-        description: "Aapko email pe webinar link mil jayega. See you at the workshop!"
-      });
-
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        webinarId: ""
-      });
+      // Redirect to success page
+      router.push('/workshop/success');
     } catch (error: any) {
       console.error('Registration error:', error);
       let errorMessage = "Registration failed. Please try again.";
