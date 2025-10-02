@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Sparkles, Users, Gift, Loader } from "lucide-react";
+import { CheckCircle2, Sparkles, Users, Gift, Loader, Calendar } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useZoomWebinars } from "@/hooks/use-zoom-webinars";
 import axios from "axios";
 const API_BASE = "https://api.theschoolofoptions.com/api/v1";
 
@@ -12,12 +14,15 @@ export const RegistrationSection = () => {
   const {
     toast
   } = useToast();
+  const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: ""
+    phone: "",
+    webinarId: ""
   });
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -31,29 +36,65 @@ export const RegistrationSection = () => {
       return;
     }
 
+    if (!formData.webinarId) {
+      toast({
+        title: "Please select a webinar",
+        description: "Kripya ek webinar session select karein",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_BASE}/webinar/register`, {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone
-      });
+      // Find the selected webinar to get its name
+      const selectedWebinar = webinars.find(w => w.id === formData.webinarId);
+      const webinarName = selectedWebinar?.topic || 'Options Trading Workshop';
+
+      // COMMENTED OUT - API CALL
+      // const response = await axios.post(`${API_BASE}/webinar/register`, {
+      //   fullName: formData.name,
+      //   email: formData.email,
+      //   phoneNumber: formData.phone,
+      //   meetingNumber: formData.webinarId,
+      //   webinarName: webinarName
+      // });
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Success message
       toast({
         title: "🎉 Registration Successful!",
-        description: "Aapko email pe webinar link mil jayega. See you on Saturday at 8 PM!"
+        description: "Aapko email pe webinar link mil jayega. See you at the workshop!"
       });
 
       // Reset form
       setFormData({
         name: "",
         email: "",
-        phone: ""
+        phone: "",
+        webinarId: ""
       });
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || error?.response?.data?.error || "Registration failed. Please try again.";
+      console.error('Registration error:', error);
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (error?.response?.data) {
+        const errorData = error.response.data;
+        // Handle various error formats
+        if (typeof errorData === 'string') {
+          errorMessage = errorData;
+        } else if (errorData.message) {
+          errorMessage = typeof errorData.message === 'string' ? errorData.message : errorMessage;
+        } else if (errorData.error) {
+          errorMessage = typeof errorData.error === 'string' ? errorData.error : errorMessage;
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Registration Failed",
         description: errorMessage,
@@ -62,6 +103,19 @@ export const RegistrationSection = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Format date for display
+  const formatWebinarDate = (startTime: string) => {
+    const date = new Date(startTime);
+    return date.toLocaleString('en-IN', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   };
   const features = ["FREE 3-Hour Live Masterclass", "Call/Put Options Complete Guide", "Delta & Probability Explained", "10 Interactive Exercises", "Win Exciting Prizes", "Certificate of Participation"];
   return <section id="registration" className="py-20 px-4 bg-white relative overflow-hidden">
@@ -143,7 +197,48 @@ export const RegistrationSection = () => {
               })} className="bg-secondary border-border" />
               </div>
 
-              <Button type="submit" variant="cta" size="xl" className="w-full" disabled={loading}>
+              <div className="space-y-2 text-black">
+                <Label htmlFor="webinar" className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Select Workshop Session / Webinar Session Chuniye
+                </Label>
+                {webinarsLoading ? (
+                  <div className="flex items-center justify-center py-4 bg-secondary rounded-md">
+                    <Loader className="w-5 h-5 animate-spin text-muted-foreground" />
+                    <span className="ml-2 text-sm text-muted-foreground">Loading sessions...</span>
+                  </div>
+                ) : webinarsError ? (
+                  <div className="py-3 px-4 bg-destructive/10 text-destructive rounded-md text-sm">
+                    {typeof webinarsError === 'string' ? webinarsError : 'Failed to load webinar sessions. Please try again.'}
+                  </div>
+                ) : webinars.length === 0 ? (
+                  <div className="py-3 px-4 bg-muted rounded-md text-sm text-muted-foreground text-black">
+                    No upcoming sessions available at the moment.
+                  </div>
+                ) : (
+                  <Select value={formData.webinarId} onValueChange={(value) => setFormData({
+                    ...formData,
+                    webinarId: value
+                  })}>
+                    <SelectTrigger className="bg-secondary border-border text-black [&>span]:text-black">
+                      <SelectValue placeholder="Choose a workshop session" className="text-black" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {webinars.map((webinar) => (
+                        <SelectItem 
+                          key={webinar.id} 
+                          value={String(webinar.id)} 
+                          className="text-black cursor-pointer"
+                        >
+                          {webinar.topic} - {formatWebinarDate(webinar.start_time)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+
+              <Button type="submit" variant="cta" size="xl" className="w-full" disabled={loading || webinarsLoading}>
                 {loading ? (
                   <>
                     <Loader className="w-5 h-5 animate-spin mr-2" />

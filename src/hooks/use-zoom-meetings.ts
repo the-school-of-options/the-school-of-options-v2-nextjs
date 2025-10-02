@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-interface ZoomWebinar {
+interface ZoomMeeting {
   id: string;
   topic: string;
   start_time: string;
@@ -10,24 +10,24 @@ interface ZoomWebinar {
   registration_url?: string;
 }
 
-interface ZoomWebinarsResponse {
-  items: ZoomWebinar[];
+interface ZoomMeetingsResponse {
+  items: ZoomMeeting[];
   next_page_token?: string;
 }
 
-interface UseZoomWebinarsReturn {
-  webinars: ZoomWebinar[];
+interface UseZoomMeetingsReturn {
+  meetings: ZoomMeeting[];
   loading: boolean;
   error: string | null;
   refetch: () => void;
 }
 
-export function useZoomWebinars(): UseZoomWebinarsReturn {
-  const [webinars, setWebinars] = useState<ZoomWebinar[]>([]);
+export function useZoomMeetings(): UseZoomMeetingsReturn {
+  const [meetings, setMeetings] = useState<ZoomMeeting[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchWebinars = async () => {
+  const fetchMeetings = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -47,31 +47,31 @@ export function useZoomWebinars(): UseZoomWebinarsReturn {
         } else if (errorData.error === 'zoom_auth_error') {
           throw new Error('Zoom authentication failed. The session has been refreshed - please try again.');
         } else if (errorData.error === 'zoom_permission_error') {
-          throw new Error('Insufficient permissions to access webinars.');
+          throw new Error('Insufficient permissions to access meetings.');
         } else {
           throw new Error(errorData.detail || `HTTP ${response.status}`);
         }
       }
       
-      const data: ZoomWebinarsResponse = await response.json();
-      setWebinars(data.items || []);
+      const data: ZoomMeetingsResponse = await response.json();
+      setMeetings(data.items || []);
     } catch (err) {
-      console.error('Failed to fetch Zoom webinars:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch webinars');
-      setWebinars([]);
+      console.error('Failed to fetch Zoom meetings:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch meetings');
+      setMeetings([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchWebinars();
+    fetchMeetings();
   }, []);
 
   return {
-    webinars,
+    meetings,
     loading,
     error,
-    refetch: fetchWebinars
+    refetch: fetchMeetings
   };
 }

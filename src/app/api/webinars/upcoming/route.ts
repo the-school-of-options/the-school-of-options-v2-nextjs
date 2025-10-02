@@ -14,7 +14,7 @@ export async function GET() {
         const tokenData = await getZoomToken();
         const token = typeof tokenData === 'string' ? tokenData : tokenData.access_token;
         const apiUrl = typeof tokenData === 'object' && tokenData.api_url ? tokenData.api_url : "https://api.zoom.us";
-        const zoomUrl = `${apiUrl}/v2/users/me/webinars?type=scheduled&page_size=50`;
+        const zoomUrl = `${apiUrl}/v2/users/me/webinars?type=upcoming&page_size=50`;
 
         console.log(`Zoom API call attempt ${retryAttempt + 1}/${maxRetries + 1}: ${zoomUrl}`);
 
