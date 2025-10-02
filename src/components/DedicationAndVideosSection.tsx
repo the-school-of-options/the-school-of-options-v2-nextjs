@@ -170,7 +170,7 @@ const DedicationAndVideosSection = () => {
               <p className="text-base text-muted-foreground mb-6 leading-relaxed">
                 The 6-Month Mentorship Program puts all of this into action - teaching, training, and mentoring to make you a disciplined, confident trader.
               </p>
-              <Button
+              {/* <Button
                 size="lg"
                 asChild
                 className="bg-[#FF7A00] hover:bg-[#FF8A1E] text-white shadow-[0_10px_24px_rgba(255,122,0,0.22)] hover:shadow-xl transition-all duration-300 hover:scale-105"
@@ -185,7 +185,7 @@ const DedicationAndVideosSection = () => {
                   Explore Mentorship Program
                   <ExternalLink className="w-4 h-4" />
                 </a>
-              </Button>
+              </Button> */}
             </CardContent>
           </Card>
         </div>

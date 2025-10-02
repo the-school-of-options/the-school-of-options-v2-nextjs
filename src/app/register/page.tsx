@@ -9,6 +9,7 @@ import {
   Loader,
   Eye,
   EyeOff,
+  Phone,
 } from "lucide-react";
 import axios from "axios";
 import Link from "next/link";
@@ -23,6 +24,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     fullName: "",
+    mobileNumber: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -211,6 +213,24 @@ export default function RegisterPage() {
                         name="fullName"
                         placeholder="Your full name"
                         value={formData.fullName}
+                        onChange={handleChange}
+                        required
+                        className="w-full rounded-xl border border-input bg-background/40 py-3 pl-11 pr-4 placeholder-muted-foreground outline-none transition focus:border-orange focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-medium">
+                      Mobile number
+                    </span>
+                    <div className="relative">
+                      <Phone className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                      <input
+                        type="tel"
+                        name="mobileNumber"
+                        placeholder="916306365582"
+                        value={formData.mobileNumber}
                         onChange={handleChange}
                         required
                         className="w-full rounded-xl border border-input bg-background/40 py-3 pl-11 pr-4 placeholder-muted-foreground outline-none transition focus:border-orange focus:ring-2 focus:ring-ring"

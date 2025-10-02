@@ -68,7 +68,7 @@ const Header = () => {
             <Button variant="cta-outline" size="sm" onClick={handleSignInClick}>
               Sign In
             </Button>
-            <Button variant="cta" size="sm" asChild>
+            {/* <Button variant="cta" size="sm" asChild>
               <a 
                 href="https://www.kundankishore.in/courses/package-six-months-mentorship-on-options-trading-by-kundan-kishore"
                 target="_blank"
@@ -76,7 +76,7 @@ const Header = () => {
               >
                 Join Mentorship
               </a>
-            </Button>
+            </Button> */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -142,7 +142,7 @@ const Header = () => {
                 >
                   Sign In
                 </Button>
-                <Button variant="cta" size="sm" className="w-full" asChild>
+                {/* <Button variant="cta" size="sm" className="w-full" asChild>
                   <a 
                     href="https://www.kundankishore.in/courses/package-six-months-mentorship-on-options-trading-by-kundan-kishore"
                     target="_blank"
@@ -151,7 +151,7 @@ const Header = () => {
                   >
                     Join Mentorship
                   </a>
-                </Button>
+                </Button> */}
               </div>
             </nav>
           </div>

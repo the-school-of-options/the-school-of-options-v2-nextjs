@@ -1,9 +1,9 @@
-import { Award, Users, Building2, GraduationCap, Quote, MapPin, Trophy } from "lucide-react";
-import kundanImage from "/public/kundan-portrait.jpg";
+import { Award, Users, Building2, GraduationCap, Quote, MapPin, Trophy, Briefcase } from "lucide-react";
+import kundanImage from "/public/lovable-uploads/8bebf579-7b93-4a53-9944-1bcefa3cbdfe.png";
 
 export const LightInstructor = () => {
   const stats = [
-    { icon: Trophy, value: "18+", label: "Years Experience" },
+    { icon: Briefcase, value: "18+", label: "Years Experience" },
     { icon: Users, value: "2L+", label: "Students Trained" },
     { icon: Building2, value: "3", label: "Global Banks" },
     { icon: GraduationCap, value: "BITS", label: "Pilani Alumnus" }
@@ -65,12 +65,13 @@ export const LightInstructor = () => {
                   key={index} 
                   className="bg-card p-6 rounded-2xl shadow-lg border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
                 >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${
-                    index === 0 ? "from-orange-500 to-red-500" :
-                    index === 1 ? "from-blue-500 to-purple-500" :
-                    index === 2 ? "from-green-500 to-teal-500" :
-                    "from-purple-500 to-pink-500"
-                  } ${index === 0 ? 'bg-gradient-orange' : ''} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg ${
+
+                    index === 0 ? "bg-gradient-to-r from-blue-500 to-purple-500" :
+                    index === 0 ? "bg-gradient-to-r from-orange-500 to-red-500" :
+                    index === 2 ? "bg-gradient-to-r from-green-500 to-teal-500" :
+                    "bg-gradient-to-r from-purple-500 to-pink-500"
+                  }`}>
                     <stat.icon className="w-6 h-6 text-white" />
                   </div>
                   <p className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-1">{stat.value}</p>

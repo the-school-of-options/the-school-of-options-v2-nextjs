@@ -76,5 +76,4 @@ export function useZoomWebinars(): UseZoomWebinarsReturn {
   };
 }
 
-// Backward compatibility export
-export const useZoomMeetings = useZoomWebinars;
+// Note: For meetings, use the dedicated useZoomMeetings hook from use-zoom-meetings.ts

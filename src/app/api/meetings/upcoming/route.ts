@@ -11,7 +11,7 @@ export async function GET() {
         const tokenData = await getZoomToken();
         const token = typeof tokenData === 'string' ? tokenData : tokenData.access_token;
         const apiUrl = typeof tokenData === 'object' && tokenData.api_url ? tokenData.api_url : "https://api.zoom.us";
-        const zoomUrl = `${apiUrl}/v2/users/me/webinars?type=scheduled&page_size=50`;
+        const zoomUrl = `${apiUrl}/v2/users/me/meetings?type=upcoming&page_size=50`;
 
         console.log(`Zoom API call attempt ${retryAttempt + 1}/${maxRetries + 1}: ${zoomUrl}`);
 
@@ -48,7 +48,7 @@ export async function GET() {
           
           if (res.status === 403) {
             return NextResponse.json(
-              { error: "zoom_permission_error", detail: "Insufficient permissions to access Zoom webinars. Please ensure the webinar:read scope is granted." },
+              { error: "zoom_permission_error", detail: "Insufficient permissions to access Zoom meetings. Please ensure the meeting:read scope is granted." },
               { status: 403 }
             );
           }
@@ -61,17 +61,17 @@ export async function GET() {
 
         // Success case
         const data = await res.json();
-        const items = (data.webinars ?? []).map((w: any) => ({
+        const items = (data.meetings ?? []).map((w: any) => ({
           id: w.id,
           topic: w.topic,
           start_time: w.start_time,
           timezone: w.timezone,
           duration: w.duration,
-          join_url: w.join_url, // webinar join URL for attendees
+          join_url: w.join_url, // meeting join URL for attendees
           registration_url: w.registration_url, // registration URL if registration is required
         }));
 
-        console.log(`Successfully fetched ${items.length} upcoming webinars`);
+        console.log(`Successfully fetched ${items.length} upcoming meetings`);
         
         return NextResponse.json({
           items,
