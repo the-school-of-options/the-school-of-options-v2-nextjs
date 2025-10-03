@@ -50,18 +50,16 @@ export const RegistrationSection = () => {
     setLoading(true);
 
     try {
-      // Find the selected webinar to get its name
       const selectedWebinar = webinars.find(w => w.id === formData.webinarId);
       const webinarName = selectedWebinar?.topic || 'Options Trading Workshop';
 
-      // COMMENTED OUT - API CALL
-      // const response = await axios.post(`${API_BASE}/webinar/register`, {
-      //   fullName: formData.name,
-      //   email: formData.email,
-      //   phoneNumber: formData.phone,
-      //   meetingNumber: formData.webinarId,
-      //   webinarName: webinarName
-      // });
+      const response = await axios.post(`${API_BASE}/webinar/register`, {
+        fullName: formData.name,
+        email: formData.email,
+        phoneNumber: formData.phone,
+        meetingNumber: formData.webinarId,
+        webinarName: webinarName
+      });
 
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
