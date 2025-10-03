@@ -32,7 +32,7 @@ export default function LoginPage() {
       //     email: formData.email,
       //     name: "User",
       //   };
-      router.push("/dashboard");
+      router.push("/");
       // onSuccess(user, formData.email, data.otp);
     } catch (err) {
       setError("Login failed");
