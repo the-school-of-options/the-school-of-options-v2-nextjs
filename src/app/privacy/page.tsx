@@ -85,9 +85,7 @@ export default function PrivacyPage() {
                 </a>
               </li>
               <li>
-                <strong>Postal Address:</strong> Corporate office: 1203, 12th
-                FLOOR, Arcadia, South City II, Sector 49, Gurugram,Haryana
-                122018
+                <strong>Postal Address:</strong> D 1/4, first floor, South City - 2, Gurugaon, Haryana, India - 122018
               </li>
               <li>
                 <strong>Grievance Officer (as per IT Rules, 2021):</strong>
