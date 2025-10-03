@@ -185,9 +185,7 @@ export default function TermsPage() {
                 <strong>CIN :</strong> U74140HR2021PTC093753
               </li>
               <li>
-                <strong>Registered Office:</strong> Corporate office: 1203, 12th
-                FLOOR, Arcadia, South City II, Sector 49, Gurugram,Haryana
-                122018
+                <strong>Registered Office:</strong> D 1/4, first floor, South City - 2, Gurugaon, Haryana, India - 122018
               </li>
               <li>
                 <strong>Email:</strong>{" "}
@@ -519,12 +517,11 @@ export default function TermsPage() {
                 </a>
               </li>
               <li>
-                <strong>Address:</strong> Corporate office: 1203, 12th FLOOR,
-                Arcadia, South City II, Sector 49, Gurugram,Haryana 122018
+                  <strong>Address:</strong> D 1/4, first floor, South City - 2, Gurugaon, Haryana, India - 122018
               </li>
               <li>
                 <strong>Response Timelines:</strong> We acknowledge complaints
-                within 24–48 hours and aim to resolve within 15 days, subject to
+                within 24-48 hours and aim to resolve within 15 days, subject to
                 law.
               </li>
             </ul>
