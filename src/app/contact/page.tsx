@@ -97,20 +97,21 @@ import {
                 Corporate & Postal Address
               </h2>
               <div className="flex items-start mb-4">
-                <MapPinIcon className="h-6 w-6 text-navy mt-1 mr-3 flex-shrink-0" />
+               <div className="flex items-start justify-start">
+               <MapPinIcon className="h-6 w-6 text-navy mt-1 mr-3 flex-shrink-0" />
                 <p className="text-gray-700">
-                  **Corporate Office:**
-                  <br />
-                  1203, 12th FLOOR, Arcadia, South City II, Sector 49,
-                  <br />
-                  Gurugram, Haryana 122018, India
+                  D 1/4, first floor, South City - 2, Gurugaon, Haryana, India - 122018
                 </p>
+               </div>
               </div>
-              <div className="flex items-center">
-                <PhoneIcon className="h-6 w-6 text-navy mr-3 flex-shrink-0" />
+              <div className="flex items-start justify-start w-full">
+              <div className="flex items-start justify-start">
+              <PhoneIcon className="h-6 w-6 text-navy mr-3 flex-shrink-0" />
                 <p className="text-gray-700">
-                  **Phone:** (Please check your internal records for the correct public phone number to include here, or remove this section if not applicable.)
+                   +91 9999007948
                 </p>
+
+              </div>
               </div>
             </section>
             
