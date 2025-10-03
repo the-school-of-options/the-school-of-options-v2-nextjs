@@ -3,19 +3,25 @@
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-
+  const { user, logout } = useAuth();
 
   const isActive = (href: string) => pathname === href;
 
   const handleSignInClick = () => {
     router.push('/login');
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
   };
 
   return (
@@ -61,13 +67,35 @@ const Header = () => {
             >
               FAQ
             </Link>
+            <Link
+              href="/workshop"
+              className={`text-sm font-medium smooth-transition ${
+                isActive("/workshop")
+                  ? "text-[#FF7A00]"
+                  : "text-white hover:text-[#FF7A00]"
+              }`}
+            >
+              Webinars
+            </Link>
           </nav>
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Button variant="cta-outline" size="sm" onClick={handleSignInClick}>
-              Sign In
-            </Button>
+            {user ? (
+              <div className="flex items-center space-x-3">
+                <span className="text-white text-sm">
+                  Welcome, {user.name || user.email}
+                </span>
+                <Button variant="cta-outline" size="sm" onClick={handleLogout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <Button variant="cta-outline" size="sm" onClick={handleSignInClick}>
+                Sign In
+              </Button>
+            )}
             {/* <Button variant="cta" size="sm" asChild>
               <a 
                 href="https://www.kundankishore.in/courses/package-six-months-mentorship-on-options-trading-by-kundan-kishore"
@@ -131,17 +159,37 @@ const Header = () => {
                 FAQ
               </Link>
               <div className="pt-4 space-y-2">
-                <Button 
-                  variant="cta-outline" 
-                  size="sm" 
-                  className="w-full" 
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    handleSignInClick();
-                  }}
-                >
-                  Sign In
-                </Button>
+                {user ? (
+                  <>
+                    <div className="text-white text-sm mb-2">
+                      Welcome, {user.name || user.email}
+                    </div>
+                    <Button 
+                      variant="cta-outline" 
+                      size="sm" 
+                      className="w-full" 
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleLogout();
+                      }}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <Button 
+                    variant="cta-outline" 
+                    size="sm" 
+                    className="w-full" 
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleSignInClick();
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                )}
                 {/* <Button variant="cta" size="sm" className="w-full" asChild>
                   <a 
                     href="https://www.kundankishore.in/courses/package-six-months-mentorship-on-options-trading-by-kundan-kishore"
