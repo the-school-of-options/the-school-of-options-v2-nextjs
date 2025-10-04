@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Lock, Loader, Eye, EyeOff, CheckCircle, ArrowRight, Shield } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -305,5 +305,22 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-900 relative overflow-hidden flex items-center justify-center">
+        <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
+          <div className="flex items-center space-x-3">
+            <Loader className="h-6 w-6 animate-spin text-orange-400" />
+            <span className="text-white">Loading...</span>
+          </div>
+        </div>
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

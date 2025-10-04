@@ -33,6 +33,7 @@ export const RegistrationForm = ({
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({});
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -66,8 +67,59 @@ export const RegistrationForm = ({
     return `${meeting.topic} - ${formattedDate}${duration}`;
   };
 
+  // Validation functions
+  const validateEmail = (email: string): string | null => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return 'Email is required';
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    return null;
+  };
+
+  const validatePhone = (phone: string): string | null => {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phone) return 'Phone number is required';
+    if (phone.length < 10) return 'Phone number must be at least 10 digits';
+    if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Please enter a valid phone number';
+    return null;
+  };
+
+  const validateName = (name: string): string | null => {
+    if (!name) return 'Full name is required';
+    if (name.trim().length < 2) return 'Name must be at least 2 characters';
+    if (name.trim().length > 100) return 'Name must be less than 100 characters';
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Client-side validation
+    const nameError = validateName(formData.fullName);
+    const emailError = validateEmail(formData.email);
+    const phoneError = validatePhone(formData.phone);
+    
+    const errors: {[key: string]: string} = {};
+    if (nameError) errors.fullName = nameError;
+    if (emailError) errors.email = emailError;
+    if (phoneError) errors.phone = phoneError;
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setErrorMessage('Please correct the errors below');
+      setShowError(true);
+      setShowSuccess(false);
+      return;
+    }
+    
+    // Clear field errors if validation passes
+    setFieldErrors({});
+
+    if (!formData.session) {
+      setErrorMessage('Please select a session');
+      setShowError(true);
+      setShowSuccess(false);
+      return;
+    }
     
     setIsSubmitting(true);
     setShowSuccess(false);
@@ -106,14 +158,18 @@ export const RegistrationForm = ({
       
       // Prepare the payload according to the new API structure
       const registrationData: WebinarRegistrationData = {
-        email: formData.email,
-        fullName: formData.fullName,
-        phoneNumebr: formData.phone, // Note: keeping the typo as specified in requirements
+        email: formData.email.trim(),
+        fullName: formData.fullName.trim(),
+        phoneNumebr: formData.phone.trim(), // Note: keeping the typo as specified in requirements
         webinarName: webinarName
       };
 
-      // Call the API
+      // Call the API with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await registerForWebinar(registrationData);
+      clearTimeout(timeoutId);
       
       if (response.ok) {
         // Clear form data on successful submission
@@ -126,15 +182,41 @@ export const RegistrationForm = ({
         setShowSuccess(true);
         setShowError(false);
       } else {
-        // Handle API error
+        // Handle API error with better categorization
         console.error('Registration failed:', response.error);
-        setErrorMessage(response.error || 'Unknown error occurred');
+        let errorMsg = 'Registration failed. Please try again.';
+        
+        if (response.error) {
+          if (response.error.toLowerCase().includes('email')) {
+            errorMsg = 'This email is already registered or invalid. Please use a different email.';
+          } else if (response.error.toLowerCase().includes('phone')) {
+            errorMsg = 'This phone number is already registered or invalid. Please use a different number.';
+          } else if (response.error.toLowerCase().includes('network')) {
+            errorMsg = 'Network error. Please check your connection and try again.';
+          } else if (response.error.toLowerCase().includes('server')) {
+            errorMsg = 'Server error. Please try again in a few minutes.';
+          } else {
+            errorMsg = response.error;
+          }
+        }
+        
+        setErrorMessage(errorMsg);
         setShowError(true);
         setShowSuccess(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
-      setErrorMessage('Registration failed. Please try again.');
+      let errorMsg = 'Registration failed. Please try again.';
+      
+      if (error.name === 'AbortError') {
+        errorMsg = 'Request timed out. Please check your connection and try again.';
+      } else if (error.code === 'NETWORK_ERROR' || error.message?.includes('network')) {
+        errorMsg = 'Network error. Please check your internet connection and try again.';
+      } else if (error.message?.includes('fetch')) {
+        errorMsg = 'Unable to connect to server. Please try again later.';
+      }
+      
+      setErrorMessage(errorMsg);
       setShowError(true);
       setShowSuccess(false);
     } finally {
@@ -174,10 +256,25 @@ export const RegistrationForm = ({
             type="text"
             placeholder="Enter your full name"
             value={formData.fullName}
-            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, fullName: e.target.value });
+              // Clear field error when user starts typing
+              if (fieldErrors.fullName) {
+                setFieldErrors({ ...fieldErrors, fullName: '' });
+              }
+            }}
             required
-            className="h-12 text-base bg-input border-border text-foreground placeholder:text-muted-foreground"
+            aria-invalid={fieldErrors.fullName ? 'true' : 'false'}
+            aria-describedby={fieldErrors.fullName ? 'fullName-error' : undefined}
+            className={`h-12 text-base bg-input border-border text-foreground placeholder:text-muted-foreground ${
+              fieldErrors.fullName ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+            }`}
           />
+          {fieldErrors.fullName && (
+            <p id="fullName-error" className="text-sm text-red-600" role="alert">
+              {fieldErrors.fullName}
+            </p>
+          )}
         </div>
         
         <div className="space-y-2">
@@ -189,10 +286,25 @@ export const RegistrationForm = ({
             type="email"
             placeholder="Enter your email address"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, email: e.target.value });
+              // Clear field error when user starts typing
+              if (fieldErrors.email) {
+                setFieldErrors({ ...fieldErrors, email: '' });
+              }
+            }}
             required
-            className="h-12 text-base bg-input border-border text-foreground placeholder:text-muted-foreground"
+            aria-invalid={fieldErrors.email ? 'true' : 'false'}
+            aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+            className={`h-12 text-base bg-input border-border text-foreground placeholder:text-muted-foreground ${
+              fieldErrors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+            }`}
           />
+          {fieldErrors.email && (
+            <p id="email-error" className="text-sm text-red-600" role="alert">
+              {fieldErrors.email}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -204,10 +316,25 @@ export const RegistrationForm = ({
             type="tel"
             placeholder="Enter your phone number"
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, phone: e.target.value });
+              // Clear field error when user starts typing
+              if (fieldErrors.phone) {
+                setFieldErrors({ ...fieldErrors, phone: '' });
+              }
+            }}
             required
-            className="h-12 text-base bg-input border-border text-foreground placeholder:text-muted-foreground"
+            aria-invalid={fieldErrors.phone ? 'true' : 'false'}
+            aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
+            className={`h-12 text-base bg-input border-border text-foreground placeholder:text-muted-foreground ${
+              fieldErrors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+            }`}
           />
+          {fieldErrors.phone && (
+            <p id="phone-error" className="text-sm text-red-600" role="alert">
+              {fieldErrors.phone}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">

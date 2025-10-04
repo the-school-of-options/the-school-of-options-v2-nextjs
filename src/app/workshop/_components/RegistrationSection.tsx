@@ -24,28 +24,60 @@ export const RegistrationSection = () => {
     webinarId: ""
   });
   const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({});
+
+  // Validation functions
+  const validateEmail = (email: string): string | null => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return 'Email is required';
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    return null;
+  };
+
+  const validatePhone = (phone: string): string | null => {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phone) return 'Phone number is required';
+    if (phone.length < 10) return 'Phone number must be at least 10 digits';
+    if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Please enter a valid phone number';
+    return null;
+  };
+
+  const validateName = (name: string): string | null => {
+    if (!name) return 'Full name is required';
+    if (name.trim().length < 2) return 'Name must be at least 2 characters';
+    if (name.trim().length > 100) return 'Name must be less than 100 characters';
+    return null;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation
-    if (!formData.name || !formData.email || !formData.phone) {
-      toast({
-        title: "Please fill all fields",
-        description: "Please fill all fields",
-        variant: "destructive"
-      });
-      return;
-    }
-
+    // Client-side validation
+    const nameError = validateName(formData.name);
+    const emailError = validateEmail(formData.email);
+    const phoneError = validatePhone(formData.phone);
+    
+    const errors: {[key: string]: string} = {};
+    if (nameError) errors.name = nameError;
+    if (emailError) errors.email = emailError;
+    if (phoneError) errors.phone = phoneError;
+    
     if (!formData.webinarId) {
+      errors.webinarId = 'Please select a webinar session';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       toast({
-        title: "Please select a webinar",
-        description: "Kripya ek webinar session select karein",
+        title: "Please correct the errors",
+        description: "Please fill in all required fields correctly",
         variant: "destructive"
       });
       return;
     }
+    
+    // Clear field errors if validation passes
+    setFieldErrors({});
 
     setLoading(true);
 
@@ -53,13 +85,22 @@ export const RegistrationSection = () => {
       const selectedWebinar = webinars.find(w => w.id === formData.webinarId);
       const webinarName = selectedWebinar?.topic || 'Options Trading Workshop';
 
+      // Create abort controller for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await axios.post(`${API_BASE}/webinar/register`, {
-        fullName: formData.name,
-        email: formData.email,
-        phoneNumber: formData.phone,
+        fullName: formData.name.trim(),
+        email: formData.email.trim(),
+        phoneNumber: formData.phone.trim(),
         meetingNumber: formData.webinarId,
         webinarName: webinarName
+      }, {
+        signal: controller.signal,
+        timeout: 30000
       });
+
+      clearTimeout(timeoutId);
 
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -70,7 +111,15 @@ export const RegistrationSection = () => {
       console.error('Registration error:', error);
       let errorMessage = "Registration failed. Please try again.";
       
-      if (error?.response?.data) {
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please check your connection and try again.";
+      } else if (error.code === 'NETWORK_ERROR' || error.message?.includes('network')) {
+        errorMessage = "Network error. Please check your internet connection and try again.";
+      } else if (error?.response?.status === 429) {
+        errorMessage = "Too many requests. Please wait a moment and try again.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Please try again in a few minutes.";
+      } else if (error?.response?.data) {
         const errorData = error.response.data;
         // Handle various error formats
         if (typeof errorData === 'string') {
@@ -79,6 +128,13 @@ export const RegistrationSection = () => {
           errorMessage = typeof errorData.message === 'string' ? errorData.message : errorMessage;
         } else if (errorData.error) {
           errorMessage = typeof errorData.error === 'string' ? errorData.error : errorMessage;
+        }
+        
+        // Specific error handling for common cases
+        if (errorData.error?.toLowerCase().includes('email')) {
+          errorMessage = 'This email is already registered. Please use a different email.';
+        } else if (errorData.error?.toLowerCase().includes('phone')) {
+          errorMessage = 'This phone number is already registered. Please use a different number.';
         }
       } else if (error?.message) {
         errorMessage = error.message;
@@ -164,26 +220,83 @@ export const RegistrationSection = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2 text-black">
                 <Label htmlFor="name">Full Name / Pura Naam</Label>
-                <Input id="name" type="text" placeholder="Enter your name" value={formData.name} onChange={e => setFormData({
-                ...formData,
-                name: e.target.value
-              })} className="bg-secondary border-border" />
+                <Input 
+                  id="name" 
+                  type="text" 
+                  placeholder="Enter your name" 
+                  value={formData.name} 
+                  onChange={e => {
+                    setFormData({ ...formData, name: e.target.value });
+                    // Clear field error when user starts typing
+                    if (fieldErrors.name) {
+                      setFieldErrors({ ...fieldErrors, name: '' });
+                    }
+                  }} 
+                  aria-invalid={fieldErrors.name ? 'true' : 'false'}
+                  aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+                  className={`bg-secondary border-border ${
+                    fieldErrors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                  }`} 
+                />
+                {fieldErrors.name && (
+                  <p id="name-error" className="text-sm text-red-600" role="alert">
+                    {fieldErrors.name}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2 text-black">
                 <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" placeholder="your.email@example.com" value={formData.email} onChange={e => setFormData({
-                ...formData,
-                email: e.target.value
-              })} className="bg-secondary border-border" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="your.email@example.com" 
+                  value={formData.email} 
+                  onChange={e => {
+                    setFormData({ ...formData, email: e.target.value });
+                    // Clear field error when user starts typing
+                    if (fieldErrors.email) {
+                      setFieldErrors({ ...fieldErrors, email: '' });
+                    }
+                  }} 
+                  aria-invalid={fieldErrors.email ? 'true' : 'false'}
+                  aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                  className={`bg-secondary border-border ${
+                    fieldErrors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                  }`} 
+                />
+                {fieldErrors.email && (
+                  <p id="email-error" className="text-sm text-red-600" role="alert">
+                    {fieldErrors.email}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2 text-black">
                 <Label htmlFor="phone">WhatsApp Number</Label>
-                <Input id="phone" type="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={e => setFormData({
-                ...formData,
-                phone: e.target.value
-              })} className="bg-secondary border-border" />
+                <Input 
+                  id="phone" 
+                  type="tel" 
+                  placeholder="+91 98765 43210" 
+                  value={formData.phone} 
+                  onChange={e => {
+                    setFormData({ ...formData, phone: e.target.value });
+                    // Clear field error when user starts typing
+                    if (fieldErrors.phone) {
+                      setFieldErrors({ ...fieldErrors, phone: '' });
+                    }
+                  }} 
+                  aria-invalid={fieldErrors.phone ? 'true' : 'false'}
+                  aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
+                  className={`bg-secondary border-border ${
+                    fieldErrors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                  }`} 
+                />
+                {fieldErrors.phone && (
+                  <p id="phone-error" className="text-sm text-red-600" role="alert">
+                    {fieldErrors.phone}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2 text-black">
@@ -205,25 +318,44 @@ export const RegistrationSection = () => {
                     No upcoming sessions available at the moment.
                   </div>
                 ) : (
-                  <Select value={formData.webinarId} onValueChange={(value) => setFormData({
-                    ...formData,
-                    webinarId: value
-                  })}>
-                    <SelectTrigger className="bg-secondary border-border text-black [&>span]:text-black">
-                      <SelectValue placeholder="Choose a workshop session" className="text-black" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      {webinars.map((webinar) => (
-                        <SelectItem 
-                          key={webinar.id} 
-                          value={String(webinar.id)} 
-                          className="text-black cursor-pointer"
-                        >
-                          {webinar.topic} - {formatWebinarDate(webinar.start_time)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <>
+                    <Select 
+                      value={formData.webinarId} 
+                      onValueChange={(value) => {
+                        setFormData({ ...formData, webinarId: value });
+                        // Clear field error when user selects
+                        if (fieldErrors.webinarId) {
+                          setFieldErrors({ ...fieldErrors, webinarId: '' });
+                        }
+                      }}
+                    >
+                      <SelectTrigger 
+                        className={`bg-secondary border-border text-black [&>span]:text-black ${
+                          fieldErrors.webinarId ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                        }`}
+                        aria-invalid={fieldErrors.webinarId ? 'true' : 'false'}
+                        aria-describedby={fieldErrors.webinarId ? 'webinar-error' : undefined}
+                      >
+                        <SelectValue placeholder="Choose a workshop session" className="text-black" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white">
+                        {webinars.map((webinar) => (
+                          <SelectItem 
+                            key={webinar.id} 
+                            value={String(webinar.id)} 
+                            className="text-black cursor-pointer"
+                          >
+                            {webinar.topic} - {formatWebinarDate(webinar.start_time)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldErrors.webinarId && (
+                      <p id="webinar-error" className="text-sm text-red-600" role="alert">
+                        {fieldErrors.webinarId}
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
 
