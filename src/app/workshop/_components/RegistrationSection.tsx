@@ -2,99 +2,54 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Sparkles, Users, Gift, Loader, Calendar } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CheckCircle2, Sparkles, Users, Gift, Loader, User } from "lucide-react";
 import { useZoomWebinars } from "@/hooks/use-zoom-webinars";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthModal } from "./AuthModal";
 import axios from "axios";
 const API_BASE = "https://api.theschoolofoptions.com/api/v1";
 
 export const RegistrationSection = () => {
   const router = useRouter();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  const { user } = useAuth();
   const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    webinarId: ""
-  });
   const [loading, setLoading] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({});
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
-  // Validation functions
-  const validateEmail = (email: string): string | null => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return 'Email is required';
-    if (!emailRegex.test(email)) return 'Please enter a valid email address';
-    return null;
-  };
-
-  const validatePhone = (phone: string): string | null => {
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    if (!phone) return 'Phone number is required';
-    if (phone.length < 10) return 'Phone number must be at least 10 digits';
-    if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Please enter a valid phone number';
-    return null;
-  };
-
-  const validateName = (name: string): string | null => {
-    if (!name) return 'Full name is required';
-    if (name.trim().length < 2) return 'Name must be at least 2 characters';
-    if (name.trim().length > 100) return 'Name must be less than 100 characters';
-    return null;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Client-side validation
-    const nameError = validateName(formData.name);
-    const emailError = validateEmail(formData.email);
-    const phoneError = validatePhone(formData.phone);
-    
-    const errors: {[key: string]: string} = {};
-    if (nameError) errors.name = nameError;
-    if (emailError) errors.email = emailError;
-    if (phoneError) errors.phone = phoneError;
-    
-    if (!formData.webinarId) {
-      errors.webinarId = 'Please select a webinar session';
+  const handleRegister = async () => {
+    // Check if user is authenticated
+    if (!user) {
+      setShowAuthModal(true);
+      return;
     }
-    
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+
+    // Get the latest webinar
+    if (webinars.length === 0) {
       toast({
-        title: "Please correct the errors",
-        description: "Please fill in all required fields correctly",
+        title: "No sessions available",
+        description: "No upcoming webinar sessions are available at the moment.",
         variant: "destructive"
       });
       return;
     }
-    
-    // Clear field errors if validation passes
-    setFieldErrors({});
 
+    // Use the latest webinar (first in the array)
+    const latestWebinar = webinars[0];
+    
     setLoading(true);
 
     try {
-      const selectedWebinar = webinars.find(w => w.id === formData.webinarId);
-      const webinarName = selectedWebinar?.topic || 'Options Trading Workshop';
-
       // Create abort controller for timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
       const response = await axios.post(`${API_BASE}/webinar/register`, {
-        fullName: formData.name.trim(),
-        email: formData.email.trim(),
-        phoneNumber: formData.phone.trim(),
-        meetingNumber: formData.webinarId,
-        webinarName: webinarName
+        fullName: user.name,
+        email: user.email,
+        meetingNumber: latestWebinar.id,
+        webinarName: latestWebinar.topic || 'Options Trading Workshop'
       }, {
         signal: controller.signal,
         timeout: 30000
@@ -102,8 +57,10 @@ export const RegistrationSection = () => {
 
       clearTimeout(timeoutId);
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast({
+        title: "Registration Successful",
+        description: "You have been successfully registered for the workshop!",
+      });
 
       // Redirect to success page
       router.push('/workshop/success');
@@ -121,20 +78,12 @@ export const RegistrationSection = () => {
         errorMessage = "Server error. Please try again in a few minutes.";
       } else if (error?.response?.data) {
         const errorData = error.response.data;
-        // Handle various error formats
         if (typeof errorData === 'string') {
           errorMessage = errorData;
         } else if (errorData.message) {
           errorMessage = typeof errorData.message === 'string' ? errorData.message : errorMessage;
         } else if (errorData.error) {
           errorMessage = typeof errorData.error === 'string' ? errorData.error : errorMessage;
-        }
-        
-        // Specific error handling for common cases
-        if (errorData.error?.toLowerCase().includes('email')) {
-          errorMessage = 'This email is already registered. Please use a different email.';
-        } else if (errorData.error?.toLowerCase().includes('phone')) {
-          errorMessage = 'This phone number is already registered. Please use a different number.';
         }
       } else if (error?.message) {
         errorMessage = error.message;
@@ -148,6 +97,12 @@ export const RegistrationSection = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    // Automatically register after successful authentication
+    handleRegister();
   };
 
   // Format date for display
@@ -213,169 +168,88 @@ export const RegistrationSection = () => {
             </div>
           </div>
 
-          {/* Registration Form */}
+          {/* Registration Card */}
           <div id="registration-form" className="bg-card p-8 rounded-2xl shadow-orange border border-border">
             <h3 className="text-2xl font-bold mb-6 text-center text-black">Register for FREE</h3>
             
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2 text-black">
-                <Label htmlFor="name">Full Name / Pura Naam</Label>
-                <Input 
-                  id="name" 
-                  type="text" 
-                  placeholder="Enter your name" 
-                  value={formData.name} 
-                  onChange={e => {
-                    setFormData({ ...formData, name: e.target.value });
-                    // Clear field error when user starts typing
-                    if (fieldErrors.name) {
-                      setFieldErrors({ ...fieldErrors, name: '' });
-                    }
-                  }} 
-                  aria-invalid={fieldErrors.name ? 'true' : 'false'}
-                  aria-describedby={fieldErrors.name ? 'name-error' : undefined}
-                  className={`bg-secondary border-border ${
-                    fieldErrors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
-                  }`} 
-                />
-                {fieldErrors.name && (
-                  <p id="name-error" className="text-sm text-red-600" role="alert">
-                    {fieldErrors.name}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2 text-black">
-                <Label htmlFor="email">Email Address</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="your.email@example.com" 
-                  value={formData.email} 
-                  onChange={e => {
-                    setFormData({ ...formData, email: e.target.value });
-                    // Clear field error when user starts typing
-                    if (fieldErrors.email) {
-                      setFieldErrors({ ...fieldErrors, email: '' });
-                    }
-                  }} 
-                  aria-invalid={fieldErrors.email ? 'true' : 'false'}
-                  aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-                  className={`bg-secondary border-border ${
-                    fieldErrors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
-                  }`} 
-                />
-                {fieldErrors.email && (
-                  <p id="email-error" className="text-sm text-red-600" role="alert">
-                    {fieldErrors.email}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2 text-black">
-                <Label htmlFor="phone">WhatsApp Number</Label>
-                <Input 
-                  id="phone" 
-                  type="tel" 
-                  placeholder="+91 98765 43210" 
-                  value={formData.phone} 
-                  onChange={e => {
-                    setFormData({ ...formData, phone: e.target.value });
-                    // Clear field error when user starts typing
-                    if (fieldErrors.phone) {
-                      setFieldErrors({ ...fieldErrors, phone: '' });
-                    }
-                  }} 
-                  aria-invalid={fieldErrors.phone ? 'true' : 'false'}
-                  aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
-                  className={`bg-secondary border-border ${
-                    fieldErrors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
-                  }`} 
-                />
-                {fieldErrors.phone && (
-                  <p id="phone-error" className="text-sm text-red-600" role="alert">
-                    {fieldErrors.phone}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2 text-black">
-                <Label htmlFor="webinar" className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  Select Workshop Session / Webinar Session Chuniye
-                </Label>
-                {webinarsLoading ? (
-                  <div className="flex items-center justify-center py-4 bg-secondary rounded-md">
-                    <Loader className="w-5 h-5 animate-spin text-muted-foreground" />
-                    <span className="ml-2 text-sm text-muted-foreground">Loading sessions...</span>
+            <div className="space-y-6">
+              {/* User Status Display */}
+              {user ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <User className="w-5 h-5 text-green-600" />
+                    <div>
+                      <p className="text-sm font-medium text-green-800">Signed in as</p>
+                      <p className="text-sm text-green-600">{user.name}</p>
+                    </div>
                   </div>
-                ) : webinarsError ? (
-                  <div className="py-3 px-4 bg-destructive/10 text-destructive rounded-md text-sm">
-                    {typeof webinarsError === 'string' ? webinarsError : 'Failed to load webinar sessions. Please try again.'}
+                </div>
+              ) : (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <User className="w-5 h-5 text-blue-600" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-800">Sign in required</p>
+                      <p className="text-sm text-blue-600">You need to sign in to register for the workshop</p>
+                    </div>
                   </div>
-                ) : webinars.length === 0 ? (
-                  <div className="py-3 px-4 bg-muted rounded-md text-sm text-muted-foreground text-black">
-                    No upcoming sessions available at the moment.
-                  </div>
-                ) : (
-                  <>
-                    <Select 
-                      value={formData.webinarId} 
-                      onValueChange={(value) => {
-                        setFormData({ ...formData, webinarId: value });
-                        // Clear field error when user selects
-                        if (fieldErrors.webinarId) {
-                          setFieldErrors({ ...fieldErrors, webinarId: '' });
-                        }
-                      }}
-                    >
-                      <SelectTrigger 
-                        className={`bg-secondary border-border text-black [&>span]:text-black ${
-                          fieldErrors.webinarId ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
-                        }`}
-                        aria-invalid={fieldErrors.webinarId ? 'true' : 'false'}
-                        aria-describedby={fieldErrors.webinarId ? 'webinar-error' : undefined}
-                      >
-                        <SelectValue placeholder="Choose a workshop session" className="text-black" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white">
-                        {webinars.map((webinar) => (
-                          <SelectItem 
-                            key={webinar.id} 
-                            value={String(webinar.id)} 
-                            className="text-black cursor-pointer"
-                          >
-                            {webinar.topic} - {formatWebinarDate(webinar.start_time)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {fieldErrors.webinarId && (
-                      <p id="webinar-error" className="text-sm text-red-600" role="alert">
-                        {fieldErrors.webinarId}
-                      </p>
-                    )}
-                  </>
-                )}
-              </div>
+                </div>
+              )}
 
-              <Button type="submit" variant="cta" size="xl" className="w-full" disabled={loading || webinarsLoading}>
+              {/* Webinar Info Display */}
+              {webinarsLoading ? (
+                <div className="flex items-center justify-center py-4 bg-secondary rounded-md">
+                  <Loader className="w-5 h-5 animate-spin text-muted-foreground" />
+                  <span className="ml-2 text-sm text-muted-foreground">Loading sessions...</span>
+                </div>
+              ) : webinarsError ? (
+                <div className="py-3 px-4 bg-destructive/10 text-destructive rounded-md text-sm">
+                  {typeof webinarsError === 'string' ? webinarsError : 'Failed to load webinar sessions. Please try again.'}
+                </div>
+              ) : webinars.length === 0 ? (
+                <div className="py-3 px-4 bg-muted rounded-md text-sm text-muted-foreground text-black">
+                  No upcoming sessions available at the moment.
+                </div>
+              ) : (
+                <div className="bg-secondary rounded-lg p-4">
+                  <h4 className="font-semibold text-black mb-2">Next Workshop Session:</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {webinars[0].topic} - {formatWebinarDate(webinars[0].start_time)}
+                  </p>
+                </div>
+              )}
+
+              {/* Register Button */}
+              <Button 
+                onClick={handleRegister}
+                variant="cta" 
+                size="xl" 
+                className="w-full" 
+                disabled={loading || webinarsLoading || webinars.length === 0}
+              >
                 {loading ? (
                   <>
                     <Loader className="w-5 h-5 animate-spin mr-2" />
                     Registering...
                   </>
                 ) : (
-                  "Register Now"
+                  user ? "Register Now" : "Sign In to Register"
                 )}
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
                 By registering, you agree to receive webinar updates via email and WhatsApp
               </p>
-            </form>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Authentication Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+      />
     </section>;
 };

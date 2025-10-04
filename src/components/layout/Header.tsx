@@ -158,6 +158,17 @@ const Header = () => {
               >
                 FAQ
               </Link>
+              <Link
+                href="/workshop"
+                className={`text-sm font-medium smooth-transition ${
+                  isActive("/workshop")
+                    ? "text-[#FF7A00]"
+                    : "text-white hover:text-[#FF7A00]"
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Webinars
+              </Link>
               <div className="pt-4 space-y-2">
                 {user ? (
                   <>
