@@ -385,7 +385,7 @@ export default function RegisterPage() {
                       </button>
                     </div>
 
-                    <div className="flex justify-between gap-3">
+                    <div className="flex justify-center gap-2 sm:gap-3">
                       {otp.map((val, i) => (
                         <input
                           key={i}
@@ -399,7 +399,7 @@ export default function RegisterPage() {
                           inputMode="numeric"
                           pattern="[0-9]*"
                           maxLength={1}
-                          className="h-14 w-12 rounded-lg border border-slate-600 bg-slate-700/50 text-center text-lg text-white tracking-widest outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+                          className="h-12 w-10 sm:h-14 sm:w-12 rounded-lg border border-slate-600 bg-slate-700/50 text-center text-base sm:text-lg text-white tracking-widest outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
                         />
                       ))}
                     </div>
