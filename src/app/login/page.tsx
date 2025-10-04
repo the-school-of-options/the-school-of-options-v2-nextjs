@@ -64,10 +64,13 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="relative z-10 min-h-screen flex">
-        {/* Left Side - Hero Section */}
-        <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-16">
-          <div className="max-w-lg">
+      <div className="relative z-10 min-h-screen flex items-center justify-center">
+        {/* Main Content Container */}
+        <div className="w-full max-w-7xl mx-auto px-8 lg:px-16">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-16">
+            {/* Left Side - Hero Section */}
+            <div className="hidden lg:flex lg:w-1/2 flex-col justify-center">
+              <div className="max-w-lg">
             <div className="mb-12">
               <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
                 Master
@@ -115,7 +118,7 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side - Login Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12">
+        <div className="w-full lg:w-1/2 flex items-center justify-center">
           <div className="w-full max-w-md">
             {/* Mobile Header */}
             <div className="lg:hidden mb-8 text-center">
@@ -301,6 +304,8 @@ export default function LoginPage() {
                 © {new Date().getFullYear()} The School of Options • Educational content only
               </p>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
