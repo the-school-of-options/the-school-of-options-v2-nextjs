@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import Header from "@/components/layout/Header";
 
 type UserBrief = { id: string; email: string; name: string };
 
@@ -141,7 +142,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+    <div className="h-screen bg-slate-900 relative overflow-hidden flex flex-col">
+      <Header />
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900"></div>
@@ -152,7 +154,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center">
+      <div className="relative z-10 flex-1 flex items-center justify-center">
         {/* Main Content Container */}
         <div className="w-full max-w-7xl mx-auto px-8 lg:px-16">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-16">

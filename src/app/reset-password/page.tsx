@@ -5,6 +5,7 @@ import { Lock, Loader, Eye, EyeOff, CheckCircle, ArrowRight, Shield } from "luci
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import Header from "@/components/layout/Header";
 
 function ResetPasswordForm() {
   const [formData, setFormData] = useState({
@@ -72,7 +73,8 @@ function ResetPasswordForm() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+      <div className="h-screen bg-slate-900 relative overflow-hidden flex flex-col">
+        <Header />
         {/* Animated Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-green-900"></div>
@@ -82,7 +84,7 @@ function ResetPasswordForm() {
           </div>
         </div>
         
-        <div className="relative z-10 flex min-h-screen items-center justify-center p-4">
+        <div className="relative z-10 flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 shadow-2xl text-center">
               <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
@@ -108,7 +110,8 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+    <div className="h-screen bg-slate-900 relative overflow-hidden flex flex-col">
+      <Header />
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900"></div>
@@ -119,14 +122,16 @@ function ResetPasswordForm() {
         </div>
       </div>
 
-      <div className="relative z-10 min-h-screen flex">
-        {/* Left Side - Hero Section */}
-        <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-16">
+      <div className="relative z-10 flex-1 flex items-center justify-center">
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-16">
+            {/* Left Side - Hero Section */}
+            <div className="hidden lg:flex lg:w-1/2 flex-col justify-center">
           <div className="max-w-lg">
             <div className="mb-12">
               <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
                 Reset Your
-                <span className="block bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text">
                   Password
                 </span>
               </h1>
@@ -169,8 +174,8 @@ function ResetPasswordForm() {
           </div>
         </div>
 
-        {/* Right Side - Reset Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12">
+            {/* Right Side - Reset Form */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center">
           <div className="w-full max-w-md">
             {/* Mobile Header */}
             <div className="lg:hidden mb-8 text-center">
@@ -300,6 +305,8 @@ function ResetPasswordForm() {
               <p className="text-xs text-slate-500">
                 © {new Date().getFullYear()} The School of Options • Educational content only
               </p>
+            </div>
+          </div>
             </div>
           </div>
         </div>
