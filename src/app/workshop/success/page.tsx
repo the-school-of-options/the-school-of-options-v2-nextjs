@@ -54,7 +54,7 @@ export default function WorkshopSuccessPage() {
           <p className="text-muted-foreground">
             Questions? Contact us at{' '}
             <a href="mailto:support@theschoolofoptions.com" className="text-primary hover:underline font-semibold">
-              support@theschoolofoptions.com
+              hello@theschoolofoptions.com
             </a>
           </p>
         </div>

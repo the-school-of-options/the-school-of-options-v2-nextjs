@@ -7,6 +7,7 @@ interface User {
   id: string;
   email: string;
   fullName: string;
+  mobileNumber?: string;
 }
 
 interface AuthContextType {
@@ -101,7 +102,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           });
           
           if (userResponse.status === 200 && userResponse.data) {
-            userProfileData = userResponse.data;
+            // Merge get-user response with login response data to preserve mobileNumber
+            userProfileData = {
+              ...userResponse.data,
+              mobileNumber: userResponse.data.mobileNumber || loginUserData.mobileNumber
+            };
           }
         } catch (getUserError: any) {
           // Failed to fetch user profile data
@@ -109,7 +114,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           userProfileData = {
             id: username || 'unknown',
             email: email,
-            fullName: email.split('@')[0] // Use email prefix as fallback
+            fullName: email.split('@')[0], // Use email prefix as fallback
+            mobileNumber: loginUserData.mobileNumber
           };
         }
         
@@ -117,7 +123,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const finalUserData = {
           id: userProfileData.id || username || 'unknown',
           email: userProfileData.email || email,
-          fullName: userProfileData.fullName || userProfileData.name || email.split('@')[0]
+          fullName: userProfileData.fullName || userProfileData.name || email.split('@')[0],
+          mobileNumber: userProfileData.mobileNumber
         };
         
         
@@ -204,7 +211,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           });
           
           if (userResponse.status === 200 && userResponse.data) {
-            userProfileData = userResponse.data;
+            // Merge get-user response with registration data to preserve mobileNumber
+            userProfileData = {
+              ...userResponse.data,
+              mobileNumber: userResponse.data.mobileNumber || loginUserData.mobileNumber || userData.mobileNumber
+            };
           }
         } catch (getUserError: any) {
           // Failed to fetch user profile data
@@ -212,7 +223,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           userProfileData = {
             id: username || 'unknown',
             email: userData.email,
-            fullName: userData.fullName || userData.email.split('@')[0]
+            fullName: userData.fullName || userData.email.split('@')[0],
+            mobileNumber: loginUserData.mobileNumber || userData.mobileNumber
           };
         }
         
@@ -220,7 +232,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const finalUserData = {
           id: userProfileData?.id || username || 'unknown',
           email: userProfileData?.email || userData.email,
-          fullName: userProfileData?.fullName || userProfileData?.name || userData.fullName || userData.email.split('@')[0]
+          fullName: userProfileData?.fullName || userProfileData?.name || userData.fullName || userData.email.split('@')[0],
+          mobileNumber: userProfileData?.mobileNumber || userData.mobileNumber
         };
         
         
@@ -281,7 +294,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           });
           
           if (userResponse.status === 200 && userResponse.data) {
-            userProfileData = userResponse.data;
+            // Merge get-user response with verification data to preserve mobileNumber
+            userProfileData = {
+              ...userResponse.data,
+              mobileNumber: userResponse.data.mobileNumber || loginUserData.mobileNumber
+            };
           }
         } catch (getUserError: any) {
           // Failed to fetch user profile data
@@ -289,7 +306,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           userProfileData = {
             id: username || 'unknown',
             email: 'verified@user.com', // We don't have email in this context
-            fullName: username || 'Verified User'
+            fullName: username || 'Verified User',
+            mobileNumber: loginUserData.mobileNumber
           };
         }
         
@@ -297,7 +315,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const finalUserData = {
           id: userProfileData.id || username || 'unknown',
           email: userProfileData.email || 'verified@user.com',
-          fullName: userProfileData.fullName || userProfileData.name || username || 'Verified User'
+          fullName: userProfileData.fullName || userProfileData.name || username || 'Verified User',
+          mobileNumber: userProfileData.mobileNumber
         };
         
         

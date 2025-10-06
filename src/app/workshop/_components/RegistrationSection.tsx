@@ -63,7 +63,7 @@ export const RegistrationSection = () => {
       const payload = {
         email: user.email,
         fullName: fullName,
-        phoneNumber: "999999999", // Default phone number as per your example
+        phoneNumber: user.mobileNumber || "999999999", // Use user's phone number or fallback
         source: "mobile", // Default source as per your example
         webinarName: latestWebinar.topic || 'Options Trading Workshop'
       };
@@ -134,14 +134,16 @@ export const RegistrationSection = () => {
     const storedUser = localStorage.getItem('auth_user');
     let userEmail = user?.email;
     let fullName = user?.fullName;
+    let mobileNumber = user?.mobileNumber;
     
     // If user data is not available from context, try localStorage
-    if (!userEmail || !fullName) {
+    if (!userEmail || !fullName || !mobileNumber) {
       if (storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser);
           userEmail = userEmail || parsedUser.email;
           fullName = fullName || parsedUser.fullName;
+          mobileNumber = mobileNumber || parsedUser.mobileNumber;
         } catch (error) {
           // Error parsing stored user
         }
@@ -164,7 +166,7 @@ export const RegistrationSection = () => {
     const payload = {
       email: userEmail,
       fullName: fullName,
-      phoneNumber: "999999999", // Default phone number as per your example
+      phoneNumber: mobileNumber, // Use user's phone number or fallback
       source: "mobile", // Default source as per your example
       webinarName: latestWebinar.topic || 'Options Trading Workshop'
     };
