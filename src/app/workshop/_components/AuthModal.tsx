@@ -85,6 +85,15 @@ export const AuthModal = ({ isOpen, onClose, onSuccess, useSignupWithoutVerifica
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (registerData.password.length < 8) {
+      toast({
+        title: "Invalid password",
+        description: "Password must be at least 8 characters long",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (registerData.password !== registerData.confirmPassword) {
       toast({
         title: "Password mismatch",
@@ -308,10 +317,11 @@ export const AuthModal = ({ isOpen, onClose, onSuccess, useSignupWithoutVerifica
                     <Input
                       id="register-password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder="Enter your password (min. 8 characters)"
                       value={registerData.password}
                       onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
                       className="pl-10 pr-10"
+                      minLength={8}
                       required
                     />
                     <button
