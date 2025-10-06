@@ -41,16 +41,39 @@ export const RegistrationSection = () => {
     setLoading(true);
 
     try {
+      // Get fullName from user object (it's fullName, not name)
+      const storedUser = localStorage.getItem('auth_user');
+      let fullName = user.fullName;
+      
+      if (!fullName && storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          fullName = parsedUser.fullName;
+        } catch (error) {
+          console.error('Error parsing stored user:', error);
+        }
+      }
+
+      // Debug logging
+      console.log('User object:', user);
+      console.log('Stored user from localStorage:', storedUser);
+      console.log('FullName to send:', fullName);
+
       // Create abort controller for timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-      const response = await axios.post(`${API_BASE}/webinar/register`, {
-        fullName: user.name,
+      const payload = {
         email: user.email,
-        meetingNumber: latestWebinar.id,
+        fullName: fullName,
+        phoneNumber: "999999999", // Default phone number as per your example
+        source: "mobile", // Default source as per your example
         webinarName: latestWebinar.topic || 'Options Trading Workshop'
-      }, {
+      };
+
+      console.log('Registration payload:', payload);
+
+      const response = await axios.post(`${API_BASE}/webinar/register`, payload, {
         signal: controller.signal,
         timeout: 30000
       });
@@ -179,8 +202,8 @@ export const RegistrationSection = () => {
                   <div className="flex items-center gap-3">
                     <User className="w-5 h-5 text-green-600" />
                     <div>
-                      <p className="text-sm font-medium text-green-800">Signed in as</p>
-                      <p className="text-sm text-green-600">{user.name}</p>
+                      <p className="text-xs font-medium text-green-800">Signed in as {user.fullName}</p>
+                      {/* <p className="text-sm text-green-600"></p> */}
                     </div>
                   </div>
                 </div>
