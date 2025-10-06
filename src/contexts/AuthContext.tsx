@@ -6,7 +6,7 @@ import axios from 'axios';
 interface User {
   id: string;
   email: string;
-  name: string;
+  fullName: string;
 }
 
 interface AuthContextType {
@@ -47,10 +47,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const storedToken = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('auth_user');
     
+    console.log('Loading from localStorage:');
+    console.log('Stored token:', storedToken);
+    console.log('Stored user:', storedUser);
+    
     if (storedToken && storedUser) {
       try {
+        const parsedUser = JSON.parse(storedUser);
+        console.log('Parsed user from localStorage:', parsedUser);
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        setUser(parsedUser);
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         localStorage.removeItem('auth_token');
@@ -77,15 +83,59 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (response.status === 200 && response.data) {
-        const { token: authToken, user: userData } = response.data;
+        // Debug logging
+        console.log('Login API response:', response.data);
+        
+        // Extract tokens from the new structure
+        const { tokens, user: loginUserData, username } = response.data;
+        
+        if (!tokens || !tokens.AccessToken) {
+          throw new Error('No access token received from login');
+        }
+        
+        const authToken = tokens.AccessToken;
+        
+        // Fetch user profile data using the get-user endpoint
+        let userProfileData = loginUserData;
+        
+        try {
+          console.log('Fetching user profile data...');
+          const userResponse = await axios.get(`${API_BASE}/auth/get-user`, {
+            headers: {
+              'Authorization': `Bearer ${authToken}`
+            }
+          });
+          
+          if (userResponse.status === 200 && userResponse.data) {
+            console.log('User profile data:', userResponse.data);
+            userProfileData = userResponse.data;
+          }
+        } catch (getUserError: any) {
+          console.warn('Failed to fetch user profile data:', getUserError.response?.data || getUserError.message);
+          // If get-user fails, create a basic user object with available data
+          userProfileData = {
+            id: username || 'unknown',
+            email: email,
+            fullName: email.split('@')[0] // Use email prefix as fallback
+          };
+        }
+        
+        // Ensure user data has required fields
+        const finalUserData = {
+          id: userProfileData.id || username || 'unknown',
+          email: userProfileData.email || email,
+          fullName: userProfileData.fullName || userProfileData.name || email.split('@')[0]
+        };
+        
+        console.log('Final user data to store:', finalUserData);
         
         // Store in localStorage
         localStorage.setItem('auth_token', authToken);
-        localStorage.setItem('auth_user', JSON.stringify(userData));
+        localStorage.setItem('auth_user', JSON.stringify(finalUserData));
         
         // Update state
         setToken(authToken);
-        setUser(userData);
+        setUser(finalUserData);
       } else {
         throw new Error(response.data?.error || 'Login failed');
       }
@@ -117,15 +167,59 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (response.status === 200 && response.data) {
-        const { token: authToken, user: userData } = response.data;
+        // Debug logging
+        console.log('Email verification API response:', response.data);
+        
+        // Extract tokens from the new structure
+        const { tokens, user: loginUserData, username } = response.data;
+        
+        if (!tokens || !tokens.AccessToken) {
+          throw new Error('No access token received from email verification');
+        }
+        
+        const authToken = tokens.AccessToken;
+        
+        // Fetch user profile data using the get-user endpoint
+        let userProfileData = loginUserData;
+        
+        try {
+          console.log('Fetching user profile data after email verification...');
+          const userResponse = await axios.get(`${API_BASE}/auth/get-user`, {
+            headers: {
+              'Authorization': `Bearer ${authToken}`
+            }
+          });
+          
+          if (userResponse.status === 200 && userResponse.data) {
+            console.log('User profile data:', userResponse.data);
+            userProfileData = userResponse.data;
+          }
+        } catch (getUserError: any) {
+          console.warn('Failed to fetch user profile data:', getUserError.response?.data || getUserError.message);
+          // If get-user fails, create a basic user object with available data
+          userProfileData = {
+            id: username || 'unknown',
+            email: 'verified@user.com', // We don't have email in this context
+            fullName: username || 'Verified User'
+          };
+        }
+        
+        // Ensure user data has required fields
+        const finalUserData = {
+          id: userProfileData.id || username || 'unknown',
+          email: userProfileData.email || 'verified@user.com',
+          fullName: userProfileData.fullName || userProfileData.name || username || 'Verified User'
+        };
+        
+        console.log('Final user data to store after verification:', finalUserData);
         
         // Store in localStorage
         localStorage.setItem('auth_token', authToken);
-        localStorage.setItem('auth_user', JSON.stringify(userData));
+        localStorage.setItem('auth_user', JSON.stringify(finalUserData));
         
         // Update state
         setToken(authToken);
-        setUser(userData);
+        setUser(finalUserData);
       } else {
         throw new Error(response.data?.error || 'Email verification failed');
       }

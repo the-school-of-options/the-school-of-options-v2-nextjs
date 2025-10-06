@@ -55,8 +55,10 @@ export const RegistrationSection = () => {
       }
 
       // Debug logging
-      console.log('User object:', user);
-      console.log('Stored user from localStorage:', storedUser);
+      console.log('RegistrationSection - User object:', user);
+      console.log('RegistrationSection - Stored user from localStorage:', storedUser);
+      console.log('RegistrationSection - User fullName:', user?.fullName);
+      console.log('RegistrationSection - User email:', user?.email);
       console.log('FullName to send:', fullName);
 
       // Create abort controller for timeout

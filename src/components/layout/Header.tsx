@@ -14,6 +14,11 @@ const Header = () => {
   const router = useRouter();
   const { user, logout } = useAuth();
 
+  // Debug logging
+  console.log('Header - User object:', user);
+  console.log('Header - User fullName:', user?.fullName);
+  console.log('Header - User email:', user?.email);
+
   const isActive = (href: string) => pathname === href;
 
   const handleSignInClick = () => {
@@ -90,7 +95,7 @@ const Header = () => {
             {user ? (
               <div className="flex items-center space-x-3">
                 <span className="text-white text-sm">
-                  Welcome, {user.name || user.email}
+                  Welcome, {user.fullName || user.email}
                 </span>
                 <Button variant="cta-outline" size="sm" onClick={handleLogout}>
                   <LogOut className="h-4 w-4 mr-2" />
@@ -179,7 +184,7 @@ const Header = () => {
                 {user ? (
                   <>
                     <div className="text-white text-sm mb-2">
-                      Welcome, {user.name || user.email}
+                      Welcome, {user.fullName || user.email}
                     </div>
                     <Button 
                       variant="cta-outline" 
