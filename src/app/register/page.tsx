@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   ArrowRight,
   Mail,
@@ -11,7 +11,6 @@ import {
   EyeOff,
   Phone,
   CheckCircle,
-  ArrowLeft,
   Shield,
   Star,
 } from "lucide-react";
@@ -33,24 +32,10 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const { register, verifyOtp } = useAuth();
-
-  // stages: "form" -> "otp"
-  const [stage, setStage] = useState<"form" | "otp">("form");
-  const [userId, setUserId] = useState<string | null>(null);
-
-  // OTP state
-  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
-  const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
-
-  const maskedEmail = useMemo(() => {
-    if (!formData.email.includes("@")) return "******";
-    const [, domain] = formData.email.split("@");
-    return `******@${domain}`;
-  }, [formData.email]);
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,15 +43,8 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      const data = await register(formData);
-      
-      // Expecting data.userId; keep flexible if your API differs
-      setUserId(data?.userId ?? null);
-
-      // move to OTP stage
-      setStage("otp");
-      // focus the first OTP input
-      setTimeout(() => inputsRef.current[0]?.focus(), 0);
+      await register(formData);
+      setSuccess(true);
     } catch (err: any) {
       setError(err.message || "Signup failed");
     } finally {
@@ -76,70 +54,6 @@ export default function RegisterPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  // ===== OTP handlers =====
-  const setOtpAt = (index: number, val: string) => {
-    setOtp((prev) => {
-      const next = [...prev];
-      next[index] = val;
-      return next;
-    });
-  };
-
-  const onOtpChange =
-    (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const v = e.target.value.replace(/\D/g, "");
-      if (!v) {
-        setOtpAt(index, "");
-        return;
-      }
-      // only take first digit here; auto-advance
-      setOtpAt(index, v[0]);
-      if (index < 5) {
-        inputsRef.current[index + 1]?.focus();
-      } else {
-        // on 6th digit entered, auto-verify
-        void handleVerifyOtp([...otp.slice(0, 5), v[0]].join(""));
-      }
-    };
-
-  const onOtpKeyDown =
-    (index: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Backspace" && !otp[index] && index > 0) {
-        inputsRef.current[index - 1]?.focus();
-      }
-    };
-
-  const onOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const text = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
-    if (!text) return;
-    const arr = Array.from({ length: 6 }, (_, i) => text[i] ?? "");
-    setOtp(arr);
-    if (arr.every((c) => c !== "")) {
-      void handleVerifyOtp(arr.join(""));
-    } else {
-      const firstEmpty = arr.findIndex((c) => c === "");
-      inputsRef.current[firstEmpty >= 0 ? firstEmpty : 5]?.focus();
-    }
-  };
-
-  const handleVerifyOtp = async (code: string) => {
-    try {
-      setVerifying(true);
-      setError("");
-
-      await verifyOtp(formData.email, code, formData.password);
-      router.push("/");
-    } catch (err: any) {
-      setError(err.message || "OTP verification failed");
-      // reset OTP so user can re-enter
-      setOtp(["", "", "", "", "", ""]);
-      inputsRef.current[0]?.focus();
-    } finally {
-      setVerifying(false);
-    }
-  };
 
   return (
     <div className="h-screen bg-slate-900 relative overflow-hidden flex flex-col">
@@ -220,23 +134,23 @@ export default function RegisterPage() {
             <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-white mb-2">
-                  {stage === "form" ? "Create your account" : "Verify your email"}
+                  {success ? "Check your email" : "Create your account"}
                 </h2>
                 <p className="text-slate-400">
-                  {stage === "form" ? (
-                    "Join The School of Options and start learning"
-                  ) : (
+                  {success ? (
                     <>
-                      Enter the 6-digit code sent to{" "}
+                      We've sent a verification link to{" "}
                       <span className="font-semibold text-orange-400">
-                        {maskedEmail}
+                        {formData.email}
                       </span>
                     </>
+                  ) : (
+                    "Join The School of Options and start learning"
                   )}
                 </p>
               </div>
 
-              {stage === "form" ? (
+              {!success ? (
                 <>
                   {/* Registration Form */}
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -370,80 +284,55 @@ export default function RegisterPage() {
                 </>
               ) : (
                 <>
-                  {/* OTP Verification */}
+                  {/* Success Message */}
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-400">
-                        We've sent a verification code to your email.
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          // Optional: implement resend endpoint here
-                        }}
-                        className="text-sm font-semibold text-orange-400 hover:text-orange-300 transition-colors"
-                      >
-                        Resend code
-                      </button>
-                    </div>
-
-                    <div className="flex justify-center gap-2 sm:gap-3">
-                      {otp.map((val, i) => (
-                        <input
-                          key={i}
-                          ref={(el) => {
-                            inputsRef.current[i] = el;
-                          }}
-                          value={val}
-                          onChange={onOtpChange(i)}
-                          onKeyDown={onOtpKeyDown(i)}
-                          onPaste={i === 0 ? onOtpPaste : undefined}
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          maxLength={1}
-                          className="h-12 w-10 sm:h-14 sm:w-12 rounded-lg border border-slate-600 bg-slate-700/50 text-center text-base sm:text-lg text-white tracking-widest outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
-                        />
-                      ))}
-                    </div>
-
-                    {error && (
-                      <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                        <p className="text-red-400 text-sm">{error}</p>
-                      </div>
-                    )}
-
-                    <button
-                      type="button"
-                      disabled={verifying || otp.some((d) => d === "")}
-                      onClick={() => handleVerifyOtp(otp.join(""))}
-                      className="w-full flex justify-center items-center py-3 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-orange-500/25"
-                    >
-                      {verifying ? (
-                        <>
-                          <Loader className="h-5 w-5 animate-spin mr-2" />
-                          Verifying...
-                        </>
-                      ) : (
-                        <>
-                          Verify code
-                          <ArrowRight className="ml-2 h-5 w-5" />
-                        </>
-                      )}
-                    </button>
-
-                    <p className="text-center text-xs text-slate-500">
-                      Enter the 6-digit code. We'll auto-submit when complete.
-                    </p>
-
                     <div className="text-center">
-                      <button
-                        type="button"
-                        onClick={() => setStage("form")}
-                        className="text-sm text-orange-400 hover:text-orange-300 transition-colors flex items-center justify-center mx-auto"
-                      >
-                        <ArrowLeft className="h-4 w-4 mr-1" />
-                        Back to registration
-                      </button>
+                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
+                        <CheckCircle className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-white mb-2">
+                        Account Created Successfully!
+                      </h3>
+                      <p className="text-slate-400 text-sm mb-6">
+                        Please check your email and click the verification link to activate your account.
+                      </p>
+                    </div>
+
+                    <div className="bg-slate-700/30 rounded-xl border border-slate-600/50 p-4">
+                      <div className="flex items-start space-x-3">
+                        <Mail className="h-5 w-5 text-orange-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-white text-sm font-medium mb-1">
+                            Verification Email Sent
+                          </p>
+                          <p className="text-slate-400 text-xs">
+                            We've sent a verification link to <span className="text-orange-400">{formData.email}</span>. 
+                            Click the link in the email to verify your account.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-center space-y-4">
+                      <p className="text-slate-500 text-xs">
+                        Didn't receive the email? Check your spam folder or try signing up again.
+                      </p>
+                      
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setSuccess(false)}
+                          className="flex-1 flex justify-center items-center py-2 px-4 border border-slate-600 text-slate-300 hover:text-white hover:border-slate-500 font-medium rounded-lg transition-all duration-200"
+                        >
+                          Try Again
+                        </button>
+                        <Link
+                          href="/login"
+                          className="flex-1 flex justify-center items-center py-2 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-orange-500/25"
+                        >
+                          Go to Login
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </>

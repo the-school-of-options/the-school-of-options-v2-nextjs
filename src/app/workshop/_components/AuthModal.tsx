@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, Eye, EyeOff, Loader, User as UserIcon, Phone } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader, User as UserIcon, Phone, CheckCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -32,10 +32,9 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
     password: "",
     confirmPassword: ""
   });
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   
-  const { login, register, verifyOtp } = useAuth();
+  const { login, register } = useAuth();
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -79,14 +78,14 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
       await register({
         fullName: registerData.fullName,
         email: registerData.email,
-        phone: registerData.phone,
+        mobileNumber: registerData.phone,
         password: registerData.password
       });
       
-      setOtpSent(true);
+      setRegistrationSuccess(true);
       toast({
-        title: "OTP sent",
-        description: "Please check your email for the OTP",
+        title: "Registration successful",
+        description: "Please check your email for verification link",
       });
     } catch (error: any) {
       toast({
@@ -99,40 +98,17 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
     }
   };
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    try {
-      await verifyOtp(registerData.email, otp, registerData.password);
-      toast({
-        title: "Registration successful",
-        description: "Your account has been created successfully",
-      });
-      onSuccess();
-      onClose();
-    } catch (error: any) {
-      toast({
-        title: "Verification failed",
-        description: error.message || "Invalid OTP. Please try again",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const resetForm = () => {
     setLoginData({ email: "", password: "" });
     setRegisterData({
-        fullName: "",
+      fullName: "",
       email: "",
       phone: "",
       password: "",
       confirmPassword: ""
     });
-    setOtp("");
-    setOtpSent(false);
+    setRegistrationSuccess(false);
     setShowPassword(false);
   };
 
@@ -157,8 +133,7 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
           </TabsList>
 
           <TabsContent value="login" className="space-y-4">
-            {!otpSent && (
-              <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2 text-black">
                   <Label htmlFor="login-email text-black">Email</Label>
                   <div className="relative">
@@ -209,11 +184,10 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
                   )}
                 </Button>
               </form>
-            )}
           </TabsContent>
 
           <TabsContent value="register" className="space-y-4">
-            {!otpSent ? (
+            {!registrationSuccess ? (
               <form onSubmit={handleRegister} className="space-y-4">
                 <div className="space-y-2 text-black">
                   <Label htmlFor="register-name">Full Name</Label>
@@ -314,46 +288,53 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
                 </Button>
               </form>
             ) : (
-              <form onSubmit={handleVerifyOtp} className="space-y-4">
-                <div className="text-center mb-4">
-                  <p className="text-sm text-muted-foreground">
-                    We've sent an OTP to <strong>{registerData.email}</strong>
+              <div className="space-y-4">
+                <div className="text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
+                    <CheckCircle className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-black mb-2">
+                    Account Created Successfully!
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    We've sent a verification link to{" "}
+                    <span className="font-semibold text-black">{registerData.email}</span>.
+                    Please check your email and click the link to verify your account.
                   </p>
                 </div>
 
-                <div className="space-y-2 text-black">
-                  <Label htmlFor="otp">Enter OTP</Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    placeholder="Enter 6-digit OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    maxLength={6}
-                    required
-                  />
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Mail className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-black text-sm font-medium mb-1">
+                        Verification Email Sent
+                      </p>
+                      <p className="text-blue-600 text-xs">
+                        Click the verification link in your email to activate your account and continue with workshop registration.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={loading || otp.length !== 6}>
-                  {loading ? (
-                    <>
-                      <Loader className="w-4 h-4 animate-spin mr-2" />
-                      Verifying...
-                    </>
-                  ) : (
-                    "Verify OTP"
-                  )}
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full text-black"
-                  onClick={() => setOtpSent(false)}
-                >
-                  Back to Registration
-                </Button>
-              </form>
+                <div className="space-y-3">
+                  <Button
+                    type="button"
+                    className="w-full"
+                    onClick={() => setRegistrationSuccess(false)}
+                  >
+                    Try Again
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full text-black"
+                    onClick={handleClose}
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
             )}
           </TabsContent>
         </Tabs>

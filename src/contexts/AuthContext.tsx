@@ -15,7 +15,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (userData: any) => Promise<any>;
-  verifyOtp: (email: string, otp: string, password: string) => Promise<void>;
+  verifyEmail: (token: string) => Promise<void>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
@@ -110,12 +110,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const verifyOtp = async (email: string, otp: string, password: string) => {
+  const verifyEmail = async (token: string) => {
     try {
-      const response = await axios.post(`${API_BASE}/otp/verify`, {
-        email,
-        otp,
-        password,
+      const response = await axios.post(`${API_BASE}/auth/verify-email`, {
+        token,
       });
 
       if (response.status === 200 && response.data) {
@@ -129,10 +127,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(authToken);
         setUser(userData);
       } else {
-        throw new Error(response.data?.error || 'OTP verification failed');
+        throw new Error(response.data?.error || 'Email verification failed');
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message || 'OTP verification failed';
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message || 'Email verification failed';
       throw new Error(errorMessage);
     }
   };
@@ -187,7 +185,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading,
     login,
     register,
-    verifyOtp,
+    verifyEmail,
     logout,
     forgotPassword,
     resetPassword,
