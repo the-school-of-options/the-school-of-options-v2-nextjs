@@ -151,10 +151,6 @@ export const RegistrationForm = ({
         }
       }
 
-      console.log("formData.session", formData.session);
-      console.log("meetings array", meetings);
-      console.log("selectedMeeting", selectedMeeting);
-      console.log("webinarName", webinarName);
       
       // Prepare the payload according to the new API structure
       const registrationData: WebinarRegistrationData = {
@@ -183,7 +179,6 @@ export const RegistrationForm = ({
         setShowError(false);
       } else {
         // Handle API error with better categorization
-        console.error('Registration failed:', response.error);
         let errorMsg = 'Registration failed. Please try again.';
         
         if (response.error) {
@@ -205,7 +200,6 @@ export const RegistrationForm = ({
         setShowSuccess(false);
       }
     } catch (error: any) {
-      console.error('Registration error:', error);
       let errorMsg = 'Registration failed. Please try again.';
       
       if (error.name === 'AbortError') {

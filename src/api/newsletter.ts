@@ -33,19 +33,12 @@ export interface NewsletterResponse {
 
 export const subscribeToNewsletter = async (email: string, name?: string): Promise<NewsletterResponse> => {
   try {
-    console.log('Sending newsletter subscription request to Listmonk:', {
-      url: LISTMONK_API_URL,
-      email: email,
-      name: name,
-      listId: NEWSLETTER_LIST_ID
-    });
 
     // Get credentials from environment variables
     const username = process.env.LISTMONK_USERNAME;
     const password = process.env.LISTMONK_PASSWORD;
 
     if (!username || !password) {
-      console.error('Missing Listmonk credentials');
       return {
         ok: false,
         error: 'Server configuration error. Please contact support.'
@@ -66,29 +59,13 @@ export const subscribeToNewsletter = async (email: string, name?: string): Promi
       }
     });
 
-    console.log('Newsletter subscription response:', response.data);
-    
     return {
       ok: true,
       subscriber: response.data.data,
       message: 'Successfully subscribed to newsletter!'
     };
   } catch (error) {
-    console.error('Newsletter subscription error:', error);
-    
     if (axios.isAxiosError(error)) {
-      console.error('Axios error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        config: {
-          url: error.config?.url,
-          method: error.config?.method,
-          headers: error.config?.headers,
-          data: error.config?.data
-        }
-      });
       
       if (error.response?.status === 409) {
         // Email already exists
@@ -99,7 +76,6 @@ export const subscribeToNewsletter = async (email: string, name?: string): Promi
       }
       
       if (error.response?.data) {
-        console.error('API Error Response:', JSON.stringify(error.response.data, null, 2));
         return {
           ok: false,
           error: error.response.data.message || 'Failed to subscribe. Please try again.'

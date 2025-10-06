@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(result, { status: 400 });
     }
   } catch (error) {
-    console.error('API route error:', error);
+    // API route error
     return NextResponse.json(
       { ok: false, error: 'Internal server error' },
       { status: 500 }

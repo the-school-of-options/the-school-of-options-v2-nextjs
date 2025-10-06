@@ -81,7 +81,6 @@ const WebcastPage = () => {
         })
         setJoined(true)
       } catch (err) {
-        console.error(err)
         setError(err instanceof Error ? err.message : 'Failed to join meeting')
       } finally {
         setJoining(false)

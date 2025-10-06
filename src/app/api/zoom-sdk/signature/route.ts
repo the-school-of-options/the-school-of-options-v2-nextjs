@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     const signature = createMeetingSdkSignature({ sdkKey, sdkSecret, meetingNumber: String(mn), role })
     return NextResponse.json({ signature })
   } catch (err) {
-    console.error('Signature generation failed', err)
+    // Signature generation failed
     return NextResponse.json({ error: 'server_error' }, { status: 500 })
   }
 }

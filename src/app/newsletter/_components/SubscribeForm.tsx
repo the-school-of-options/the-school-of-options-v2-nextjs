@@ -60,7 +60,6 @@ export default function SubscribeForm({ placeholder, cta, micro }: SubscribeForm
         setError(data.message || data.error || 'Failed to subscribe. Please try again.');
       }
     } catch (error) {
-      console.error('Newsletter subscription error:', error);
       setError('Network error. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);

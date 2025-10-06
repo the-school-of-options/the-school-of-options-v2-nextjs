@@ -71,7 +71,7 @@ export default function FormCard({
         const parsed = JSON.parse(savedData);
         setFormData(parsed);
       } catch (error) {
-        console.warn('Failed to parse saved form data:', error);
+        // Failed to parse saved form data
       }
     }
   }, []);
@@ -198,10 +198,6 @@ export default function FormCard({
         }
       }
 
-      console.log("formData.session", formData.session);
-      console.log("meetings array", meetings);
-      console.log("selectedMeeting", selectedMeeting);
-      console.log("webinarName", webinarName);
       
       // Prepare the payload according to the new API structure
       const registrationData: WebinarRegistrationData = {
@@ -226,11 +222,9 @@ export default function FormCard({
         setIsStep2Open(true);
       } else {
         // Handle API error
-        console.error('Registration failed:', response.error);
         alert(`Registration failed: ${response.error || 'Unknown error occurred'}`);
       }
     } catch (error) {
-      console.error('Registration error:', error);
       alert('Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);

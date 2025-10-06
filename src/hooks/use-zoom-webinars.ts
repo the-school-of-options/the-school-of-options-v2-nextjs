@@ -56,7 +56,6 @@ export function useZoomWebinars(): UseZoomWebinarsReturn {
       const data: ZoomWebinarsResponse = await response.json();
       setWebinars(data.items || []);
     } catch (err) {
-      console.error('Failed to fetch Zoom webinars:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch webinars');
       setWebinars([]);
     } finally {

@@ -28,16 +28,6 @@ export interface WebinarResponse {
 
 export const registerForWebinar = async (data: WebinarRegistrationData): Promise<WebinarResponse> => {
   try {
-    console.log('Sending webinar registration request:', {
-      url: `${API_BASE_URL}/webinar/register`,
-      data: {
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phoneNumebr,
-        webinarName: data.webinarName,
-        source: 'website'
-      }
-    });
 
     // Create abort controller for timeout
     const controller = new AbortController();
@@ -58,24 +48,9 @@ export const registerForWebinar = async (data: WebinarRegistrationData): Promise
     });
 
     clearTimeout(timeoutId);
-    console.log('Webinar registration response:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Webinar registration error:', error);
-    
     if (axios.isAxiosError(error)) {
-      console.error('Axios error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        config: {
-          url: error.config?.url,
-          method: error.config?.method,
-          headers: error.config?.headers,
-          data: error.config?.data
-        }
-      });
       
       // Handle specific HTTP status codes
       if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
@@ -128,7 +103,6 @@ export const registerForWebinar = async (data: WebinarRegistrationData): Promise
       }
       
       if (error.response?.data) {
-        console.error('API Error Response:', JSON.stringify(error.response.data, null, 2));
         
         // Extract meaningful error message from response
         let errorMessage = 'Registration failed. Please try again.';

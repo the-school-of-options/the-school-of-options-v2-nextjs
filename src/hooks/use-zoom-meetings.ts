@@ -56,7 +56,6 @@ export function useZoomMeetings(): UseZoomMeetingsReturn {
       const data: ZoomMeetingsResponse = await response.json();
       setMeetings(data.items || []);
     } catch (err) {
-      console.error('Failed to fetch Zoom meetings:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch meetings');
       setMeetings([]);
     } finally {

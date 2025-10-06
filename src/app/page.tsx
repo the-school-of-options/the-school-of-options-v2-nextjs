@@ -90,7 +90,6 @@ const HomePage = () => {
         });
       }
     } catch (error) {
-      console.error('Newsletter subscription error:', error);
       toast({
         title: "Subscription Failed",
         description: "Network error. Please check your connection and try again.",
@@ -148,10 +147,6 @@ const HomePage = () => {
         }
       }
 
-      console.log("session", session);
-      console.log("webinars array", webinars);
-      console.log("selectedMeeting", selectedMeeting);
-      console.log("webinarName", webinarName);
 
       const response = await registerForWebinar({
         email: email.trim(),

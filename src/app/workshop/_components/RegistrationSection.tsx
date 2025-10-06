@@ -25,6 +25,8 @@ export const RegistrationSection = () => {
       return;
     }
 
+    // If user is authenticated, proceed with registration
+
     // Get the latest webinar
     if (webinars.length === 0) {
       toast({
@@ -50,16 +52,9 @@ export const RegistrationSection = () => {
           const parsedUser = JSON.parse(storedUser);
           fullName = parsedUser.fullName;
         } catch (error) {
-          console.error('Error parsing stored user:', error);
+          // Error parsing stored user
         }
       }
-
-      // Debug logging
-      console.log('RegistrationSection - User object:', user);
-      console.log('RegistrationSection - Stored user from localStorage:', storedUser);
-      console.log('RegistrationSection - User fullName:', user?.fullName);
-      console.log('RegistrationSection - User email:', user?.email);
-      console.log('FullName to send:', fullName);
 
       // Create abort controller for timeout
       const controller = new AbortController();
@@ -72,8 +67,6 @@ export const RegistrationSection = () => {
         source: "mobile", // Default source as per your example
         webinarName: latestWebinar.topic || 'Options Trading Workshop'
       };
-
-      console.log('Registration payload:', payload);
 
       const response = await axios.post(`${API_BASE}/webinar/register`, payload, {
         signal: controller.signal,
@@ -90,7 +83,6 @@ export const RegistrationSection = () => {
       // Redirect to success page
       router.push('/workshop/success');
     } catch (error: any) {
-      console.error('Registration error:', error);
       let errorMessage = "Registration failed. Please try again.";
       
       if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
@@ -126,8 +118,66 @@ export const RegistrationSection = () => {
 
   const handleAuthSuccess = () => {
     setShowAuthModal(false);
-    // Automatically register after successful authentication
-    handleRegister();
+    // No need to automatically register here anymore since it's handled in AuthModal
+  };
+
+  const handleAutoRegister = async () => {
+    // Get the latest webinar
+    if (webinars.length === 0) {
+      throw new Error("No upcoming webinar sessions are available at the moment.");
+    }
+
+    // Use the latest webinar (first in the array)
+    const latestWebinar = webinars[0];
+    
+    // Get user data - try multiple sources
+    const storedUser = localStorage.getItem('auth_user');
+    let userEmail = user?.email;
+    let fullName = user?.fullName;
+    
+    // If user data is not available from context, try localStorage
+    if (!userEmail || !fullName) {
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          userEmail = userEmail || parsedUser.email;
+          fullName = fullName || parsedUser.fullName;
+        } catch (error) {
+          // Error parsing stored user
+        }
+      }
+    }
+
+    // Validate required fields
+    if (!userEmail) {
+      throw new Error("User email is required for registration");
+    }
+
+    if (!fullName) {
+      fullName = userEmail.split('@')[0]; // Fallback to email prefix
+    }
+
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+    const payload = {
+      email: userEmail,
+      fullName: fullName,
+      phoneNumber: "999999999", // Default phone number as per your example
+      source: "mobile", // Default source as per your example
+      webinarName: latestWebinar.topic || 'Options Trading Workshop'
+    };
+
+    const response = await axios.post(`${API_BASE}/webinar/register`, payload, {
+      signal: controller.signal,
+      timeout: 30000
+    });
+
+    clearTimeout(timeoutId);
+    
+    // Redirect to success page
+    router.push('/workshop/success');
   };
 
   // Format date for display
@@ -258,7 +308,7 @@ export const RegistrationSection = () => {
                     Registering...
                   </>
                 ) : (
-                  user ? "Register Now" : "Sign In to Register"
+                  "Register Now"
                 )}
               </Button>
 
@@ -275,6 +325,8 @@ export const RegistrationSection = () => {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onSuccess={handleAuthSuccess}
+        useSignupWithoutVerification={true}
+        onAutoRegister={handleAutoRegister}
       />
     </section>;
 };

@@ -14,10 +14,12 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  useSignupWithoutVerification?: boolean;
+  onAutoRegister?: () => Promise<void>;
 }
 
-export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
-  const [activeTab, setActiveTab] = useState("login");
+export const AuthModal = ({ isOpen, onClose, onSuccess, useSignupWithoutVerification = false, onAutoRegister }: AuthModalProps) => {
+  const [activeTab, setActiveTab] = useState("register");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
@@ -34,7 +36,7 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
   });
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   
-  const { login, register } = useAuth();
+  const { login, register, registerWithoutVerification } = useAuth();
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -43,10 +45,30 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
     
     try {
       await login(loginData.email, loginData.password);
-      toast({
-        title: "Login successful",
-        description: "You have been successfully logged in",
-      });
+      
+      // If onAutoRegister is provided, automatically register for webinar
+      if (onAutoRegister) {
+        try {
+          // Add a small delay to ensure context is updated
+          await new Promise(resolve => setTimeout(resolve, 500));
+          await onAutoRegister();
+          toast({
+            title: "Login successful",
+            description: "You have been logged in and registered for the workshop!",
+          });
+        } catch (registerError: any) {
+          toast({
+            title: "Login successful",
+            description: "You have been logged in, but workshop registration failed. You can try registering again.",
+          });
+        }
+      } else {
+        toast({
+          title: "Login successful",
+          description: "You have been successfully logged in",
+        });
+      }
+      
       onSuccess();
       onClose();
     } catch (error: any) {
@@ -75,18 +97,49 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
     setLoading(true);
     
     try {
-      await register({
+      const registrationData = {
         fullName: registerData.fullName,
         email: registerData.email,
         mobileNumber: registerData.phone,
         password: registerData.password
-      });
-      
-      setRegistrationSuccess(true);
-      toast({
-        title: "Registration successful",
-        description: "Please check your email for verification link",
-      });
+      };
+
+      if (useSignupWithoutVerification) {
+        await registerWithoutVerification(registrationData);
+        
+        // If onAutoRegister is provided, automatically register for webinar
+        if (onAutoRegister) {
+          try {
+            // Add a small delay to ensure context is updated
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await onAutoRegister();
+            toast({
+              title: "Registration successful",
+              description: "Account created, logged in, and registered for the workshop!",
+            });
+          } catch (registerError: any) {
+            toast({
+              title: "Registration successful",
+              description: "Account created and logged in, but workshop registration failed. You can try registering again.",
+            });
+          }
+        } else {
+          toast({
+            title: "Registration successful",
+            description: "Account created and you're now logged in! Proceeding to workshop registration...",
+          });
+        }
+        
+        onSuccess();
+        onClose();
+      } else {
+        await register(registrationData);
+        setRegistrationSuccess(true);
+        toast({
+          title: "Registration successful",
+          description: "Please check your email for verification link",
+        });
+      }
     } catch (error: any) {
       toast({
         title: "Registration failed",
@@ -128,17 +181,18 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100">
-            <TabsTrigger 
-              value="login"
-              className="data-[state=active]:bg-[#0A2540] data-[state=active]:text-white data-[state=active]:font-semibold"
-            >
-              Sign In
-            </TabsTrigger>
+
             <TabsTrigger 
               value="register"
               className="data-[state=active]:bg-[#0A2540] data-[state=active]:text-white data-[state=active]:font-semibold"
             >
               Sign Up
+            </TabsTrigger>
+            <TabsTrigger 
+              value="login"
+              className="data-[state=active]:bg-[#0A2540] data-[state=active]:text-white data-[state=active]:font-semibold"
+            >
+              Sign In
             </TabsTrigger>
           </TabsList>
 
@@ -190,7 +244,7 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
                       Signing in...
                     </>
                   ) : (
-                    "Sign In"
+                    "Register Now"
                   )}
                 </Button>
               </form>
@@ -293,7 +347,7 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
                       Creating account...
                     </>
                   ) : (
-                    "Create Account"
+                    "Register Now"
                   )}
                 </Button>
               </form>

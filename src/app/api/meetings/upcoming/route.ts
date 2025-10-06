@@ -16,7 +16,6 @@ export async function GET() {
         const apiUrl = typeof tokenData === 'object' && tokenData.api_url ? tokenData.api_url : "https://api.zoom.us";
         const zoomUrl = `${apiUrl}/v2/users/me/meetings?type=upcoming&page_size=50`;
 
-        console.log(`Zoom API call attempt ${retryAttempt + 1}/${maxRetries + 1}: ${zoomUrl}`);
 
         const res = await fetch(zoomUrl, {
           headers: { Authorization: `Bearer ${token}` },
@@ -25,12 +24,10 @@ export async function GET() {
 
         if (!res.ok) {
           const text = await res.text();
-          console.error(`Zoom API error: ${res.status} ${text}`);
           
           // Handle specific error cases
           if (res.status === 401 && retryAttempt < maxRetries) {
             // Clear token cache on authentication failure and retry
-            console.log(`Authentication failed, clearing cache and retrying (attempt ${retryAttempt + 1})`);
             clearZoomTokenCache();
             retryAttempt++;
             continue; // Retry the loop
@@ -74,7 +71,6 @@ export async function GET() {
           registration_url: w.registration_url, // registration URL if registration is required
         }));
 
-        console.log(`Successfully fetched ${items.length} upcoming meetings`);
         
         return NextResponse.json({
           items,
@@ -82,11 +78,9 @@ export async function GET() {
         });
 
       } catch (fetchError: any) {
-        console.error(`Error in fetch attempt ${retryAttempt + 1}:`, fetchError);
         
         if (retryAttempt < maxRetries) {
           retryAttempt++;
-          console.log(`Retrying API call (attempt ${retryAttempt + 1}/${maxRetries + 1})`);
           continue;
         }
         
@@ -95,7 +89,6 @@ export async function GET() {
       }
     }
   } catch (e: any) {
-    console.error("Error in meetings API:", e);
     
     // Handle specific error types
     if (e.message?.includes("Missing Zoom environment variables")) {
