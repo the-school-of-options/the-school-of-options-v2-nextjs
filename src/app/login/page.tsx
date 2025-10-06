@@ -54,7 +54,7 @@ export default function LoginPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   return (
-    <div className="h-screen bg-slate-900 relative overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-slate-900 relative overflow-auto flex flex-col">
       <Header />
       {/* Animated Background */}
       <div className="absolute inset-0">
@@ -66,7 +66,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="relative z-10 flex-1 flex items-center justify-center">
+      <div className="relative z-10 flex-1 flex items-center justify-center py-8">
         {/* Main Content Container */}
         <div className="w-full max-w-7xl mx-auto px-8 lg:px-16">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-16">
@@ -157,7 +157,7 @@ export default function LoginPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="block w-full pl-10 pr-3 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                        className="block w-full pl-10 pr-3 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-white focus:border-white transition-all"
                       />
                     </div>
                   </div>
@@ -177,7 +177,7 @@ export default function LoginPage() {
                         value={formData.password}
                         onChange={handleChange}
                         required
-                        className="block w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                        className="block w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-white focus:border-white transition-all"
                       />
                       <button
                         type="button"
@@ -255,7 +255,7 @@ export default function LoginPage() {
                           value={forgotPasswordEmail}
                           onChange={(e) => setForgotPasswordEmail(e.target.value)}
                           required
-                          className="block w-full px-3 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                          className="block w-full px-3 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-white focus:border-white transition-all"
                         />
                       </div>
                       <button

@@ -827,9 +827,17 @@ const HomePage = () => {
             <p className="text-lg font-semibold text-[#FFCF9E] mb-8 leading-[1.6]">
               These webinars are designed to spread knowledge. We do not give tips. We do not create hype. We provide clarity, structure, and logic.
             </p>
+            <Button 
+                  className="bg-[#FF7A00] text-white font-bold py-[14px] px-[22px] rounded-xl shadow-[0_10px_24px_rgba(255,122,0,0.25)] hover:bg-[#FF8A1E] hover:scale-[1.02] transition-all duration-200 tap-target w-full md:w-auto" 
+                  asChild
+                >
+                  <Link href="/workshop" aria-label="Open the Workshop page">
+                    Register Now
+                  </Link>
+                </Button>
             
             {/* Registration Form */}
-            <div className="bg-white rounded-[16px] p-8 shadow-[0_16px_32px_rgba(0,0,0,0.4)] max-w-md mx-auto">
+            {/* <div className="bg-white rounded-[16px] p-8 shadow-[0_16px_32px_rgba(0,0,0,0.4)] max-w-md mx-auto">
               <h3 className="text-xl font-bold text-[#0A2540] mb-6">Register for the next session</h3>
                 <form className="space-y-4" onSubmit={handleWebinarRegistration}>
                 <div>
@@ -933,7 +941,8 @@ const HomePage = () => {
               <p className="text-sm text-gray-500 mt-4 text-center">
                 We respect your privacy. No spam ever.
               </p>
-            </div>
+            </div> */}
+
           </div>
         </div>
       </section>

@@ -110,7 +110,7 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="h-screen bg-slate-900 relative overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-slate-900 relative overflow-auto flex flex-col">
       <Header />
       {/* Animated Background */}
       <div className="absolute inset-0">
@@ -122,84 +122,84 @@ function ResetPasswordForm() {
         </div>
       </div>
 
-      <div className="relative z-10 flex-1 flex items-center justify-center">
+      <div className="relative z-10 flex-1 flex items-center justify-center py-8 px-4">
         <div className="w-full max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-16">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-16">
             {/* Left Side - Hero Section */}
             <div className="hidden lg:flex lg:w-1/2 flex-col justify-center">
-          <div className="max-w-lg">
-            <div className="mb-12">
-              <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
-                Reset Your
-                <span className="block bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text">
-                  Password
-                </span>
-              </h1>
-              <p className="text-xl text-slate-300 leading-relaxed mb-8">
-                Create a new secure password to continue your learning journey with The School of Options.
-              </p>
+              <div className="max-w-lg">
+                <div className="mb-12">
+                  <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
+                    Reset Your
+                    <span className="block bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text">
+                      Password
+                    </span>
+                  </h1>
+                  <p className="text-xl text-slate-300 leading-relaxed mb-8">
+                    Create a new secure password to continue your learning journey with The School of Options.
+                  </p>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
+                      <Shield className="h-6 w-6 text-orange-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold">Secure Reset</h3>
+                      <p className="text-slate-400">Your account is protected</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
+                      <Lock className="h-6 w-6 text-orange-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold">Strong Password</h3>
+                      <p className="text-slate-400">Enhanced security features</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
+                      <CheckCircle className="h-6 w-6 text-orange-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold">Quick Access</h3>
+                      <p className="text-slate-400">Back to learning in seconds</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
-                  <Shield className="h-6 w-6 text-orange-400" />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold">Secure Reset</h3>
-                  <p className="text-slate-400">Your account is protected</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
-                  <Lock className="h-6 w-6 text-orange-400" />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold">Strong Password</h3>
-                  <p className="text-slate-400">Enhanced security features</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
-                  <CheckCircle className="h-6 w-6 text-orange-400" />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold">Quick Access</h3>
-                  <p className="text-slate-400">Back to learning in seconds</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
             {/* Right Side - Reset Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
-          <div className="w-full max-w-md">
-            {/* Mobile Header */}
-            <div className="lg:hidden mb-8 text-center">
-              <h1 className="text-3xl font-bold text-white mb-2">Reset Password</h1>
-              <p className="text-slate-400">Create a new secure password</p>
-            </div>
-
-            {/* Reset Password Card */}
-            <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
-              <div className="mb-8 text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
-                  <Lock className="h-8 w-8 text-white" />
+              <div className="w-full max-w-md">
+                {/* Mobile Header */}
+                <div className="lg:hidden mb-8 text-center">
+                  <h1 className="text-3xl font-bold text-white mb-2">Reset Password</h1>
+                  <p className="text-slate-400">Create a new secure password</p>
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  Reset your password
-                </h2>
-                <p className="text-slate-400">
-                  Enter your new password below
-                </p>
-              </div>
 
-              {/* Reset Form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-4">
+                {/* Reset Password Card */}
+                <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 md:p-8 shadow-2xl">
+                  <div className="mb-6 md:mb-8 text-center">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
+                      <Lock className="h-8 w-8 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">
+                      Reset your password
+                    </h2>
+                    <p className="text-slate-400">
+                      Enter your new password below
+                    </p>
+                  </div>
+
+                  {/* Reset Form */}
+                  <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                    <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">
                       New Password
@@ -215,7 +215,7 @@ function ResetPasswordForm() {
                         value={formData.password}
                         onChange={handleChange}
                         required
-                        className="block w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                        className="block w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-white focus:border-white transition-all"
                       />
                       <button
                         type="button"
@@ -246,7 +246,7 @@ function ResetPasswordForm() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
-                        className="block w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                        className="block w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-white focus:border-white transition-all"
                       />
                       <button
                         type="button"
@@ -261,52 +261,52 @@ function ResetPasswordForm() {
                       </button>
                     </div>
                   </div>
+                    </div>
+
+                    {error && (
+                      <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                        <p className="text-red-400 text-sm">{error}</p>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={loading || !token}
+                      className="w-full flex justify-center items-center py-3 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-orange-500/25"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader className="h-5 w-5 animate-spin mr-2" />
+                          Resetting password...
+                        </>
+                      ) : (
+                        <>
+                          Reset Password
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  {/* Footer */}
+                  <div className="mt-4 md:mt-6 text-center text-sm text-slate-400">
+                    Remember your password?{" "}
+                    <Link
+                      href="/login"
+                      className="text-orange-400 hover:text-orange-300 font-semibold transition-colors"
+                    >
+                      Sign in
+                    </Link>
+                  </div>
                 </div>
 
-                {error && (
-                  <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                    <p className="text-red-400 text-sm">{error}</p>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading || !token}
-                  className="w-full flex justify-center items-center py-3 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-orange-500/25"
-                >
-                  {loading ? (
-                    <>
-                      <Loader className="h-5 w-5 animate-spin mr-2" />
-                      Resetting password...
-                    </>
-                  ) : (
-                    <>
-                      Reset Password
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Footer */}
-              <div className="mt-6 text-center text-sm text-slate-400">
-                Remember your password?{" "}
-                <Link
-                  href="/login"
-                  className="text-orange-400 hover:text-orange-300 font-semibold transition-colors"
-                >
-                  Sign in
-                </Link>
+                {/* Mobile Footer */}
+                <div className="lg:hidden mt-6 md:mt-8 text-center">
+                  <p className="text-xs text-slate-500">
+                    © {new Date().getFullYear()} The School of Options • Educational content only
+                  </p>
+                </div>
               </div>
-            </div>
-
-            {/* Mobile Footer */}
-            <div className="lg:hidden mt-8 text-center">
-              <p className="text-xs text-slate-500">
-                © {new Date().getFullYear()} The School of Options • Educational content only
-              </p>
-            </div>
-          </div>
             </div>
           </div>
         </div>

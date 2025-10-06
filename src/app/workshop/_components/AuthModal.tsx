@@ -127,9 +127,19 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="login">Sign In</TabsTrigger>
-            <TabsTrigger value="register">Sign Up</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100">
+            <TabsTrigger 
+              value="login"
+              className="data-[state=active]:bg-[#0A2540] data-[state=active]:text-white data-[state=active]:font-semibold"
+            >
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger 
+              value="register"
+              className="data-[state=active]:bg-[#0A2540] data-[state=active]:text-white data-[state=active]:font-semibold"
+            >
+              Sign Up
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="login" className="space-y-4">

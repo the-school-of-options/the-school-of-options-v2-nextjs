@@ -32,6 +32,13 @@ export const metadata: Metadata = {
   creator: "Kundan Kishore",
   publisher: "The School of Options",
   robots: "index, follow",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" }
+    ],
+    apple: { url: "/favicon.svg", type: "image/svg+xml" }
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

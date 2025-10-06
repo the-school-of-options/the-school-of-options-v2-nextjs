@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { CheckCircle2, Calendar, Mail, Phone, ArrowLeft, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import Header from '@/components/layout/Header';
 
 export default function WorkshopSuccessPage() {
   const router = useRouter();
@@ -12,7 +13,9 @@ export default function WorkshopSuccessPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white flex items-center justify-center px-4 py-12">
+    <div>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white flex items-center justify-center px-4 py-12">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
@@ -55,6 +58,7 @@ export default function WorkshopSuccessPage() {
             </a>
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

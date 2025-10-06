@@ -1,0 +1,22 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="60" fill="black"/>
+  
+  <!-- Open Book -->
+  <path d="M20 25 L20 15 Q20 10 25 10 L35 10 Q40 10 40 15 L40 25 Q40 30 35 30 L25 30 Q20 30 20 25 Z" fill="white" stroke="#FFD700" stroke-width="1.5"/>
+  <path d="M25 10 L35 10 L35 30 L25 30" fill="none" stroke="#FFD700" stroke-width="1"/>
+  
+  <!-- Chart/Arrow -->
+  <path d="M15 35 L20 30 L25 32 L30 28 L35 25 L40 20" stroke="#FFD700" stroke-width="2" fill="none"/>
+  <path d="M38 22 L42 18 L38 14" stroke="#FFD700" stroke-width="2" fill="none"/>
+  
+  <!-- Text: THE SCHOOL OF -->
+  <text x="50" y="20" font-family="Arial, sans-serif" font-size="8" font-weight="normal" fill="white">THE SCHOOL OF</text>
+  
+  <!-- Text: OPTION -->
+  <text x="50" y="35" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFD700">OPTION</text>
+  
+  <!-- Golden dots on O and N -->
+  <circle cx="52" cy="31" r="0.8" fill="#FFD700"/>
+  <circle cx="82" cy="31" r="0.8" fill="#FFD700"/>
+</svg>
