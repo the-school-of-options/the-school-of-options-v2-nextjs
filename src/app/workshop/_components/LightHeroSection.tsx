@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Globe, Award } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useZoomWebinars } from "@/hooks/use-zoom-webinars";
 export const LightHeroSection = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -9,32 +10,62 @@ export const LightHeroSection = () => {
     minutes: 0,
     seconds: 0
   });
+  
+  // Fetch upcoming webinars from Zoom API
+  const { webinars, loading: webinarsLoading, error: webinarsError } = useZoomWebinars();
+  
+  // Get the next upcoming webinar
+  const nextWebinar = webinars.length > 0 ? webinars[0] : null;
+  
+  // Helper function to format date
+  const formatWebinarDate = (startTime: string) => {
+    const date = new Date(startTime);
+    const month = date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    const day = date.getDate();
+    const suffix = day === 1 || day === 21 || day === 31 ? 'st' : 
+                   day === 2 || day === 22 ? 'nd' : 
+                   day === 3 || day === 23 ? 'rd' : 'th';
+    return `${month}${day}${suffix}`;
+  };
+  
   useEffect(() => {
     const calculateTimeLeft = () => {
+      if (!nextWebinar) {
+        // Fallback to next Saturday if no webinar data
+        const now = new Date();
+        const currentDay = now.getDay();
+        const daysUntilSaturday = (6 - currentDay + 7) % 7 || 7;
+        const nextSaturday = new Date(now);
+        nextSaturday.setDate(now.getDate() + daysUntilSaturday);
+        nextSaturday.setHours(20, 0, 0, 0);
+        const difference = nextSaturday.getTime() - now.getTime();
+        if (difference > 0) {
+          const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(difference / (1000 * 60 * 60) % 24);
+          const minutes = Math.floor(difference / 1000 / 60 % 60);
+          const seconds = Math.floor(difference / 1000 % 60);
+          setTimeLeft({ days, hours, minutes, seconds });
+        }
+        return;
+      }
+      
       const now = new Date();
-      const currentDay = now.getDay();
-      const daysUntilSaturday = (6 - currentDay + 7) % 7 || 7;
-      const nextSaturday = new Date(now);
-      nextSaturday.setDate(now.getDate() + daysUntilSaturday);
-      nextSaturday.setHours(20, 0, 0, 0);
-      const difference = nextSaturday.getTime() - now.getTime();
+      const webinarTime = new Date(nextWebinar.start_time);
+      const difference = webinarTime.getTime() - now.getTime();
+      
       if (difference > 0) {
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor(difference / (1000 * 60 * 60) % 24);
         const minutes = Math.floor(difference / 1000 / 60 % 60);
         const seconds = Math.floor(difference / 1000 % 60);
-        setTimeLeft({
-          days,
-          hours,
-          minutes,
-          seconds
-        });
+        setTimeLeft({ days, hours, minutes, seconds });
       }
     };
+    
     calculateTimeLeft();
     const timer = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [nextWebinar]);
   const scrollToRegistration = () => {
     const formElement = document.getElementById('registration-form');
     if (formElement) {
@@ -180,18 +211,28 @@ export const LightHeroSection = () => {
                 
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-semibold text-black">OCT11th</span>
+                  <span className="text-sm font-semibold text-black">
+                    {webinarsLoading ? 'Loading...' : 
+                     webinarsError ? 'TBD' : 
+                     nextWebinar ? formatWebinarDate(nextWebinar.start_time) : 'TBD'}
+                  </span>
                 </div>
                 
                 <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-semibold text-black">3 Hours</span>
+                  <span className="text-sm font-semibold text-black">
+                    {webinarsLoading ? 'Loading...' : 
+                     webinarsError ? '3 Hours' : 
+                     nextWebinar ? `${Math.round(nextWebinar.duration / 60)} Hours` : '3 Hours'}
+                  </span>
                 </div>
               </div>
             </div>
             
             <p className="text-sm text-muted-foreground mx-0 whitespace-nowrap">
-              ⚡ Limited Seats • This Saturday
+              ⚡ Limited Seats • {webinarsLoading ? 'Loading...' : 
+                                   webinarsError ? 'This Saturday' : 
+                                   nextWebinar ? new Date(nextWebinar.start_time).toLocaleDateString('en-US', { weekday: 'long' }) : 'This Saturday'}
             </p>
           </div>
         </div>
