@@ -81,7 +81,7 @@ export const RegistrationSection = () => {
       });
 
       // Redirect to success page
-      router.push('/esummit/success');
+      router.push('/bootcamp/success');
     } catch (error: any) {
       let errorMessage = "Registration failed. Please try again.";
       
@@ -179,7 +179,7 @@ export const RegistrationSection = () => {
     clearTimeout(timeoutId);
     
     // Redirect to success page
-    router.push('/esummit/success');
+    router.push('/bootcamp/success');
   };
 
   // Format date for display
@@ -301,7 +301,7 @@ export const RegistrationSection = () => {
                 onClick={handleRegister}
                 variant="cta" 
                 size="xl" 
-                className="w-full" 
+                className="w-full bg-[rgb(255,103,25)] text-black hover:bg-[rgb(255,103,25)]/90" 
                 disabled={loading || webinarsLoading || webinars.length === 0}
               >
                 {loading ? (
