@@ -32,13 +32,13 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="h-12 md:h-24 w-auto">
+            <div className="h-12 md:h-24 w-12 md:w-auto">
               <Image
                 src="/TSOO_Logo_Monogram_Light.png"
                 alt="The School of Options"
                 width={160}
                 height={60}
-                className="h-full w-full object-fill"
+                className="h-full w-full "
                 priority
               />
             </div>
