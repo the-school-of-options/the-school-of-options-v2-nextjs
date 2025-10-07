@@ -31,12 +31,12 @@ export const LightHeroSection = () => {
   // Helper function to format date
   const formatWebinarDate = (startTime: string) => {
     const date = new Date(startTime);
-    const month = date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    const month = date.toLocaleDateString('en-US', { month: 'long' }).toUpperCase();
     const day = date.getDate();
-    const suffix = day === 1 || day === 21 || day === 31 ? 'st' : 
-                   day === 2 || day === 22 ? 'nd' : 
-                   day === 3 || day === 23 ? 'rd' : 'th';
-    return `${month}${day}${suffix}`;
+    const suffix = day === 1 || day === 21 || day === 31 ? 'st ' : 
+                   day === 2 || day === 22 ? 'nd ' : 
+                   day === 3 || day === 23 ? 'rd ' : 'th ';
+    return `${day}${suffix}${month}`;
   };
   
   useEffect(() => {
@@ -237,9 +237,10 @@ export const LightHeroSection = () => {
         <div className="mb-8">
           <div className="bg-gradient-purple px-6 py-3 rounded-full text-sm font-bold text-white shadow-orange inline-block">
             <div className="flex flex-col sm:flex-row items-center gap-2">
-              <span className="whitespace-nowrap">🟢 FREE 3-Hour Masterclass</span>
+              <span className="whitespace-nowrap text-black">🟢 FREE 3-Hour Masterclass</span>
               <span className="whitespace-nowrap bg-background/20 px-3 py-1 rounded-full border border-primary-foreground/30">
-                by <span className="text-white font-extrabold">kundan kishore</span>
+                <span className="text-black">by </span> 
+                <span className="text-white font-extrabold">kundan kishore</span>
               </span>
             </div>
           </div>
@@ -250,7 +251,7 @@ export const LightHeroSection = () => {
       <div className="mb-8 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
             <span className="text-black">Why </span>
-            <span className="text-gradient-orange">90% Traders</span>
+            <span className="text-gradient-orange">91% Traders</span>
             <br />
             <span className="text-black">Lose Money in Options</span>
           </h1>

@@ -251,13 +251,12 @@ export const RegistrationSection = () => {
             
             <div className="space-y-6">
               {/* User Status Display */}
-              {user ? (
+              {/* {user ? (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <div className="flex items-center gap-3">
                     <User className="w-5 h-5 text-green-600" />
                     <div>
                       <p className="text-xs font-medium text-green-800">Signed in as {user.fullName}</p>
-                      {/* <p className="text-sm text-green-600"></p> */}
                     </div>
                   </div>
                 </div>
@@ -271,7 +270,7 @@ export const RegistrationSection = () => {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Webinar Info Display */}
               {webinarsLoading ? (

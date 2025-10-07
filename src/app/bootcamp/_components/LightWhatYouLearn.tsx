@@ -24,8 +24,8 @@ export const LightWhatYouLearn = () => {
     },
     {
       icon: Trophy,
-      title: "Delta Mastery",
-      description: "Using probability to make informed trading decisions.",
+      title: "Delta Greeks Mastery",
+      description: "Learn to predict profit probability of Options Trades.",
     }
   ];
 
