@@ -180,7 +180,7 @@ export const LightHeroSection = () => {
                 
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-semibold text-black">SEP4th</span>
+                  <span className="text-sm font-semibold text-black">OCT11th</span>
                 </div>
                 
                 <div className="flex items-center gap-2">
