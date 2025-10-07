@@ -288,7 +288,7 @@ export const RegistrationSection = () => {
                 </div>
               ) : (
                 <div className="bg-secondary rounded-lg p-4">
-                  <h4 className="font-semibold text-black mb-2">Next Workshop Session:</h4>
+                  <h4 className="font-semibold text-black mb-2">Here are the webinar details:</h4>
                   <p className="text-sm text-muted-foreground">
                     {webinars[0].topic} - {formatWebinarDate(webinars[0].start_time)}
                   </p>
