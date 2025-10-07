@@ -75,10 +75,10 @@ export const RegistrationSection = () => {
 
       clearTimeout(timeoutId);
 
-      toast({
-        title: "Registration Successful",
-        description: "You have been successfully registered for the workshop!",
-      });
+      // toast({
+      //   title: "Registration Successful",
+      //   description: "You have been successfully registered for the workshop!",
+      // });
 
       // Redirect to success page
       router.push('/workshop/success');
@@ -288,7 +288,7 @@ export const RegistrationSection = () => {
                 </div>
               ) : (
                 <div className="bg-secondary rounded-lg p-4">
-                  <h4 className="font-semibold text-black mb-2">Here are the webinar deta:</h4>
+                  <h4 className="font-semibold text-black mb-2">Webinar details:</h4>
                   <p className="text-sm text-muted-foreground">
                     {webinars[0].topic} - {formatWebinarDate(webinars[0].start_time)}
                   </p>

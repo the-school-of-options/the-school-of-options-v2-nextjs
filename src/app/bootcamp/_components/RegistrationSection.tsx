@@ -45,6 +45,7 @@ export const RegistrationSection = () => {
     try {
       // Get fullName from user object (it's fullName, not name)
       const storedUser = localStorage.getItem('auth_user');
+      console.log(storedUser);
       let fullName = user.fullName;
       
       if (!fullName && storedUser) {
@@ -62,7 +63,7 @@ export const RegistrationSection = () => {
 
       const payload = {
         email: user.email,
-        fullName: fullName,
+        fullName: user.fullName,
         phoneNumber: user.mobileNumber || "999999999", // Use user's phone number or fallback
         source: "mobile", // Default source as per your example
         webinarName: latestWebinar.topic || 'Options Trading Workshop'
@@ -75,10 +76,10 @@ export const RegistrationSection = () => {
 
       clearTimeout(timeoutId);
 
-      toast({
-        title: "Registration Successful",
-        description: "You have been successfully registered for the workshop!",
-      });
+      // toast({
+      //   title: "Registration Successful",
+      //   description: "You have been successfully registered for the workshop!",
+      // });
 
       // Redirect to success page
       router.push('/bootcamp/success');
@@ -288,7 +289,7 @@ export const RegistrationSection = () => {
                 </div>
               ) : (
                 <div className="bg-secondary rounded-lg p-4">
-                  <h4 className="font-semibold text-black mb-2">Here are the webinar details:</h4>
+                  <h4 className="font-semibold text-black mb-2">Webinar details:</h4>
                   <p className="text-sm text-muted-foreground">
                     {webinars[0].topic} - {formatWebinarDate(webinars[0].start_time)}
                   </p>

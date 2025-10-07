@@ -58,21 +58,21 @@ export const AuthModal = ({ isOpen, onClose, onSuccess, useSignupWithoutVerifica
           // Add a small delay to ensure context is updated
           await new Promise(resolve => setTimeout(resolve, 500));
           await onAutoRegister();
-          toast({
-            title: "Login successful",
-            description: "You have been logged in and registered for the workshop!",
-          });
+          // toast({
+          //   title: "Login successful",
+          //   description: "You have been logged in and registered for the workshop!",
+          // });
         } catch (registerError: any) {
-          toast({
-            title: "Login successful",
-            description: "You have been logged in, but workshop registration failed. You can try registering again.",
-          });
+          // toast({
+          //   title: "Login successful",
+          //   description: "You have been logged in, but workshop registration failed. You can try registering again.",
+          // });
         }
       } else {
-        toast({
-          title: "Login successful",
-          description: "You have been successfully logged in",
-        });
+        // toast({
+        //   title: "Login successful",
+        //   description: "You have been successfully logged in",
+        // });
       }
       
       onSuccess();
@@ -128,21 +128,21 @@ export const AuthModal = ({ isOpen, onClose, onSuccess, useSignupWithoutVerifica
             // Add a small delay to ensure context is updated
             await new Promise(resolve => setTimeout(resolve, 500));
             await onAutoRegister();
-            toast({
-              title: "Registration successful",
-              description: "Account created, logged in, and registered for the workshop!",
-            });
+            // toast({
+            //   title: "Registration successful",
+            //   description: "Account created, logged in, and registered for the workshop!",
+            // });
           } catch (registerError: any) {
-            toast({
-              title: "Registration successful",
-              description: "Account created and logged in, but workshop registration failed. You can try registering again.",
-            });
+            // toast({
+            //   title: "Registration successful",
+            //   description: "Account created and logged in, but workshop registration failed. You can try registering again.",
+            // });
           }
         } else {
-          toast({
-            title: "Registration successful",
-            description: "Account created and you're now logged in! Proceeding to workshop registration...",
-          });
+          // toast({
+          //   title: "Registration successful",
+          //   description: "Account created and you're now logged in! Proceeding to workshop registration...",
+          // });
         }
         
         onSuccess();

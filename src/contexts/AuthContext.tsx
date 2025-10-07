@@ -91,40 +91,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         const authToken = tokens.AccessToken;
         
-        // Fetch user profile data using the get-user endpoint
-        let userProfileData = loginUserData;
-        
-        try {
-          const userResponse = await axios.get(`${API_BASE}/auth/get-user`, {
-            headers: {
-              'Authorization': `Bearer ${authToken}`
-            }
-          });
-          
-          if (userResponse.status === 200 && userResponse.data) {
-            // Merge get-user response with login response data to preserve mobileNumber
-            userProfileData = {
-              ...userResponse.data,
-              mobileNumber: userResponse.data.mobileNumber || loginUserData.mobileNumber
-            };
-          }
-        } catch (getUserError: any) {
-          // Failed to fetch user profile data
-          // If get-user fails, create a basic user object with available data
-          userProfileData = {
-            id: username || 'unknown',
-            email: email,
-            fullName: email.split('@')[0], // Use email prefix as fallback
-            mobileNumber: loginUserData.mobileNumber
-          };
-        }
-        
-        // Ensure user data has required fields
+        // Build final user data directly from login payload
         const finalUserData = {
-          id: userProfileData.id || username || 'unknown',
-          email: userProfileData.email || email,
-          fullName: userProfileData.fullName || userProfileData.name || email.split('@')[0],
-          mobileNumber: userProfileData.mobileNumber
+          id: loginUserData?.id || username || 'unknown',
+          email: loginUserData?.email || email,
+          fullName: loginUserData?.fullName || loginUserData?.name || email.split('@')[0],
+          mobileNumber: loginUserData?.mobileNumber
         };
         
         
@@ -200,40 +172,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 
       if (authToken) {
-        // Fetch user profile data using the get-user endpoint
-        let userProfileData = loginUserData;
-        
-        try {
-          const userResponse = await axios.get(`${API_BASE}/auth/get-user`, {
-            headers: {
-              'Authorization': `Bearer ${authToken}`
-            }
-          });
-          
-          if (userResponse.status === 200 && userResponse.data) {
-            // Merge get-user response with registration data to preserve mobileNumber
-            userProfileData = {
-              ...userResponse.data,
-              mobileNumber: userResponse.data.mobileNumber || loginUserData.mobileNumber || userData.mobileNumber
-            };
-          }
-        } catch (getUserError: any) {
-          // Failed to fetch user profile data
-          // If get-user fails, create a basic user object with available data
-          userProfileData = {
-            id: username || 'unknown',
-            email: userData.email,
-            fullName: userData.fullName || userData.email.split('@')[0],
-            mobileNumber: loginUserData.mobileNumber || userData.mobileNumber
-          };
-        }
-        
-        // Ensure user data has required fields
+        // Build final user data directly from registration/login payload
         const finalUserData = {
-          id: userProfileData?.id || username || 'unknown',
-          email: userProfileData?.email || userData.email,
-          fullName: userProfileData?.fullName || userProfileData?.name || userData.fullName || userData.email.split('@')[0],
-          mobileNumber: userProfileData?.mobileNumber || userData.mobileNumber
+          id: loginUserData?.id || username || 'unknown',
+          email: loginUserData?.email || userData.email,
+          fullName: loginUserData?.fullName || loginUserData?.name || userData.fullName || userData.email.split('@')[0],
+          mobileNumber: loginUserData?.mobileNumber || userData.mobileNumber
         };
         
         
@@ -283,40 +227,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         const authToken = tokens.AccessToken;
         
-        // Fetch user profile data using the get-user endpoint
-        let userProfileData = loginUserData;
-        
-        try {
-          const userResponse = await axios.get(`${API_BASE}/auth/get-user`, {
-            headers: {
-              'Authorization': `Bearer ${authToken}`
-            }
-          });
-          
-          if (userResponse.status === 200 && userResponse.data) {
-            // Merge get-user response with verification data to preserve mobileNumber
-            userProfileData = {
-              ...userResponse.data,
-              mobileNumber: userResponse.data.mobileNumber || loginUserData.mobileNumber
-            };
-          }
-        } catch (getUserError: any) {
-          // Failed to fetch user profile data
-          // If get-user fails, create a basic user object with available data
-          userProfileData = {
-            id: username || 'unknown',
-            email: 'verified@user.com', // We don't have email in this context
-            fullName: username || 'Verified User',
-            mobileNumber: loginUserData.mobileNumber
-          };
-        }
-        
-        // Ensure user data has required fields
+        // Build final user data directly from verification payload
         const finalUserData = {
-          id: userProfileData.id || username || 'unknown',
-          email: userProfileData.email || 'verified@user.com',
-          fullName: userProfileData.fullName || userProfileData.name || username || 'Verified User',
-          mobileNumber: userProfileData.mobileNumber
+          id: loginUserData?.id || username || 'unknown',
+          email: loginUserData?.email || 'verified@user.com',
+          fullName: loginUserData?.fullName || loginUserData?.name || username || 'Verified User',
+          mobileNumber: loginUserData?.mobileNumber
         };
         
         

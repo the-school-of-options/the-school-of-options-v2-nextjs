@@ -70,13 +70,13 @@ export const useRegistration = () => {
 
       clearTimeout(timeoutId);
 
-      toast({
-        title: "Registration Successful",
-        description: "You have been successfully registered for the workshop!",
-      });
+      // toast({
+      //   title: "Registration Successful",
+      //   description: "You have been successfully registered for the workshop!",
+      // });
 
       // Redirect to success page
-      router.push('/esummit/success');
+      router.push('/bootcamp/success');
       return { success: true };
     } catch (error: any) {
       let errorMessage = "Registration failed. Please try again.";
