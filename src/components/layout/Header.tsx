@@ -32,55 +32,53 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="The School of Options"
-              width={160}
-              height={48}
-              className="h-8 md:h-10 w-auto"
-              priority
-            />
+            <div className="h-12 md:h-24 w-auto">
+              <Image
+                src="/TSOO_Logo_Monogram_Light.png"
+                alt="The School of Options"
+                width={160}
+                height={60}
+                className="h-full w-full object-fill"
+                priority
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             <Link
               href="/about"
-              className={`text-sm font-medium smooth-transition ${
-                isActive("/about")
+              className={`text-sm font-medium smooth-transition ${isActive("/about")
                   ? "text-[#FF7A00]"
                   : "text-white hover:text-[#FF7A00]"
-              }`}
+                }`}
             >
               About
             </Link>
             <Link
               href="/methodology"
-              className={`text-sm font-medium smooth-transition ${
-                isActive("/methodology")
+              className={`text-sm font-medium smooth-transition ${isActive("/methodology")
                   ? "text-[#FF7A00]"
                   : "text-white hover:text-[#FF7A00]"
-              }`}
+                }`}
             >
               Methodology
             </Link>
             <Link
               href="/faq"
-              className={`text-sm font-medium smooth-transition ${
-                isActive("/faq")
+              className={`text-sm font-medium smooth-transition ${isActive("/faq")
                   ? "text-[#FF7A00]"
                   : "text-white hover:text-[#FF7A00]"
-              }`}
+                }`}
             >
               FAQ
             </Link>
             <Link
               href="/workshop"
-              className={`text-sm font-medium smooth-transition ${
-                isActive("/workshop")
+              className={`text-sm font-medium smooth-transition ${isActive("/workshop")
                   ? "text-[#FF7A00]"
                   : "text-white hover:text-[#FF7A00]"
-              }`}
+                }`}
             >
               Webinars
             </Link>
@@ -134,44 +132,40 @@ const Header = () => {
             <nav className="flex flex-col space-y-4">
               <Link
                 href="/about"
-                className={`text-sm font-medium smooth-transition ${
-                  isActive("/about")
+                className={`text-sm font-medium smooth-transition ${isActive("/about")
                     ? "text-[#FF7A00]"
                     : "text-white hover:text-[#FF7A00]"
-                }`}
+                  }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
               <Link
                 href="/methodology"
-                className={`text-sm font-medium smooth-transition ${
-                  isActive("/methodology")
+                className={`text-sm font-medium smooth-transition ${isActive("/methodology")
                     ? "text-[#FF7A00]"
                     : "text-white hover:text-[#FF7A00]"
-                }`}
+                  }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Methodology
               </Link>
               <Link
                 href="/faq"
-                className={`text-sm font-medium smooth-transition ${
-                  isActive("/faq")
+                className={`text-sm font-medium smooth-transition ${isActive("/faq")
                     ? "text-[#FF7A00]"
                     : "text-white hover:text-[#FF7A00]"
-                }`}
+                  }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 FAQ
               </Link>
               <Link
                 href="/workshop"
-                className={`text-sm font-medium smooth-transition ${
-                  isActive("/workshop")
+                className={`text-sm font-medium smooth-transition ${isActive("/workshop")
                     ? "text-[#FF7A00]"
                     : "text-white hover:text-[#FF7A00]"
-                }`}
+                  }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Webinars
@@ -182,10 +176,10 @@ const Header = () => {
                     <div className="text-white text-sm mb-2">
                       Welcome, {user.fullName || user.email}
                     </div>
-                    <Button 
-                      variant="cta-outline" 
-                      size="sm" 
-                      className="w-full" 
+                    <Button
+                      variant="cta-outline"
+                      size="sm"
+                      className="w-full"
                       onClick={() => {
                         setIsMenuOpen(false);
                         handleLogout();
@@ -196,10 +190,10 @@ const Header = () => {
                     </Button>
                   </>
                 ) : (
-                  <Button 
-                    variant="cta-outline" 
-                    size="sm" 
-                    className="w-full" 
+                  <Button
+                    variant="cta-outline"
+                    size="sm"
+                    className="w-full"
                     onClick={() => {
                       setIsMenuOpen(false);
                       handleSignInClick();
